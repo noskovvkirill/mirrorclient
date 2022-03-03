@@ -51,20 +51,21 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
     'public, s-maxage=1, stale-while-revalidate=59'
   );
 
-  if (subdomain === "mirror-feed") {
-    return {
-      redirect: {
-        destination: `http://${"mirrorfeed"}.xyz/`,
-        permanent: true,
-      },
-    }
-  }
-  return {
-    redirect: {
-      destination: process.env.NODE_ENV === "development" ? `http://${"mirrorfeed"}.xyz/${subdomain}` : `https://${"mirrorfeed"}.xyz/${subdomain}`,
-      permanent: true,
-    },
-  }
+  // if (subdomain === "mirror-feed") {
+  //   return {
+  //     redirect: {
+  //       destination: `http://${"mirrorfeed"}.xyz/`,
+  //       permanent: true,
+  //     },
+  //   }
+  // }
+  return ({ props: { entries: [] } })
+  // return {
+  //   redirect: {
+  //     destination: process.env.NODE_ENV === "development" ? `http://${"mirrorfeed"}.xyz/${subdomain}` : `https://${"mirrorfeed"}.xyz/${subdomain}`,
+  //     permanent: true,
+  //   },
+  // }
 };
 
 
