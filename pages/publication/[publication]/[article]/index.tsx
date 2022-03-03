@@ -59,8 +59,9 @@ type Props = {
 }
 
 const Article = ({ entry }: Props) => {
+    if (!entry) return <></>
     return (
-        <Layout publisher={entry.publisher}
+        <Layout publisher={entry?.publisher}
             description={entry.body?.slice(0, 120)}
             cover={entry.featuredImage?.url}
             title={entry.title + ' — by' + entry.publication?.displayName} twitterAuthor={entry.author?.displayName}>
