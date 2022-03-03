@@ -59,7 +59,7 @@ const Layout = ({ children, title = 'Mirror feed', cover = '', twitterAuthor = '
         }
         setPrevScroll(scrollY)
 
-    }, [scrollY])
+    }, [scrollY, scrollDir, prevScroll])
 
 
 

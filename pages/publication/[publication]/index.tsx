@@ -199,7 +199,7 @@ const Publication = ({ entries, publisher }: Props) => {
                                                         <Stack direction='horizontal' space={'2'} align='center'>
                                                             <a href={'https' + publisher?.domain}
                                                                 target={'_blank'}
-                                                                rel={'norefferer'}>
+                                                                rel='noreferrer'>
                                                                 <Box borderRadius={'full'}
                                                                     padding={'1.5'}
                                                                     cursor='pointer'

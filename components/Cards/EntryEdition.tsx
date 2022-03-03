@@ -85,6 +85,7 @@ const EntryEdition = ({ digest, maxWidth }: { digest: string, maxWidth?: BoxMaxW
                                 : 'https://' + 'mirror.xyz/' + data?.entry?.publisher?.member?.ens + '/edition/' + (data?.entry?.editions && data?.entry?.editions[0]?.editionContractAddress) + '/' + (data?.entry?.editions && data?.entry?.editions[0]?.editionId)
                         }
                         target={"_blank"}
+                        rel="noreferrer"
                     />
                 )}
 

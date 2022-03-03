@@ -26,19 +26,19 @@ export async function getStaticPaths() {
     const length = publications.slice(0, 10).length
     for (let i = 0; i <= length; i++) {
         const publication = publications[i]
-        const entries = await getPublication(publication.ensLabel)
-
+        const entries = await getPublication(publication.ensLabel + '.mirror.xyz')
         if (!entries.projectFeed?.posts) {
-            return ({ paths: [] })
+            return
         }
-        const path: Array<string | { params: { [key: string]: string } }> = entries.projectFeed.posts.map((entry: EntryType) => {
+        const path: Array<string | { params: { [key: string]: string } }> = entries?.projectFeed?.posts.map((entry: EntryType) => {
             const keyNew = entry.digest as string
-            return ({ params: { article: keyNew } })
+            return ({ params: { article: keyNew, publication: publication.ensLabel } })
         })
         items.push(...path)
     }
     const paths = items.flat()
-    return { paths, fallback: 'blocking' }
+
+    return { paths, fallback: true }
 }
 
 export const getStaticProps: GetStaticProps = async (ctx) => {
@@ -50,7 +50,7 @@ export const getStaticProps: GetStaticProps = async (ctx) => {
 
     return {
         props: { entry: entry },
-        revalidate: 10
+        revalidate: 60
     }
 };
 

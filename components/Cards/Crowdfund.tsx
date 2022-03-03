@@ -105,6 +105,7 @@ const Crowdfund = ({ address, maxWidth }: { address: string, maxWidth?: BoxMaxWi
                                 : 'https://' + 'mirror.xyz/' + data?.crowdfundAtAddress?.publisher?.member?.ens + '/crowdfunds/' + address
                         }
                         target={"_blank"}
+                        rel="noreferrer"
                     />
                 )}
                 <Box

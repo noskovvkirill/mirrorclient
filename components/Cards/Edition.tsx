@@ -73,6 +73,7 @@ const Edition = ({ id, contract, maxWidth }: { id: number, contract: string, max
                                 : 'https://' + 'mirror.xyz/' + data?.edition?.publisher?.member?.ens + '/edition/' + contract + '/' + id.toString()
                         }
                         target={"_blank"}
+                        rel="noreferrer"
                     />
                 )}
 

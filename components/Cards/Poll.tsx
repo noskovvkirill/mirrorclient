@@ -87,6 +87,7 @@ const Poll = ({ id, digest, maxWidth }: { digest: string, id: string, maxWidth?:
                                 : 'https://' + 'mirror.xyz/' + dataEntry?.entry?.publisher?.member?.ens + digest
                         }
                         target={"_blank"}
+                        rel="noreferrer"
                     />
                 )}
 
