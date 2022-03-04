@@ -21,6 +21,9 @@ const nextConfig = {
   typescript: {
     ignoreBuildErrors: true
   },
+  images: {
+    domains: ['mirror-media.imgix.net', 'images.mirror-media.xyz', 'res.cloudinary.com', '*.medium.com'],
+  },
   // webpack: (config, options) => {
   //   // modify the `config` here
   //   if (options.isServer) {

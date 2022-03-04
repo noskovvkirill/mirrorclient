@@ -17,6 +17,7 @@ export const fetchOptions = [
     edges: [
       { name: 'Latest', href: '/', isProtected: false },
       { name: 'Subscribed', href: '/subscribed', isProtected: true },
+      { name: 'All', href: '/all', isProtected: false },
     ]
   },
   {
@@ -46,6 +47,7 @@ const HeaderFeed = ({ pathName }: { pathName: string }) => {
   const fetchOption = () => {
     if (pathName === '/') return ['/', '/']
     if (pathName === '/subscribed') return ['/', '/subscribed']
+    if (pathName === '/all') return ['/', '/all']
     if (pathName === '/editions') return ['/editions', '/']
     if (pathName === '/crowdfunds') return ['/crowdfunds', '/']
 

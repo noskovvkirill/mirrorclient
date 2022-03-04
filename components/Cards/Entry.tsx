@@ -4,9 +4,11 @@ import Root from './Root'
 import { render } from 'src/helpers/MarkdownSimpleParser'
 import { Box, Heading, Skeleton, SkeletonGroup, Stat, Tag, Text, Stack, Avatar } from 'design-system'
 import AddressPrettyPrint from 'src/helpers/AddressPrettyPrint'
+import Image from 'next/image'
 import { getFirstImage } from 'src/helpers/MarkdownUtils'
 import type { BoxMaxWidth } from './Root'
 import Link from 'next/link'
+import { useState } from 'react'
 //types
 import { EntryType } from 'types'
 
@@ -50,8 +52,10 @@ const fetcher = (digest: string) => {
     )
 }
 
-const EntryItem = ({ entry, isValidating, maxWidth, digest, error }: { error: any, isValidating: boolean, entry?: EntryType, digest: string, maxWidth?: BoxMaxWidth }) => {
 
+
+const EntryItem = ({ entry, isValidating, maxWidth, digest, error }: { error: any, isValidating: boolean, entry?: EntryType, digest: string, maxWidth?: BoxMaxWidth }) => {
+    const [isImageError, setIsImageError] = useState(false)
     return (
         <Root maxWidth={maxWidth}>
             <Box display="flex"
@@ -82,14 +86,16 @@ const EntryItem = ({ entry, isValidating, maxWidth, digest, error }: { error: an
                     borderTopRightRadius={"3xLarge"}
                     position={"relative"}>
                     {entry?.featuredImage?.url
-                        ? <img
+                        ? <Image
+                            objectFit='cover'
+                            layout='fill'
                             loading="lazy"
                             alt={entry?.title + 'cover image'}
-                            style={{ userSelect: 'none', objectFit: 'cover', width: '100%', height: '100%' }}
                             src={entry?.featuredImage?.url} />
-                        : entry?.body && getFirstImage(entry?.body)
+                        : entry?.body && getFirstImage(entry?.body) && !isImageError
                             ? <img
                                 loading="lazy"
+                                onError={() => setIsImageError(true)}
                                 alt={entry?.title + 'cover image'}
                                 style={{ userSelect: 'none', objectFit: 'cover', width: '100%', height: '100%' }}
                                 src={getFirstImage(entry?.body) || ''} />
