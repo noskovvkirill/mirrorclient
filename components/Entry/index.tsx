@@ -116,6 +116,7 @@ const EntryItem = ({ entry }: { entry?: EntryType }) => {
             <Stack direction={"horizontal"} space={"2"} align={"center"}>
                 <Avatar
                     size="6"
+                    placeholder={!entry?.publisher?.project?.avatarURL}
                     label={entry?.publisher?.project?.displayName || 'avatar'}
                     src={entry?.publisher?.project?.avatarURL} />
                 <Text
@@ -123,15 +124,18 @@ const EntryItem = ({ entry }: { entry?: EntryType }) => {
                     color='textSecondary'>{entry?.publisher?.project?.displayName}</Text>
 
                 <Tag>{AddressPrettyPrint(entry?.publisher?.project?.address || "0x", 6)}</Tag>
-                <Tag>{entry?.timestamp && dayjs.unix(entry.timestamp).fromNow()}</Tag>
             </Stack>
 
             {entry?.collaborators?.map((collaborator: Collaborator) => {
+                if (collaborator?.displayName === entry?.publisher?.project?.displayName) {
+                    return <></>
+                }
                 return (
                     <Stack
                         key={collaborator?.address + 'collaborator'}
                         direction={"horizontal"} space={"2"} align={"center"}>
                         <Avatar
+                            placeholder={!collaborator?.avatarURL}
                             size="6"
                             label={collaborator?.displayName || 'avatar'}
                             src={collaborator?.avatarURL} />
@@ -143,6 +147,8 @@ const EntryItem = ({ entry }: { entry?: EntryType }) => {
                     </Stack>
                 )
             })}
+            <Tag>{entry?.timestamp && dayjs.unix(entry.timestamp).fromNow()}</Tag>
+
 
         </Stack>
 
@@ -200,6 +206,7 @@ const EntryItem = ({ entry }: { entry?: EntryType }) => {
                         flexDirection="column" justifyContent={"space-between"}>
                         <Box width="full" as='section'
                             overflow={'hidden'}
+                            style={{ wordBreak: 'break-all' }}
                             marginBottom="auto" paddingLeft={"6"} paddingRight={"6"}>
                             <Stack space={"4"}>
                                 <Text size='headingOne' weight='bold'

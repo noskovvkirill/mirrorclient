@@ -15,9 +15,9 @@ export const fetchOptions = [
     baseHref: '/',
     isProtected: false,
     edges: [
-      { name: 'Latest', href: '/', isProtected: false },
-      { name: 'Subscribed', href: '/subscribed', isProtected: true },
+      { name: "Publications", href: '/', isProtected: false },
       { name: 'All', href: '/all', isProtected: false },
+      { name: 'Subscribed', href: '/subscribed', isProtected: true },
     ]
   },
   {
@@ -92,7 +92,7 @@ const HeaderFeed = ({ pathName }: { pathName: string }) => {
                         <Box as={fetchOption()[1] === edge.href ? 'h1' : 'h2'}
                           lineHeight={'1.25'}
                           fontWeight={'semiBold'}
-                          fontSize={fetchOption()[1] === edge.href ? 'headingOne' : 'headingTwo'}
+                          fontSize={fetchOption()[1] === edge.href ? { xs: 'headingTwo', sm: 'headingTwo', md: 'headingOne', lg: 'headingOne' } : 'headingTwo'}
                           color={{ base: fetchOption()[1] === edge.href ? "accent" : "textTertiary", 'hover': 'accent' }}
                         >
                           {edge.name.toString()}
@@ -123,7 +123,7 @@ const HeaderFeed = ({ pathName }: { pathName: string }) => {
                           lineHeight={'1.25'}
                           fontWeight={'semiBold'}
                           as={fetchOption()[1] === edge.href ? 'h1' : 'h2'}
-                          fontSize={fetchOption()[1] === edge.href ? 'headingOne' : 'headingTwo'}
+                          fontSize={fetchOption()[1] === edge.href ? { xs: 'headingTwo', sm: 'headingTwo', md: 'headingOne', lg: 'headingOne' } : 'headingTwo'}
                           color={{ base: fetchOption()[1] === edge.href ? "accent" : "textTertiary", 'hover': 'accent' }}
                           key={edge.name}>
                           {edge.name}
@@ -151,7 +151,7 @@ const HeaderFeed = ({ pathName }: { pathName: string }) => {
                       as={fetchOption()[1] === edge.href ? 'h1' : 'h2'}
                       fontWeight={'semiBold'}
                       lineHeight={'1.25'}
-                      fontSize={fetchOption()[1] === edge.href ? 'headingOne' : 'headingTwo'}
+                      fontSize={fetchOption()[1] === edge.href ? { xs: 'headingTwo', sm: 'headingTwo', md: 'headingOne', lg: 'headingOne' } : 'headingTwo'}
                       color={{ base: fetchOption()[1] === edge.href ? "accent" : "textTertiary", 'hover': 'accent' }}
                       key={edge.name}>
                       {edge.name}
@@ -191,7 +191,7 @@ const HeaderFeed = ({ pathName }: { pathName: string }) => {
                         fontWeight={'semiBold'}
                         lineHeight={'1.25'}
                         as={fetchOption()[0] === option.baseHref ? 'h1' : 'h2'}
-                        fontSize={fetchOption()[0] === option.baseHref ? 'headingOne' : 'headingTwo'}
+                        fontSize={fetchOption()[0] === option.baseHref ? { xs: 'headingTwo', sm: 'headingTwo', md: 'headingOne', lg: 'headingOne' } : 'headingTwo'}
                         color={{ base: fetchOption()[0] === option.baseHref ? "accent" : 'textTertiary', 'hover': 'accent' }}
                       >
                         {option.name}

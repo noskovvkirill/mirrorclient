@@ -40,6 +40,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
       .from('mirroritems')
       .select('*')
       .order('publishedAtTimestamp', { ascending: false })
+      .eq('publishStatus', 'public')
       .limit(20)
 
 
@@ -94,6 +95,7 @@ const fetcher = async (index: string | null) => {
         .from('mirroritems')
         .select('*')
         .order('publishedAtTimestamp', { ascending: false })
+        .eq('publishStatus', 'public')
         .range(parseInt(index) + 1, parseInt(index) + 20)
       console.log('error', error)
       if (error) return []
@@ -104,6 +106,7 @@ const fetcher = async (index: string | null) => {
         .from('mirroritems')
         .select('*')
         .order('publishedAtTimestamp', { ascending: false })
+        .eq('publishStatus', 'public')
         .limit(20)
       if (error) return []
       const newdata = data?.map(({ digest }) => digest) as EntryType['digest'][] | null

@@ -78,6 +78,7 @@ const Grid = ({ data, error, isValidating, setSize, pathName, fetchEntries }: IG
             <Box
                 width={'full'}
                 display='flex'
+                ref={setSize && ref}
                 justifyContent='center'
                 alignItems='center'
                 style={{
@@ -88,13 +89,13 @@ const Grid = ({ data, error, isValidating, setSize, pathName, fetchEntries }: IG
                 }
             </Box>
 
-            {setSize && (
+            {/* {setSize && (
                 <div
                     style={{ backgroundColor: 'red', opacity: 0, bottom: 0, height: '256px' }}
                     ref={ref}>
                     &nbsp;
                 </div>
-            )}
+            )} */}
 
         </Box>
     )

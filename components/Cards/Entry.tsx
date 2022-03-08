@@ -3,8 +3,9 @@ import useSWR from 'swr'
 import Root from './Root'
 import { render } from 'src/helpers/MarkdownSimpleParser'
 import { Box, Heading, Skeleton, SkeletonGroup, Stat, Tag, Text, Stack, Avatar } from 'design-system'
+import Publisher from '@/components/Publisher'
 import AddressPrettyPrint from 'src/helpers/AddressPrettyPrint'
-import Image from 'next/image'
+// import Image from 'next/image'
 import { getFirstImage } from 'src/helpers/MarkdownUtils'
 import type { BoxMaxWidth } from './Root'
 import Link from 'next/link'
@@ -56,6 +57,7 @@ const fetcher = (digest: string) => {
 
 const EntryItem = ({ entry, isValidating, maxWidth, digest, error }: { error: any, isValidating: boolean, entry?: EntryType, digest: string, maxWidth?: BoxMaxWidth }) => {
     const [isImageError, setIsImageError] = useState(false)
+    // console.log('entry', entry)
     return (
         <Root maxWidth={maxWidth}>
             <Box display="flex"
@@ -67,12 +69,14 @@ const EntryItem = ({ entry, isValidating, maxWidth, digest, error }: { error: an
                     <Link href={
                         entry?.publisher?.project?.domain
                             ? '/publication/' + entry?.publisher?.project?.domain.split('.')[0] + '/' + digest
-                            : entry?.publisher?.member?.ens + digest
+                            : '/member/' + entry?.publisher?.member?.address + '/' + digest
                     } passHref>
                         <Box
                             cursor="pointer"
                             zIndex='10'
-                            position={'absolute'} left={'0'} top={'0'} width="full" height={'full'}>
+                            position={'absolute'} left={'0'} top={'0'} width="full" style={{
+                                height: 'calc(100% - 48px)'
+                            }}>
                             &nbsp;
                         </Box>
                     </Link>
@@ -86,9 +90,8 @@ const EntryItem = ({ entry, isValidating, maxWidth, digest, error }: { error: an
                     borderTopRightRadius={"3xLarge"}
                     position={"relative"}>
                     {entry?.featuredImage?.url
-                        ? <Image
-                            objectFit='cover'
-                            layout='fill'
+                        ? <img
+                            style={{ userSelect: 'none', objectFit: 'cover', width: '100%', height: '100%' }}
                             loading="lazy"
                             alt={entry?.title + 'cover image'}
                             src={entry?.featuredImage?.url} />
@@ -100,14 +103,14 @@ const EntryItem = ({ entry, isValidating, maxWidth, digest, error }: { error: an
                                 style={{ userSelect: 'none', objectFit: 'cover', width: '100%', height: '100%' }}
                                 src={getFirstImage(entry?.body) || ''} />
                             : <Box width="full" height="full"
-                                style={{ minHeight: '100%', userSelect: 'none', textAlign: 'center', padding: '1rem' }}
+                                style={{ minHeight: '100%', userSelect: 'none', textAlign: 'center', padding: '1rem', wordBreak: 'break-all' }}
                                 display="flex"
                                 alignItems={"center"}
                                 justifyContent={"center"}
                                 // @ts-ignore
                                 backgroundColor={entry?.publisher?.project?.theme?.accent?.toLowerCase() || "foregroundSecondary"}
                             >
-                                <Heading>{entry?.title}</Heading>
+                                <Heading>{(entry?.title && entry?.title?.length >= 48) ? entry?.title?.slice(0, 48) + '...' : entry?.title}</Heading>
                             </Box>
                     }
                 </Box>
@@ -148,15 +151,12 @@ const EntryItem = ({ entry, isValidating, maxWidth, digest, error }: { error: an
                         <SkeletonGroup loading={isValidating || error}>
                             <Stack direction={"horizontal"} space={"2"} align={"center"}>
                                 <Skeleton>
-                                    <Avatar
-                                        size="6"
-                                        label={entry?.publisher?.project?.displayName || 'avatar'}
-                                        src={entry?.publisher?.project?.avatarURL} />
-                                </Skeleton>
-                                <Skeleton>
-                                    <Text
-                                        weight={"semiBold"}
-                                        color='textSecondary'>{entry?.publisher?.project?.displayName}</Text>
+                                    {entry?.publisher?.project && (
+                                        <Publisher
+                                            size="small"
+                                            publisher={entry.publisher} />
+                                    )}
+
                                 </Skeleton>
                                 <Skeleton>
                                     <Tag>{AddressPrettyPrint(entry?.publisher?.project?.address || "0x", 6)}</Tag>
@@ -172,9 +172,13 @@ const EntryItem = ({ entry, isValidating, maxWidth, digest, error }: { error: an
 }
 
 const Entry = ({ digest, maxWidth, entry }: { entry?: EntryType, digest: string, maxWidth?: BoxMaxWidth }): JSX.Element => {
+    // console.log('entry___', digest)
     const { data, error, isValidating } = useSWR(!entry ? digest : null, fetcher, {
         revalidateOnFocus: false
     });
+    if (!entry && !data?.entry && !error && !isValidating) {
+        return <></>
+    }
     return (
         <EntryItem entry={entry ? entry : data?.entry} isValidating={isValidating} maxWidth={maxWidth} digest={digest} error={error} />
     )

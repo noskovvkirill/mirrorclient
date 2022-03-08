@@ -22,7 +22,7 @@ const nextConfig = {
     ignoreBuildErrors: true
   },
   images: {
-    domains: ['mirror-media.imgix.net', 'images.mirror-media.xyz', 'res.cloudinary.com', '*.medium.com'],
+    domains: ['mirror-media.imgix.net', 'images.mirror-media.xyz', 'res.cloudinary.com', '*.medium.com', 'firebasestorage.googleapis.com'],
   },
   // webpack: (config, options) => {
   //   // modify the `config` here

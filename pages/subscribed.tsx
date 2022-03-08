@@ -54,24 +54,30 @@ const getUserSubscribtionsMiddleware: Middleware = (useSWRNext: SWRHook) => (key
 const fetcher = async (index: string | null, list: string[]) => {
     try {
         if (index && parseInt(index) > 0) {
+
             const { data, error } = await supabase
-                .from('mirroritems_test')
-                .select('digest')
-                .order('timestamp', { ascending: false })
-                .eq('isPublished', true)
-                .in('publication', list)
+                .from('mirroritems')
+                .select('*')
+                .order('publishedAtTimestamp', { ascending: false })
+                .eq('publishStatus', 'public')
+                .in('domain', list)
                 .range(parseInt(index) + 1, parseInt(index) + 20)
             const newdata = data?.map(({ digest }) => digest) as EntryType['digest'][] | null
+            console.log('error', error)
             if (error) return []
             return newdata
         } else {
+
+            const newlist = list.map((i) => ({ domain: i }))
+            console.log('new', newlist)
             const { data, error } = await supabase
-                .from('mirroritems_test')
-                .select('digest')
-                .order('timestamp', { ascending: false })
-                .eq('isPublished', true)
-                .in('publication', list)
+                .from('mirroritems')
+                .select('*')
+                .order('publishedAtTimestamp', { ascending: false })
+                .eq('publishStatus', 'public')
+                .in('domain', list)
                 .limit(20)
+            console.log('error', error)
             if (error) return []
             const newdata = data?.map(({ digest }) => digest) as EntryType['digest'][] | null
             return newdata

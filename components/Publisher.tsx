@@ -8,9 +8,9 @@ import AddressPrettyPrint from 'src/helpers/AddressPrettyPrint'
 
 interface IPublisher {
     publisher: PublisherType,
-    size: 'small' | 'default'
+    size?: 'small' | 'default'
 }
-const Publisher = ({ publisher, size = 'default' }: { publisher: PublisherType }) => {
+const Publisher = ({ publisher, size = 'default' }: IPublisher) => {
 
     const members = useMemo(() => publisher.project?.members?.filter(member => member).map((member) => {
         return (
@@ -21,33 +21,44 @@ const Publisher = ({ publisher, size = 'default' }: { publisher: PublisherType }
         )
     }), [publisher])
 
-    const trigger = <Box> <Link href={
-        publisher?.project?.domain
-            ? '/publication/' + publisher?.project?.domain.split('.')[0] + '/'
-            : publisher?.member?.ens || '/'
-    } passHref>
-        <Stack direction={"horizontal"} space={"4"} align={"center"}>
-            <Button
-                tabIndex={0}
-                variant='tertiary'
-                size='small'
-                shape='circle'>
-                <Avatar
-                    size="9"
-                    label={publisher?.project?.displayName || 'avatar'}
-                    src={publisher?.project?.avatarURL}
-                />
-            </Button>
-            <Text
-                color='textTertiary'
-                weight={
-                    'bold'
+    const trigger = <Box
+        zIndex='20'
+        style={{ pointerEvents: 'all' }}> <Link href={
+            publisher?.project?.domain
+                ? '/publication/' + publisher?.project?.domain.split('.')[0] + '/'
+                : publisher?.member?.ens || '/'
+        } passHref>
+            <Stack direction={"horizontal"} space={size === 'default' ? "4" : "2"} align={"center"}>
+                {size === 'default'
+                    ? <Button
+                        tabIndex={0}
+                        variant='tertiary'
+                        size='small'
+                        shape='circle'>
+                        <Avatar
+                            size={"9"}
+                            placeholder={!publisher?.project?.avatarURL}
+                            label={publisher?.project?.displayName || 'avatar'}
+                            src={publisher?.project?.avatarURL}
+                        />
+                    </Button>
+                    : <Avatar
+                        size={"6"}
+                        placeholder={!publisher?.project?.avatarURL}
+                        label={publisher?.project?.displayName || 'avatar'}
+                        src={publisher?.project?.avatarURL}
+                    />
                 }
-                size='extraLarge'
-            >{publisher?.project?.displayName}
-            </Text>
-        </Stack>
-    </Link></Box>
+                <Text
+                    color={size === 'default' ? 'textTertiary' : 'textSecondary'}
+                    weight={
+                        'bold'
+                    }
+                    size={size === 'default' ? 'extraLarge' : 'inherit'}
+                >{publisher?.project?.displayName}
+                </Text>
+            </Stack>
+        </Link></Box>
 
     return (
         <HoverCard width={'80'} padding={'0'} trigger={trigger}>
@@ -56,6 +67,7 @@ const Publisher = ({ publisher, size = 'default' }: { publisher: PublisherType }
                     <Stack direction={'horizontal'}>
                         <Avatar
                             size="16"
+                            placeholder={!publisher?.project?.avatarURL}
                             label={publisher?.project?.displayName || 'avatar'}
                             src={publisher?.project?.avatarURL}
                         />
@@ -76,7 +88,7 @@ const Publisher = ({ publisher, size = 'default' }: { publisher: PublisherType }
                         <Link href={
                             publisher?.project?.domain
                                 ? '/publication/' + publisher?.project?.domain.split('.')[0] + '/'
-                                : publisher?.member?.ens || '/'
+                                : '/member/' + publisher?.member?.address + '/'
                         } passHref>
                             <Button size='small'>Open Publication</Button>
                         </Link>

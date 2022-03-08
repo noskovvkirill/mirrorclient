@@ -1,5 +1,5 @@
-import { Button, IconMenu, Dropdown, DropdownItem, Stack, Box, Tag, Text, IconBookOpen, IconTrendingUp, IconCollection } from 'design-system'
-import Link from 'next/link'
+import { Button, IconMenu, Dropdown, DropdownItem, Stack, Box, Tag, Text, IconBookOpen, IconCollection } from 'design-system'
+// import Link from 'next/link'
 import { useRouter } from 'next/router'
 import type { PublisherType } from 'types'
 import Publisher from '@/components/Publisher'

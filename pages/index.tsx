@@ -39,7 +39,8 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
     const { data, error } = await supabase
       .from('mirroritems')
       .select('*')
-      .not('project->domain', 'eq', null)
+      .not('domain', 'eq', null)
+      .eq('publishStatus', 'public')
       .order('publishedAtTimestamp', { ascending: false })
       .limit(20)
 
@@ -94,7 +95,8 @@ const fetcher = async (index: string | null) => {
       const { data, error } = await supabase
         .from('mirroritems')
         .select('*')
-        .not('project->domain', 'eq', null)
+        .not('domain', 'eq', null)
+        .eq('publishStatus', 'public')
         .order('publishedAtTimestamp', { ascending: false })
         .range(parseInt(index) + 1, parseInt(index) + 20)
       if (error) return []
@@ -104,7 +106,8 @@ const fetcher = async (index: string | null) => {
       const { data, error } = await supabase
         .from('mirroritems')
         .select('*')
-        .not('project->domain', 'eq', null)
+        .not('domain', 'eq', null)
+        .eq('publishStatus', 'public')
         .order('publishedAtTimestamp', { ascending: false })
         .limit(20)
       if (error) return []
