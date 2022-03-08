@@ -12,10 +12,10 @@ import type { GetStaticProps } from 'next'
 import type { EntryType } from 'types';
 
 export async function getStaticPaths() {
-    if (process.env.NODE_ENV === 'development') {
-        const paths: Array<string | { params: { [key: string]: string } }> = []
-        return ({ paths, fallback: 'blocking' })
-    }
+    // if (process.env.NODE_ENV === 'development') {
+    //     const paths: Array<string | { params: { [key: string]: string } }> = []
+    //     return ({ paths, fallback: 'blocking' })
+    // }
     const { data } = await supabase
         .from('mirrorpublications')
         .select('*')
@@ -28,7 +28,7 @@ export async function getStaticPaths() {
         const publication = publications[i]
         const entries = await getPublication(publication.ensLabel + '.mirror.xyz')
         if (!entries.projectFeed?.posts) {
-            return []
+            continue
         }
         const path: Array<string | { params: { [key: string]: string } }> = entries?.projectFeed?.posts.map((entry: EntryType) => {
             const keyNew = entry.digest as string
@@ -36,8 +36,9 @@ export async function getStaticPaths() {
         })
         items.push(...path)
     }
-    const paths = items.flat()
 
+    const paths = items.flat()
+    console.log('paths', paths)
     return { paths, fallback: true }
 }
 
