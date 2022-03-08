@@ -3,19 +3,50 @@ import { Button, Avatar, Stack, Box, Text, HoverCard, AvatarGroup, Tag } from 'd
 import Link from 'next/link'
 //state
 import { useMemo } from 'react'
+import thunder from 'src/fetcher'
+import useSWR from 'swr'
 //utils
 import AddressPrettyPrint from 'src/helpers/AddressPrettyPrint'
 
+
+
+const fetcher = (address: string) => {
+    return thunder('query')({
+        mirrorProject: [{
+            address: address
+        }, {
+            projectDetails: {
+                address: true,
+                displayName: true,
+                avatarURL: true,
+                ens: true,
+                domain: true,
+                members: {
+                    avatarURL: true,
+                    displayName: true,
+                }
+            }
+
+        },
+        ],
+    }
+    )
+}
+
+
 interface IPublisher {
-    publisher: PublisherType,
+    publisher?: PublisherType,
+    ensLabel?: string,
     size?: 'small' | 'default'
 }
-const Publisher = ({ publisher, size = 'default' }: IPublisher) => {
+
+const PublisherBody = ({ publisher, size }: { publisher: PublisherType, size: 'small' | 'default' }) => {
 
     const members = useMemo(() => publisher.project?.members?.filter(member => member).map((member) => {
         return (
             {
                 label: member?.displayName || member?.avatarURL || 'avatar',
+                placeholder: !member?.avatarURL,
                 src: member?.avatarURL
             }
         )
@@ -101,6 +132,27 @@ const Publisher = ({ publisher, size = 'default' }: IPublisher) => {
             </Stack>
         </HoverCard>
     )
+}
+
+
+const Publisher = ({ publisher, ensLabel, size = 'default' }: IPublisher) => {
+
+    const { data, error, isValidating } = useSWR(!publisher ? ensLabel : null, fetcher, {
+        revalidateOnFocus: false
+    });
+
+    if (!publisher) {
+        if (data && data?.mirrorProject?.projectDetails) {
+            return (
+                <PublisherBody
+                    publisher={{ project: data.mirrorProject.projectDetails }} size={size} />
+            )
+        }
+        return <Box>{JSON.stringify(error)}</Box>
+    }
+
+    return (<PublisherBody publisher={publisher} size={size} />)
+
 }
 
 export default Publisher

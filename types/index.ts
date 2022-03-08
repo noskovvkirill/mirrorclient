@@ -24,6 +24,10 @@ export type {
     MediaAssetType
 }
 
+type SubscribtionType = {
+    ensLabel: string,
+    type: 'ADDRESS' | 'DOMAIN'
+}
 
 // user types
 type UserType = {
@@ -39,4 +43,5 @@ type UserType = {
 
 export type {
     UserType,
+    SubscribtionType
 }

@@ -5,7 +5,7 @@ import { Box, Stack, Tag, Text, Avatar, Button, IconLink, IconPlusSmall, AvatarG
 import GridPage from '@/components/Layout/GridPage'
 
 //utils
-// import { supabase } from 'src/client'
+import { supabase } from 'src/client'
 import { useRouter } from 'next/router'
 import AddressPrettyPrint from 'src/helpers/AddressPrettyPrint'
 //types
@@ -16,6 +16,7 @@ import type { ParsedUrlQuery } from 'querystring'
 import { useStore } from 'contexts'
 import getPublication from 'src/fetch/publication'
 import { useEffect, useState, useMemo } from 'react'
+import checkPublication from 'pages/api/checkPublication'
 
 
 interface IParams extends ParsedUrlQuery {
@@ -29,20 +30,19 @@ export async function getStaticPaths() {
         return ({ paths, fallback: 'blocking' })
     }
 
-    // const { data } = await supabase
-    //     .from('mirrorpublications')
-    //     .select('*')
+    const { data } = await supabase
+        .from('mirrorpublications')
+        .select('*')
+        .eq('type', 'ADDRESS')
 
-    // const publications = data || []
+    const publications = data || []
 
-    // const pathsPublications: Array<string | { params: { [key: string]: string } }> = publications.map((item: any) => {
-    //     const key = item.ensLabel
-    //     return ({ params: { publication: key } })
-    // })
-    const paths: Array<string | { params: { [key: string]: string } }> = []
+    const pathsPublications: Array<string | { params: { [key: string]: string } }> = publications.map((item: any) => {
+        const key = item.ensLabel
+        return ({ params: { publication: key } })
+    })
 
-
-    // const paths: Array<string | { params: { [key: string]: string } }> = [...pathsPublications]
+    const paths: Array<string | { params: { [key: string]: string } }> = [...pathsPublications]
     return { paths, fallback: 'blocking' }
 }
 
@@ -87,12 +87,26 @@ const Publication = ({ entries, publisher }: Props) => {
     const { isAuth, withEth, ToggleAuth } = useStore()
     const [isSubscribed, setIsSubscribed] = useState<boolean | null>(null)
 
+
+    async function checkPublication() {
+        console.log('checking publication')
+        if (!publisher?.domain && !publisher?.address) {
+            return false
+        }
+        const { ok, error } = await fetch('/api/checkPublication?publication=' + (publisher?.domain ? publisher?.domain.split('.')[0] : publisher.address || ''))
+            .then(res => {
+                return res.json()
+            })
+        if (error) throw "something went wrong... try later"
+        return ok
+
+    }
     async function getSubscribed() {
-        if (!publisher?.domain || publisher?.address) {
+        if (!publisher?.domain && !publisher?.address) {
             setIsSubscribed(false)
             return
         }
-        const { ok } = await fetch('/api/getSubscribedOne?publication=' + publisher?.domain ? publisher?.domain.split('.')[0] : publisher.address || '')
+        const { ok } = await fetch('/api/getSubscribedOne?publication=' + (publisher?.domain ? publisher?.domain.split('.')[0] : publisher.address || ''))
             .then(res => {
                 return res.json()
             })
@@ -100,15 +114,27 @@ const Publication = ({ entries, publisher }: Props) => {
         setIsSubscribed(ok);
     }
 
+    const handle = async () => {
+        const isPublication = await checkPublication()
+        if (isPublication) {
+            console.log('its publication!')
+            getSubscribed()
+        }
+    }
+
     useEffect(() => {
         if (withEth) {
-            getSubscribed()
+            handle()
         }
     }, [withEth])
 
     const Subcribe = async () => {
+        if (!publisher?.domain && !publisher?.address) {
+            setIsSubscribed(false)
+            return
+        }
         setIsSubscribed(null)
-        const { ok } = await fetch('/api/subscribe?publication=' + publisher?.domain?.split('.')[0])
+        const { ok } = await fetch('/api/subscribe?publication=' + (publisher?.domain ? publisher?.domain?.split('.')[0] : publisher.address || ''))
             .then(res => res.json())
         if (ok === false) {
             setIsSubscribed(false)
@@ -117,8 +143,11 @@ const Publication = ({ entries, publisher }: Props) => {
         }
     }
     const UnSubcribe = async () => {
+        if (!publisher?.domain && !publisher?.address) {
+            return
+        }
         setIsSubscribed(null)
-        const { ok } = await fetch('/api/unsubscribe?publication=' + publisher?.domain?.split('.')[0])
+        const { ok } = await fetch('/api/unsubscribe?publication=' + (publisher?.domain ? publisher?.domain?.split('.')[0] : publisher.address || ''))
             .then(res => res.json())
         if (ok === false) {
             setIsSubscribed(true)
@@ -260,9 +289,9 @@ const Publication = ({ entries, publisher }: Props) => {
                                                 <Button
                                                     onClick={isSubscribed ? UnSubcribe : Subcribe}
                                                     variant={isSubscribed === false ? 'primary' : 'tertiary'}
-                                                    loading={isSubscribed === null}
+                                                    loading={(isSubscribed === null && withEth) ? true : false}
                                                     prefix={isSubscribed === false && <IconPlusSmall />}
-                                                    disabled={(withEth && isAuth) ? false : true}
+                                                    disabled={(withEth) ? false : true}
                                                     size='small'>
                                                     {isSubscribed === true && (
                                                         'Unsubscribe'
@@ -270,13 +299,17 @@ const Publication = ({ entries, publisher }: Props) => {
                                                     {isSubscribed === false && (
                                                         'Subscribe'
                                                     )}
-                                                    {isSubscribed === null && (
+                                                    {isSubscribed === null && (withEth) && (
                                                         'Loading'
+                                                    )}
+
+                                                    {isSubscribed === null && (!withEth) && (
+                                                        'Subscribe'
                                                     )}
 
 
                                                 </Button>
-                                                {(!withEth || !isAuth) && (
+                                                {(!withEth) && (
                                                     <Box maxWidth={'32'}>
                                                         <Text
                                                             weight={'bold'}

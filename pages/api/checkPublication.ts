@@ -16,20 +16,34 @@ const ironOptions = {
 }
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
-    const { method } = req
+    const { method, query } = req
+    const publication = query.publication
+
+    if (typeof publication !== "string") {
+        return res.json({ ok: false })
+    }
+
     switch (method) {
         case 'GET':
-            if (!req.session.siwe?.id) {
-                res.json({ ok: false })
-            }
-            const { data, error } = await supabase.from('user_subscriptions')
-                .select('publication, owner')
-                .filter('owner', 'eq', req.session.siwe?.id)
+            const { data, error } = await supabase.from('mirrorpublications')
+                .select('ensLabel')
+                .filter('ensLabel', 'eq', publication)
             if (error || !data) {
-                console.log('error', error, data)
-                res.json({ ok: false })
+                res.json({ ok: false, error: true })
+            }
+            if (data?.length === 0) {
+                const { data: dataCreate, error: errorCreate } = await supabase.from('mirrorpublications')
+                    .insert({
+                        ensLabel: publication,
+                        type: 'ADDRESS'
+                    })
+                if (errorCreate || !dataCreate) {
+                    res.json({ ok: false, error: true })
+                }
+                res.json({ ok: true })
+
             } else {
-                res.send({ data: data })
+                res.send({ ok: true })
             }
             break
         default:
@@ -37,10 +51,5 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
             res.status(405).end(`Method ${method} Not Allowed`)
     }
 }
-
-
-
-
-
 
 export default withIronSessionApiRoute(handler, ironOptions)

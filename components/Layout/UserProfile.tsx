@@ -99,18 +99,24 @@ const UserProfile = () => {
                         loading={state.loading}
                         onClick={signIn}>Sign in with Ethereum</Button>}
                 <Dropdown trigger={
-                    <Button size='small' shape='circle' variant='tertiary'>
-                        {accountData.ens?.avatar
-                            ? (<Avatar src={accountData.ens?.avatar} label="ENS Avatar" />)
-                            : <IconUserSolid />}
-                    </Button>
-                }>
-                    <Box>Connected to {accountData?.connector?.name}</Box>
-                    {accountData.ens?.name
-                        ? `${accountData.ens?.name}`
-                        : AddressPrettyPrint(accountData.address)
-                    }
+                    <Box>
+                        <Stack direction='horizontal' align='center'>
+                            <Text
+                                weight={'medium'}
+                                color='textTertiary'>{accountData.ens?.name
+                                    ? `${accountData.ens?.name}`
+                                    : AddressPrettyPrint(accountData.address)
+                                }</Text>
+                            <Button size='small' shape='circle' variant='tertiary'>
+                                {accountData.ens?.avatar
+                                    ? (<Avatar src={accountData.ens?.avatar} label="ENS Avatar" />)
+                                    : <IconUserSolid />}
+                            </Button>
 
+                        </Stack>
+                    </Box>
+                }>
+                    <Box textAlign={'center'}><Text color='textTertiary'>Connected to {accountData?.connector?.name}</Text></Box>
 
                     <DropdownItem
                         onClick={() => router.push('/settings')}

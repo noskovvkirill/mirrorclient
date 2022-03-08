@@ -143,20 +143,29 @@ const HeaderFeed = ({ pathName }: { pathName: string }) => {
                       ToggleAuth()
                     }
                   }}>
-                  <Link
-                    href={edge.href}
-                    passHref
-                  >
-                    <Box
-                      as={fetchOption()[1] === edge.href ? 'h1' : 'h2'}
-                      fontWeight={'semiBold'}
-                      lineHeight={'1.25'}
-                      fontSize={fetchOption()[1] === edge.href ? { xs: 'headingTwo', sm: 'headingTwo', md: 'headingOne', lg: 'headingOne' } : 'headingTwo'}
-                      color={{ base: fetchOption()[1] === edge.href ? "accent" : "textTertiary", 'hover': 'accent' }}
-                      key={edge.name}>
-                      {edge.name}
-                    </Box>
-                  </Link>
+
+                  <Stack space={'0'}>
+                    {fetchOption()[1] === edge.href && (
+                      <Text
+                        weight={'bold'}
+                        color={'textTertiary'}
+                      >Filter</Text>
+                    )}
+                    <Link
+                      href={edge.href}
+                      passHref
+                    >
+                      <Box
+                        as={fetchOption()[1] === edge.href ? 'h1' : 'h2'}
+                        fontWeight={'semiBold'}
+                        lineHeight={'1.25'}
+                        fontSize={fetchOption()[1] === edge.href ? { xs: 'headingTwo', sm: 'headingTwo', md: 'headingOne', lg: 'headingOne' } : 'headingTwo'}
+                        color={{ base: fetchOption()[1] === edge.href ? "accent" : "textTertiary", 'hover': 'accent' }}
+                        key={edge.name}>
+                        {edge.name}
+                      </Box>
+                    </Link>
+                  </Stack>
                 </Box>
               )
             })}

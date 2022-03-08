@@ -42,6 +42,7 @@ const getUserSubscribtionsMiddleware: Middleware = (useSWRNext: SWRHook) => (key
             .then(res => res.json())
             .then(res => res)
         if (!dataPublications) return fetcher(pageIndex, [])
+        console.log('data', dataPublications)
         const list: string[] = dataPublications?.reduce((prev: any, current: any) => [...prev, current.publication], [])
         return fetcher(pageIndex, list)
     }
@@ -60,7 +61,7 @@ const fetcher = async (index: string | null, list: string[]) => {
                 .select('*')
                 .order('publishedAtTimestamp', { ascending: false })
                 .eq('publishStatus', 'public')
-                .in('domain', list)
+                .in('project', list)
                 .range(parseInt(index) + 1, parseInt(index) + 20)
             const newdata = data?.map(({ digest }) => digest) as EntryType['digest'][] | null
             console.log('error', error)
@@ -75,7 +76,7 @@ const fetcher = async (index: string | null, list: string[]) => {
                 .select('*')
                 .order('publishedAtTimestamp', { ascending: false })
                 .eq('publishStatus', 'public')
-                .in('domain', list)
+                .in('project', list)
                 .limit(20)
             console.log('error', error)
             if (error) return []
