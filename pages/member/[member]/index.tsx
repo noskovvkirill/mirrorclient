@@ -39,7 +39,7 @@ export async function getStaticPaths() {
 
     const pathsPublications: Array<string | { params: { [key: string]: string } }> = publications.map((item: any) => {
         const key = item.ensLabel
-        return ({ params: { publication: key } })
+        return ({ params: { member: key } })
     })
 
     const paths: Array<string | { params: { [key: string]: string } }> = [...pathsPublications]

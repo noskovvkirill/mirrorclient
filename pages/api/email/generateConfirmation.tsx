@@ -1,30 +1,6 @@
-import Cors from "cors";
 import { NextApiRequest, NextApiResponse } from "next";
 import { v4 as uuidv4 } from 'uuid';
 import jwt from 'jsonwebtoken'
-
-export const config = {
-    api: {
-        bodyParser: true,
-    },
-}
-
-function initMiddleware(middleware: any) {
-    return (req: NextApiRequest, res: NextApiResponse) =>
-        new Promise((resolve, reject) => {
-            middleware(req, res, (result: any) => {
-                if (result instanceof Error) {
-                    return reject(result);
-                }
-                return resolve(result);
-            });
-        });
-}
-const cors = initMiddleware(
-    Cors({
-        methods: ["POST"],
-    })
-);
 
 
 
@@ -61,7 +37,6 @@ export default async function handler(
     req: NextApiRequest,
     res: NextApiResponse
 ) {
-    await cors(req, res);
 
     const { emailAddress } = req.body
     const nonce = uuidv4()

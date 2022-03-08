@@ -28,7 +28,7 @@ export async function getStaticPaths() {
         const publication = publications[i]
         const entries = await getPublication(publication.ensLabel + '.mirror.xyz')
         if (!entries.projectFeed?.posts) {
-            return
+            return []
         }
         const path: Array<string | { params: { [key: string]: string } }> = entries?.projectFeed?.posts.map((entry: EntryType) => {
             const keyNew = entry.digest as string
