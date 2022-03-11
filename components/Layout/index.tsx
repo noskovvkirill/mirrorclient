@@ -65,6 +65,7 @@ const Layout = ({ children, title = 'Mirror feed', cover = '', twitterAuthor = '
 
     return (
         <Box
+            minHeight={'viewHeight'}
             backgroundColor={'backgroundTertiary'}
         >
             <Head>

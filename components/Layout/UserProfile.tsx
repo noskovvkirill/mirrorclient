@@ -13,6 +13,7 @@ import { useRouter } from 'next/router'
 
 
 const UserProfile = () => {
+
     const router = useRouter()
 
 
@@ -68,7 +69,7 @@ const UserProfile = () => {
                 setState((x) => ({ ...x, errorMessage, loading: false }))
             }
         }
-    }, [])
+    }, [accountData, connectData])
 
 
     useEffect(() => {
@@ -116,10 +117,17 @@ const UserProfile = () => {
                         </Stack>
                     </Box>
                 }>
-                    <Box textAlign={'center'}><Text color='textTertiary'>Connected to {accountData?.connector?.name}</Text></Box>
-
+                    {!state.address && (
+                        <Box textAlign={'center'}><Text color='textTertiary'>Sign in with Ethereum to change the settings</Text></Box>
+                    )}
+                    {state.address && (
+                        <Box textAlign={'center'}><Text color='textTertiary'>Connected to {accountData?.connector?.name}</Text></Box>
+                    )}
                     <DropdownItem
-                        onClick={() => router.push('/settings')}
+                        disabled={!state.address}
+                        onClick={() => {
+                            router.push('/settings')
+                        }}
                         variant='secondary'>
                         Settings
                     </DropdownItem>

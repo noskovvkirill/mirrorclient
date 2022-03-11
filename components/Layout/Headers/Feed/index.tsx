@@ -1,6 +1,6 @@
 
 //components
-import { Box, Stack, Text, Heading } from 'design-system'
+import { Box, Stack, Text, Heading, Tag } from 'design-system'
 import Link from 'next/link'
 //state 
 import { useStore } from 'contexts'
@@ -23,6 +23,7 @@ export const fetchOptions = [
   {
     name: 'Editions',
     baseHref: '/editions',
+    isComingSoon: true,
     isProtected: false,
     edges: [
       { name: 'Latest', href: '/', isProtected: false },
@@ -32,6 +33,7 @@ export const fetchOptions = [
   {
     name: 'Crowdfunds',
     baseHref: '/crowdfunds',
+    isComingSoon: true,
     isProtected: false,
     edges: [
       { name: 'Latest', href: '/', isProtected: false },
@@ -101,7 +103,7 @@ const HeaderFeed = ({ pathName }: { pathName: string }) => {
                     </Stack>
 
                   </Box>)
-              if (accountData) {
+              if (accountData && withEth.address) {
                 return (
                   <Box
                     style={{ userSelect: 'none' }}
@@ -135,12 +137,16 @@ const HeaderFeed = ({ pathName }: { pathName: string }) => {
               }
               return (
                 <Box
-                  style={{ userSelect: 'none' }}
+                  style={{
+                    userSelect: 'none',
+                    pointerEvents: !withEth.address ? 'all' : 'auto'
+                  }}
+
                   cursor={fetchOption()[1] === edge.href ? 'default' : 'pointer'}
                   key={'fetch_option_' + edge.name}
                   onClick={() => {
                     if (!withEth.address) {
-                      ToggleAuth()
+                      alert('Sign in with Ethereum')
                     }
                   }}>
 
@@ -151,20 +157,17 @@ const HeaderFeed = ({ pathName }: { pathName: string }) => {
                         color={'textTertiary'}
                       >Filter</Text>
                     )}
-                    <Link
-                      href={edge.href}
-                      passHref
-                    >
-                      <Box
-                        as={fetchOption()[1] === edge.href ? 'h1' : 'h2'}
-                        fontWeight={'semiBold'}
-                        lineHeight={'1.25'}
-                        fontSize={fetchOption()[1] === edge.href ? { xs: 'headingTwo', sm: 'headingTwo', md: 'headingOne', lg: 'headingOne' } : 'headingTwo'}
-                        color={{ base: fetchOption()[1] === edge.href ? "accent" : "textTertiary", 'hover': 'accent' }}
-                        key={edge.name}>
-                        {edge.name}
-                      </Box>
-                    </Link>
+
+                    <Box
+                      as={fetchOption()[1] === edge.href ? 'h1' : 'h2'}
+                      fontWeight={'semiBold'}
+                      lineHeight={'1.25'}
+                      fontSize={fetchOption()[1] === edge.href ? { xs: 'headingTwo', sm: 'headingTwo', md: 'headingOne', lg: 'headingOne' } : 'headingTwo'}
+                      color={{ base: fetchOption()[1] === edge.href ? "accent" : "textTertiary", 'hover': 'accent' }}
+                      key={edge.name}>
+                      {edge.name}
+                    </Box>
+
                   </Stack>
                 </Box>
               )
@@ -184,7 +187,7 @@ const HeaderFeed = ({ pathName }: { pathName: string }) => {
                 <Box
                   style={{ userSelect: 'none' }}
                   key={'fetch_option_' + option.name}
-                  cursor={fetchOption()[0] === option.baseHref ? 'default' : 'pointer'}
+                  cursor={(fetchOption()[0] === option.baseHref || option.isComingSoon) ? 'default' : 'pointer'}
                 >
 
                   <Stack space={'0'}>
@@ -192,20 +195,33 @@ const HeaderFeed = ({ pathName }: { pathName: string }) => {
                       weight={'bold'}
                       color={'textTertiary'}
                     >Content type</Text>)}
-                    <Link
-                      href={option.baseHref}
-                      passHref
-                    >
+                    {option.isComingSoon && (
                       <Box
                         fontWeight={'semiBold'}
                         lineHeight={'1.25'}
                         as={fetchOption()[0] === option.baseHref ? 'h1' : 'h2'}
                         fontSize={fetchOption()[0] === option.baseHref ? { xs: 'headingTwo', sm: 'headingTwo', md: 'headingOne', lg: 'headingOne' } : 'headingTwo'}
-                        color={{ base: fetchOption()[0] === option.baseHref ? "accent" : 'textTertiary', 'hover': 'accent' }}
+                        color={{ base: fetchOption()[0] === option.baseHref ? "accent" : 'textTertiary' }}
                       >
-                        {option.name}
+                        <Stack direction='horizontal' align='center'>{option.name}   <Tag>Soon</Tag></Stack>
                       </Box>
-                    </Link>
+
+                    )}
+                    {!option.isComingSoon && (
+                      <Link
+                        href={option.baseHref}
+                        passHref
+                      >
+                        <Box
+                          fontWeight={'semiBold'}
+                          lineHeight={'1.25'}
+                          as={fetchOption()[0] === option.baseHref ? 'h1' : 'h2'}
+                          fontSize={fetchOption()[0] === option.baseHref ? { xs: 'headingTwo', sm: 'headingTwo', md: 'headingOne', lg: 'headingOne' } : 'headingTwo'}
+                          color={{ base: fetchOption()[0] === option.baseHref ? "accent" : 'textTertiary', 'hover': 'accent' }}
+                        >
+                          {option.name}
+                        </Box>
+                      </Link>)}
                   </Stack>
 
                 </Box>

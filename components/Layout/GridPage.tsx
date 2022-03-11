@@ -1,7 +1,7 @@
 import { useRef, useEffect } from 'react'
 import useOnScreen from 'hooks/useOnScreen'
 //components
-import { Box, Spinner as Loader } from 'design-system'
+import { Box, Spinner as Loader, Stack } from 'design-system'
 import Entry from '@/components/Cards/Entry'
 //types
 import type { EntryType } from 'types'
@@ -85,7 +85,8 @@ const Grid = ({ data, error, isValidating, setSize, pathName, fetchEntries }: IG
                     gridColumn: 'span 3'
                 }}
                 height={'24'}>
-                {isValidating && <Loader size='large' />
+
+                {isValidating && <Stack justify='center' align='center'><Loader size='large' /></Stack>
                 }
             </Box>
 

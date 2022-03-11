@@ -1,6 +1,6 @@
 import Layout from '@/components/Layout'
 import Header from '@/components/Layout/Headers/Feed'
-import { Spinner as Loader, Box } from 'design-system'
+import { Spinner as Loader, Box, Stack } from 'design-system'
 import GridPage from '@/components/Layout/GridPage'
 
 //global state
@@ -23,11 +23,8 @@ export const getServerSideProps: GetServerSideProps = withSessionSsr(
         const siwe = req.session.siwe;
         if (!siwe?.address) {
             return {
-                redirect: {
-                    destination: `/`,
-                    permanent: false,
-                },
-            };
+                notFound: true
+            }
         }
         return {
             props: {}
@@ -98,7 +95,10 @@ const RenderCard = ({ pathName }: { pathName: string }) => {
     }, fetcher, { use: [getUserSubscribtionsMiddleware] }) // tslint:disable-line
 
 
-    if (!data) return <Loader size='large' />
+    if (!data) return <Box
+        width={'full'}>
+        <Stack justify='center' align='center'>
+            <Loader size='large' /></Stack></Box>
     if (error) return <Box>Something went wrong...Refresh the page  {JSON.stringify(error)}</Box>
     return (
         <GridPage

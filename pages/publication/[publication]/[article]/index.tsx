@@ -38,7 +38,7 @@ export async function getStaticPaths() {
     }
 
     const paths = items.flat()
-    console.log('paths', paths)
+
     return { paths, fallback: true }
 }
 

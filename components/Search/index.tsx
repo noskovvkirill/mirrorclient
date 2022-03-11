@@ -125,7 +125,7 @@ const SearchPanel = ({ setIsOpen }: ISearch) => {
                                 borderColor={'accent'}
                                 borderRadius={'2xLarge'}
                                 padding={'8'}
-                                width='1/2'
+                                width={{ 'xs': 'full', 'sm': '3/4', 'md': '3/4', 'lg': '1/2', 'xl': '1/2' }}
                                 backgroundColor={'backgroundSecondary'}
                                 style={{
                                     left: '50%', top: '50%',
