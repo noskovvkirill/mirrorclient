@@ -25,16 +25,21 @@ export async function getStaticPaths() {
     const items: Array<string | { params: { [key: string]: string } }> = []
     const length = publications.slice(0, 10).length
     for (let i = 0; i <= length; i++) {
-        const publication = publications[i]
-        const entries = await getPublication(publication.ensLabel + '.mirror.xyz')
-        if (!entries.projectFeed?.posts) {
+        try {
+            const publication = publications[i]
+            const entries = await getPublication(publication.ensLabel + '.mirror.xyz')
+            if (!entries.projectFeed?.posts) {
+                continue
+            }
+            const path: Array<string | { params: { [key: string]: string } }> = entries?.projectFeed?.posts.map((entry: EntryType) => {
+                const keyNew = entry.digest as string
+                return ({ params: { article: keyNew, publication: publication.ensLabel } })
+            })
+            items.push(...path)
+        } catch (e) {
+            console.log(e)
             continue
         }
-        const path: Array<string | { params: { [key: string]: string } }> = entries?.projectFeed?.posts.map((entry: EntryType) => {
-            const keyNew = entry.digest as string
-            return ({ params: { article: keyNew, publication: publication.ensLabel } })
-        })
-        items.push(...path)
     }
 
     const paths = items.flat()
@@ -45,13 +50,18 @@ export async function getStaticPaths() {
 export const getStaticProps: GetStaticProps = async (ctx) => {
     const { article } = ctx.params as { article: string };
     if (!article) return ({ notFound: true })
-    const { entry } = await getEntry(article)
+    try {
+        const { entry } = await getEntry(article)
 
-    if (!entry) return ({ notFound: true })
+        if (!entry) return ({ notFound: true })
 
-    return {
-        props: { entry: entry },
-        revalidate: 60
+        return {
+            props: { entry: entry },
+            revalidate: 60
+        }
+    } catch (e) {
+        console.log(e)
+        return ({ notFound: true })
     }
 };
 
