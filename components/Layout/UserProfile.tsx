@@ -102,12 +102,14 @@ const UserProfile = () => {
                 <Dropdown trigger={
                     <Box>
                         <Stack direction='horizontal' align='center'>
-                            <Text
-                                weight={'medium'}
-                                color='textTertiary'>{accountData.ens?.name
-                                    ? `${accountData.ens?.name}`
-                                    : AddressPrettyPrint(accountData.address)
-                                }</Text>
+                            <Box display={{ xs: 'none', sm: 'none', md: 'inline-block', lg: 'inline-block', xl: 'inline-block' }}>
+                                <Text
+                                    weight={'medium'}
+                                    color='textTertiary'>{accountData.ens?.name
+                                        ? `${accountData.ens?.name}`
+                                        : AddressPrettyPrint(accountData.address)
+                                    }</Text>
+                            </Box>
                             <Button size='small' shape='circle' variant='tertiary'>
                                 {accountData.ens?.avatar
                                     ? (<Avatar src={accountData.ens?.avatar} label="ENS Avatar" />)
@@ -117,11 +119,28 @@ const UserProfile = () => {
                         </Stack>
                     </Box>
                 }>
+
+
+                    <Box textAlign={'center'}
+                        display={{ xs: 'inline-block', sm: 'inline-block', md: 'none', lg: 'none', xl: 'none' }}>
+                        <Text
+                            size={'label'}
+                            weight={'medium'}
+                            color='textTertiary'>{accountData.ens?.name
+                                ? `${accountData.ens?.name}`
+                                : AddressPrettyPrint(accountData.address)
+                            }</Text>
+                    </Box>
+
                     {!state.address && (
-                        <Box textAlign={'center'}><Text color='textTertiary'>Sign in with Ethereum to change the settings</Text></Box>
+                        <Box textAlign={'center'}><Text
+                            size={{ xs: 'label', sm: 'label', md: 'base', lg: 'base', xl: 'base' }}
+                            color='textTertiary'>Sign in with Ethereum to change the settings</Text></Box>
                     )}
                     {state.address && (
-                        <Box textAlign={'center'}><Text color='textTertiary'>Connected to {accountData?.connector?.name}</Text></Box>
+                        <Box textAlign={'center'}><Text
+                            size={{ xs: 'label', sm: 'label', md: 'base', lg: 'base', xl: 'base' }}
+                            color='textTertiary'>Connected to {accountData?.connector?.name}</Text></Box>
                     )}
                     <DropdownItem
                         disabled={!state.address}
@@ -148,7 +167,7 @@ const UserProfile = () => {
         <Dialog
             isOpen={isAuth}
             setIsOpen={ToggleAuth}
-            width='96'
+            width={{ xs: '3/4', sm: '3/4', md: '96', lg: '96', xl: '96' }}
             size={'small'}
             trigger={'Connect Wallet'}>
             <Box width='full' paddingX={'4'}

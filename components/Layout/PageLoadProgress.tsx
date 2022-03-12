@@ -1,25 +1,26 @@
-import { useEffect, useState, memo, useRef } from 'react'
+import { useEffect, memo, useRef } from 'react'
 import Router from 'next/router'
 import { Progress, Box } from 'design-system'
 
 
 const PageLoadProgress = () => {
-    const [progress, setProgress] = useState(0);
+    // const [progress, setProgress] = useState(0);
     const loadInterval = useRef<any>(null)
+    const progress = useRef(0)
 
     const routeChangeStart = () => {
-        setProgress(10);
+        progress.current = 10
         loadInterval.current = setInterval(() => {
-            if (progress <= 90) {
-                setProgress(progress => progress + 5);
+            if (progress.current <= 80) {
+                progress.current = progress.current + 10
             }
         }, 100);
     };
 
     const routeChangeEnd = () => {
-        setProgress(100);
+        progress.current = 100
         setTimeout(() => {
-            setProgress(0)
+            progress.current = 0
             clearInterval(loadInterval.current)
         }, 1000);
     };
@@ -46,7 +47,7 @@ const PageLoadProgress = () => {
             height='1'
             overflow='hidden'
         >
-            <Progress height='1' progress={progress} />
+            <Progress height='1' progress={progress.current} />
         </Box>
     )
 }

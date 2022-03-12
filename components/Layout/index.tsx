@@ -113,12 +113,12 @@ const Layout = ({ children, title = 'Mirror feed', cover = '', twitterAuthor = '
                 transitionProperty='all'
                 transitionDuration={'500'}
                 display={'flex'}
-                paddingX={'4'}
+                paddingX={{ xs: '2.5', sm: '4', md: '4', lg: '4', xl: '4' }}
                 width={'full'}
                 maxWidth={'full'}
                 overflow={'hidden'}
                 paddingY={'5'}
-                gap={'6'}
+                gap={{ xs: '2.5', sm: '2.5', md: '6', lg: '6', xl: '6' }}
                 alignItems={'center'}
                 position='sticky'
                 justifyContent={'space-between'}
@@ -148,7 +148,6 @@ const Layout = ({ children, title = 'Mirror feed', cover = '', twitterAuthor = '
                 <Box flexBasis={'0'} flexGrow={1}>
                     <Box
                         position='relative'
-
                     >
                         <Stack direction='horizontal'
                             justify={'flex-end'}>
@@ -164,7 +163,7 @@ const Layout = ({ children, title = 'Mirror feed', cover = '', twitterAuthor = '
                 flex={1}
                 justifyContent={'flex-start'}
                 flexDirection={'column'}
-                paddingX={{ sm: '4', xs: '4', md: '6', lg: '8', xl: '8' }}
+                paddingX={{ sm: '2.5', xs: '2.5', md: '6', lg: '8', xl: '8' }}
             >
                 {children}
             </Box>
@@ -177,7 +176,26 @@ const Layout = ({ children, title = 'Mirror feed', cover = '', twitterAuthor = '
                 {toolbar}
             </Box>)}
 
-            <Box as='footer'
+
+            <Box
+                as='footer'
+                width={'16'}
+                height={"16"}
+                position={'fixed'}
+                transitionProperty='all'
+                transitionDuration={'500'}
+                style={{ transform: (!isSearch && !isPinnedList) ? 'translateY(1000px)' : 'translateY(0)', mixBlendMode: 'multiply' }}
+                backgroundColor={'backgroundSecondary'}
+                zIndex={'10'} right={"4"} bottom={"4"}
+                display={'flex'} alignItems={'center'} justifyContent={'center'}
+                aspectRatio='1/1' borderRadius={'full'}>
+                <Box
+                    width={"6"}
+                ><svg viewBox="0 0 144 185" xmlns="http://www.w3.org/2000/svg" ><path d="M0 71.6129C0 32.0622 32.0622 0 71.6129 0C111.164 0 143.226 32.0622 143.226 71.6129V174.118C143.226 180.128 138.354 185 132.343 185H10.8824C4.87222 185 0 180.128 0 174.118V71.6129Z" fill="url(#markGradient)"></path><path clipRule="evenodd" d="M134.717 176.111V71.8216C134.717 36.8684 106.465 8.53326 71.6129 8.53326C36.7613 8.53326 8.50846 36.8684 8.50846 71.8216V176.111C8.50846 176.308 8.66719 176.467 8.86298 176.467H134.363C134.559 176.467 134.717 176.308 134.717 176.111ZM71.6129 0C32.0622 0 0 32.1556 0 71.8216V176.111C0 181.02 3.96809 185 8.86298 185H134.363C139.258 185 143.226 181.02 143.226 176.111V71.8216C143.226 32.1556 111.164 0 71.6129 0Z" fill="var(--colors-accent)" fillRule="evenodd"></path><defs><linearGradient gradientUnits="userSpaceOnUse" id="markGradient" x1="18.435" x2="143.747" y1="10.6666" y2="209.447"><stop offset="0.265625" stopColor="var(--colors-accent)"></stop><stop offset="0.734375" stopColor="var(--colors-background)"></stop></linearGradient></defs></svg></Box>
+            </Box>
+
+
+            {/* <Box as='footer'
                 width={'fit'}
                 borderRadius={'full'}
                 position={'fixed'}
@@ -193,7 +211,7 @@ const Layout = ({ children, title = 'Mirror feed', cover = '', twitterAuthor = '
                         width={"6"}
                     ><svg viewBox="0 0 144 185" xmlns="http://www.w3.org/2000/svg" ><path d="M0 71.6129C0 32.0622 32.0622 0 71.6129 0C111.164 0 143.226 32.0622 143.226 71.6129V174.118C143.226 180.128 138.354 185 132.343 185H10.8824C4.87222 185 0 180.128 0 174.118V71.6129Z" fill="url(#markGradient)"></path><path clipRule="evenodd" d="M134.717 176.111V71.8216C134.717 36.8684 106.465 8.53326 71.6129 8.53326C36.7613 8.53326 8.50846 36.8684 8.50846 71.8216V176.111C8.50846 176.308 8.66719 176.467 8.86298 176.467H134.363C134.559 176.467 134.717 176.308 134.717 176.111ZM71.6129 0C32.0622 0 0 32.1556 0 71.8216V176.111C0 181.02 3.96809 185 8.86298 185H134.363C139.258 185 143.226 181.02 143.226 176.111V71.8216C143.226 32.1556 111.164 0 71.6129 0Z" fill="var(--colors-accent)" fillRule="evenodd"></path><defs><linearGradient gradientUnits="userSpaceOnUse" id="markGradient" x1="18.435" x2="143.747" y1="10.6666" y2="209.447"><stop offset="0.265625" stopColor="var(--colors-accent)"></stop><stop offset="0.734375" stopColor="var(--colors-background)"></stop></linearGradient></defs></svg></Box>
                 </Box>
-            </Box>
+            </Box> */}
 
 
         </Box >
