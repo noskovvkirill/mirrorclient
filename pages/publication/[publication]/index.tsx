@@ -7,7 +7,7 @@ import GridPage from '@/components/Layout/GridPage'
 //utils
 import { supabase } from 'src/client'
 import { useRouter } from 'next/router'
-import AddressPrettyPrint from 'src/helpers/AddressPrettyPrint'
+// import AddressPrettyPrint from 'src/helpers/AddressPrettyPrint'
 //types
 import type { GetStaticProps } from 'next'
 import type { EntryType, PublisherType } from 'types'
@@ -171,8 +171,8 @@ const Publication = ({ entries, publisher }: Props) => {
                             display='flex'
                             flex={1}
                             backgroundColor={'backgroundSecondary'}
-                            width={'128'}
-                            minWidth={'96'}
+                            width={{ sm: 'full', xs: 'full', md: '128', xl: '128', lg: '128' }}
+                            minWidth={{ sm: 'auto', xs: 'auto', md: '96', xl: '96', lg: '96' }}
                             padding={'4'}>
 
                             <Box width='full' >
