@@ -61,11 +61,11 @@ const HeaderFeed = ({ pathName }: { pathName: string }) => {
 
   return (
     <Box width='full'
-      marginTop={'16'}
+      marginTop={{ xs: '6', sm: '6', md: '16', lg: '16', xl: '16' }}
       paddingY={'8'}
       paddingX={{ xs: '0', sm: '0', md: '0', lg: '10', xl: '10' }}
       borderRadius={'2xLarge'}
-      marginBottom={'12'}
+      marginBottom={{ xs: '10', sm: '10', md: '12', lg: '12', xl: '12' }}
     >
       <Stack direction={{ xs: 'vertical', sm: 'horizontal', md: 'horizontal', lg: 'horizontal', xl: 'horizontal' }} space={'12'}>
         <Stack space={'2'}>

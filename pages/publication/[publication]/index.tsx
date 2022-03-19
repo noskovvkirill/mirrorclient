@@ -177,8 +177,8 @@ const Publication = ({ entries, publisher }: Props) => {
 
                             <Box width='full' >
                                 <Box width='full' >
-                                    <Stack direction='horizontal'>
-                                        <Box width='full' paddingX={'4'} paddingY={'2'}>
+                                    <Stack direction={{ xs: 'vertical', sm: 'vertical', md: 'horizontal', lg: 'horizontal', xl: 'horizontal' }}>
+                                        <Box width='full' paddingX={'4'} paddingY={{ xs: '0', sm: '0', md: '2', xl: '2', lg: '2' }}>
                                             <Stack direction='vertical' align='flex-start'>
                                                 <Text weight='bold'
                                                     color='textTertiary'
@@ -218,8 +218,10 @@ const Publication = ({ entries, publisher }: Props) => {
                                             </Stack>
                                         </Box>
 
-                                        <Box height={'auto'} paddingY={'6'}>
-                                            <Box height='full' borderColor={'foregroundSecondary'} borderRightWidth={'0.375'}>&nbsp;</Box>
+                                        <Box height={'auto'} paddingY={{ xs: '0', sm: '0', md: '6', xl: '6', lg: '6' }}>
+                                            <Box height='full' borderColor={'foregroundSecondary'}
+                                                borderBottomWidth={{ xs: '0.375', sm: '0.375', md: '0', lg: '0', xl: '0' }}
+                                                borderRightWidth={{ xs: '0', sm: '0', md: '0.375', lg: '0.375', xl: '0.375' }}>&nbsp;</Box>
                                         </Box>
 
 

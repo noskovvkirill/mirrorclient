@@ -287,6 +287,7 @@ const SearchPanel = ({ setIsOpen, isSearch }: ISearch) => {
                                                                                 }
                                                                                 if (e.key === 'Enter') {
                                                                                     e.stopPropagation()
+                                                                                    setIsOpen(false)
                                                                                     if (item.type === 'DOMAIN') {
                                                                                         router.push('/publication/' + item.ensLabel + '/')
                                                                                     } else {
@@ -367,6 +368,7 @@ const SearchPanel = ({ setIsOpen, isSearch }: ISearch) => {
                                                                                 }
                                                                                 if (e.key === 'Enter') {
                                                                                     e.stopPropagation()
+                                                                                    setIsOpen(false)
                                                                                     if (item?.domain) {
                                                                                         router.push('/publication/' + item?.domain.split('.')[0] + '/' + item.digest)
                                                                                     } else {
