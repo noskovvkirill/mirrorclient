@@ -67,7 +67,7 @@ const HeaderFeed = ({ pathName }: { pathName: string }) => {
       borderRadius={'2xLarge'}
       marginBottom={'12'}
     >
-      <Stack direction='horizontal' space={'12'}>
+      <Stack direction={{ xs: 'vertical', sm: 'horizontal', md: 'horizontal', lg: 'horizontal', xl: 'horizontal' }} space={'12'}>
         <Stack space={'2'}>
           {[...fetchOptions.find((option) => fetchOption()[0] === option.baseHref)?.edges || []]
             .sort((a: FeedTypeEdge, b: FeedTypeEdge) => {
@@ -94,7 +94,7 @@ const HeaderFeed = ({ pathName }: { pathName: string }) => {
                         <Box as={fetchOption()[1] === edge.href ? 'h1' : 'h2'}
                           lineHeight={'1.25'}
                           fontWeight={'semiBold'}
-                          fontSize={fetchOption()[1] === edge.href ? { xs: 'extraLarge', sm: 'extraLarge', md: 'headingOne', lg: 'headingOne' } : { xs: 'extraLarge', sm: 'extraLarge', md: 'headingTwo', lg: 'headingTwo' }}
+                          fontSize={fetchOption()[1] === edge.href ? { xs: 'headingTwo', sm: 'headingTwo', md: 'headingOne', lg: 'headingOne' } : { xs: 'headingTwo', sm: 'headingTwo', md: 'headingTwo', lg: 'headingTwo' }}
                           color={{ base: fetchOption()[1] === edge.href ? "accent" : "textTertiary", 'hover': 'accent' }}
                         >
                           {edge.name.toString()}
@@ -125,7 +125,7 @@ const HeaderFeed = ({ pathName }: { pathName: string }) => {
                           lineHeight={'1.25'}
                           fontWeight={'semiBold'}
                           as={fetchOption()[1] === edge.href ? 'h1' : 'h2'}
-                          fontSize={fetchOption()[1] === edge.href ? { xs: 'extraLarge', sm: 'extraLarge', md: 'headingOne', lg: 'headingOne' } : { xs: 'extraLarge', sm: 'extraLarge', md: 'headingTwo', lg: 'headingTwo' }}
+                          fontSize={fetchOption()[1] === edge.href ? { xs: 'headingTwo', sm: 'headingTwo', md: 'headingOne', lg: 'headingOne' } : { xs: 'headingTwo', sm: 'headingTwo', md: 'headingTwo', lg: 'headingTwo' }}
                           color={{ base: fetchOption()[1] === edge.href ? "accent" : "textTertiary", 'hover': 'accent' }}
                           key={edge.name}>
                           {edge.name}
@@ -162,7 +162,7 @@ const HeaderFeed = ({ pathName }: { pathName: string }) => {
                       as={fetchOption()[1] === edge.href ? 'h1' : 'h2'}
                       fontWeight={'semiBold'}
                       lineHeight={'1.25'}
-                      fontSize={fetchOption()[1] === edge.href ? { xs: 'extraLarge', sm: 'extraLarge', md: 'headingOne', lg: 'headingOne' } : { xs: 'extraLarge', sm: 'extraLarge', md: 'headingTwo', lg: 'headingTwo' }}
+                      fontSize={fetchOption()[1] === edge.href ? { xs: 'headingTwo', sm: 'headingTwo', md: 'headingOne', lg: 'headingOne' } : { xs: 'headingTwo', sm: 'headingTwo', md: 'headingTwo', lg: 'headingTwo' }}
                       color={{ base: fetchOption()[1] === edge.href ? "accent" : "textTertiary", 'hover': 'accent' }}
                       key={edge.name}>
                       {edge.name}
@@ -200,7 +200,7 @@ const HeaderFeed = ({ pathName }: { pathName: string }) => {
                         fontWeight={'semiBold'}
                         lineHeight={'1.25'}
                         as={fetchOption()[0] === option.baseHref ? 'h1' : 'h2'}
-                        fontSize={fetchOption()[0] === option.baseHref ? { xs: 'extraLarge', sm: 'extraLarge', md: 'headingOne', lg: 'headingOne' } : { xs: 'extraLarge', sm: 'extraLarge', md: 'headingTwo', lg: 'headingTwo' }}
+                        fontSize={fetchOption()[0] === option.baseHref ? { xs: 'headingTwo', sm: 'headingTwo', md: 'headingOne', lg: 'headingOne' } : { xs: 'headingTwo', sm: 'headingTwo', md: 'headingTwo', lg: 'headingTwo' }}
                         color={{ base: fetchOption()[0] === option.baseHref ? "accent" : 'textTertiary' }}
                       >
                         <Stack direction='horizontal' align='center'>{option.name}   <Tag>Soon</Tag></Stack>
@@ -216,7 +216,7 @@ const HeaderFeed = ({ pathName }: { pathName: string }) => {
                           fontWeight={'semiBold'}
                           lineHeight={'1.25'}
                           as={fetchOption()[0] === option.baseHref ? 'h1' : 'h2'}
-                          fontSize={fetchOption()[0] === option.baseHref ? { xs: 'extraLarge', sm: 'extraLarge', md: 'headingOne', lg: 'headingOne' } : { xs: 'extraLarge', sm: 'extraLarge', md: 'headingTwo', lg: 'headingTwo' }}
+                          fontSize={fetchOption()[0] === option.baseHref ? { xs: 'headingTwo', sm: 'headingTwo', md: 'headingOne', lg: 'headingOne' } : { xs: 'headingTwo', sm: 'headingTwo', md: 'headingTwo', lg: 'headingTwo' }}
                           color={{ base: fetchOption()[0] === option.baseHref ? "accent" : 'textTertiary', 'hover': 'accent' }}
                         >
                           {option.name}

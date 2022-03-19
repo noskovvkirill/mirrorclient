@@ -1,15 +1,14 @@
 import Layout from '@/components/Layout'
-import Header from '@/components/Layout/Headers/Feed'
-import { Spinner as Loader, Box, Stack, Text, Input, IconClose, Button } from 'design-system'
-import GridPage from '@/components/Layout/GridPage'
+import { Box, Stack, Text, Input, IconClose, IconPlus, Button } from 'design-system'
 import Publisher from '@/components/Publisher'
 
 //utils
 import { useState, useRef } from 'react'
 import { createClient } from '@supabase/supabase-js'
 import { withSessionSsr } from "src/withSession";
+import AddressPrettyPrint from 'src/helpers/AddressPrettyPrint'
 //type
-import type { EntryType, SubscribtionType } from 'types'
+import type { SubscribtionType } from 'types'
 import type { GetServerSideProps } from 'next'
 
 
@@ -63,19 +62,45 @@ type Props = {
 const Page = ({ publications, user: userState }: Props) => {
 
     const [subscribed, setSubscribed] = useState(publications)
+
     const [user, setUser] = useState(userState)
-    const input = useRef<HTMLInputElement>()
+    const input = useRef<HTMLInputElement | null>()
+
+    const [removeState, setRemoveState] = useState<'default' | 'initiated'>('default')
     const [emailState, setEmailState] = useState
         <"default" | "confirm" | "error" | string>
         ("default");
 
 
-    const Unsubcribe = (publ: string) => {
+    const Subscribe = async (publ: string) => {
+        const item = publications.find(item => item.ensLabel === publ)
+        if (item) {
+            const { ok } = await fetch('/api/subscribe?publication=' + item.ensLabel)
+                .then(res => res.json())
+            if (ok) {
+                setSubscribed([...subscribed, item])
+            }
+        }
+    }
+
+
+
+    const Unsubcribe = async (publ: string) => {
         setSubscribed((prev) => prev.filter((i) => i.ensLabel !== publ))
+        const { ok } = await fetch('/api/unsubscribe?publication=' + publ)
+            .then(res => res.json())
+        if (!ok) {
+            alert('error unsub')
+        }
     }
 
     const RemoveEmail = async () => {
         setUser({ ...user, email: null })
+        const { ok } = await fetch('/api/email/removeEmail')
+            .then(res => res.json())
+        if (!ok) {
+            alert('error remove email')
+        }
         // setNotificationSettings({
         //     delivery: null,
         //     email: null,
@@ -119,6 +144,7 @@ const Page = ({ publications, user: userState }: Props) => {
                     }
                 })
                 .then(() => {
+                    setRemoveState('default')
                     setEmailState('confirm')
                 })
                 .catch((e) => {
@@ -168,10 +194,30 @@ const Page = ({ publications, user: userState }: Props) => {
                                             <Stack direction='horizontal'>
                                                 <Text
                                                     weight={'medium'}
-                                                    color='textSecondary'>{user.email} </Text>
-                                                <Box position='absolute' right='5' bottom='2.5'><Button
-                                                    onClick={RemoveEmail}
-                                                    size='small' variant='transparent' shape='circle'><IconClose size='4' /></Button></Box>
+                                                    color='textSecondary'>{user.email.lengh <= 25 ? user.email : AddressPrettyPrint(user.email, 25)} </Text>
+                                                <Box position='absolute' right='5' bottom='2.5'>
+                                                    {removeState === 'default' && (
+                                                        <Button
+                                                            onClick={() => setRemoveState('initiated')}
+                                                            size='small' variant='transparent' shape='circle'><IconClose size='4' /></Button>
+                                                    )}
+                                                    {removeState === 'initiated' && (
+                                                        <Stack direction='horizontal' align='center'>
+                                                            <Box display={{ xs: "none", sm: "none", md: "block", lg: "block", xl: "block" }}>
+                                                                <Text color='red'
+                                                                >Are you sure?</Text>
+                                                            </Box>
+                                                            <Button
+                                                                onClick={RemoveEmail}
+                                                                tone='red'
+                                                                size='small' variant='primary'>Remove</Button>
+                                                            <Button
+                                                                onClick={() => setRemoveState('default')}
+                                                                size='small' variant='tertiary' shape='circle'><IconClose size='4' /></Button>
+                                                        </Stack>
+                                                    )}
+
+                                                </Box>
                                             </Stack>
                                         </Box>
                                     </Stack>)}
@@ -179,8 +225,9 @@ const Page = ({ publications, user: userState }: Props) => {
                                 {!user.email && (
                                     <Stack direction='vertical' space={'4'}>
                                         <Input
+                                            //@ts-ignore-next-line
                                             ref={input}
-                                            disabled={user.email}
+                                            disabled={user.email || emailState === 'confirm'}
                                             label='Email Address'
                                             placeholder={'Your email Address'}
                                             autoFocus={false}
@@ -188,7 +235,12 @@ const Page = ({ publications, user: userState }: Props) => {
                                             textTransform='lowercase'
                                             type='email'
                                         />
-                                        <Button size='small' onClick={ChangeUserEmail}>Send email confirmation</Button>
+                                        {emailState === 'default' && (
+                                            <Button size='small' onClick={ChangeUserEmail}>Send email confirmation</Button>
+                                        )}
+                                        {emailState === 'confirm' && (
+                                            <Button size='small' disabled variant='tertiary'>Confirm your email to receive notifications</Button>
+                                        )}
                                         {emailState === 'error' && <Text color='red'>Something went wrong</Text>}
                                     </Stack>
                                 )}
@@ -207,22 +259,45 @@ const Page = ({ publications, user: userState }: Props) => {
                                 <Box paddingBottom={'4'}>
                                     <Text size='headingTwo' color='accent' weight='bold'>Subscriptions</Text>
                                 </Box>
-                                {(!subscribed || subscribed.length === 0) && (
+                                {(!publications || publications.length === 0) && (
                                     <Text size='small' color='textTertiary'>You are not subscribed to any publications</Text>
                                 )}
                                 {/* <Box borderBottomWidth={'0.375'} paddingY={'4'}> */}
-                                {subscribed.map((address, index, arr) => {
-                                    return <Box
-                                        position='relative'
-                                        borderBottomWidth={index === arr.length - 1 ? '0' : '0.375'} key={address.ensLabel + 'subscribtion'} paddingBottom={'4'}>
-                                        <Box width='fit' >
-                                            <Publisher
-                                                ensLabel={address.type === 'ADDRESS' ? address.ensLabel : address.ensLabel + '.mirror.xyz'} size='default' />
-                                            <Box position='absolute' right='5' bottom='4'><Button
-                                                onClick={() => Unsubcribe(address.ensLabel)}
-                                                size='small' variant='transparent' shape='circle'><IconClose size='4' /></Button></Box>
+                                {publications.map((address, index, arr) => {
+                                    if (subscribed.find(item => item.ensLabel === address.ensLabel)) {
+                                        return <Box
+                                            position='relative'
+                                            borderBottomWidth={index === arr.length - 1 ? '0' : '0.375'} key={address.ensLabel + 'subscribtion'} paddingBottom={'4'}>
+                                            <Box width='fit' >
+                                                <Publisher
+                                                    ensLabel={address.type === 'ADDRESS' ? address.ensLabel : address.ensLabel + '.mirror.xyz'} size='default' />
+                                                <Box position='absolute' right='5' bottom='4'><Button
+                                                    onClick={() => Unsubcribe(address.ensLabel)}
+                                                    size='small' variant='transparent' shape='circle'><IconClose size='4' /></Button></Box>
+                                            </Box>
                                         </Box>
-                                    </Box>
+                                    } else {
+                                        return (
+                                            <Box
+                                                position='relative'
+                                                borderBottomWidth={index === arr.length - 1 ? '0' : '0.375'} key={address.ensLabel + 'subscribtion'} paddingBottom={'4'}>
+                                                <Box width='fit' >
+                                                    <Publisher
+                                                        ensLabel={address.type === 'ADDRESS' ? address.ensLabel : address.ensLabel + '.mirror.xyz'} size='default' />
+                                                    <Box position='absolute' right='5' bottom='4'>
+                                                        <Stack direction='horizontal' align='center'>
+                                                            <Box display={{ xs: "none", sm: "none", md: "block", lg: "block", xl: "block" }}>
+                                                                <Text color='textTertiary'>Subscribe back</Text>
+                                                            </Box>
+                                                            <Button
+                                                                onClick={() => Subscribe(address.ensLabel)}
+                                                                size='small' variant='secondary' shape='circle'><IconPlus size='4' /></Button>
+                                                        </Stack>
+                                                    </Box>
+                                                </Box>
+                                            </Box>
+                                        )
+                                    }
                                 })}
                                 {/* </Box> */}
                             </Stack>

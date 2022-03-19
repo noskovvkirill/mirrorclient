@@ -3,33 +3,35 @@ import { supabase } from 'src/client'
 const Search = async (query: string, type?: 'ENTRIES' | 'PUBLICATIONS') => {
     if (type === 'ENTRIES') {
         const { data, error } = await supabase
-            .from('mirroritems_test')
-            .select('digest, title, publication, timestamp')
+            .from('mirroritems')
+            .select('digest, title, project, domain')
+            .neq('project', null)
             .textSearch('title', query, {
                 type: 'plain',
                 config: 'english'
             })
             .limit(5)
-        return data
+        return [data, []]
     } else if (type === 'PUBLICATIONS') {
         const { data, error } = await supabase
             .rpc('fuzzy_search_publication', { str1: query })
-        return data
+        return [[], data]
     }
 
-    const promiseItems = await supabase
-        .from('mirroritems_test')
-        .select('digest, title, publication, timestamp')
+    const { data, error } = await supabase
+        .from('mirroritems')
+        .select('digest, title, project, domain')
+        .neq('project', null)
         .textSearch('title', query, {
             type: 'plain',
             config: 'english'
         })
         .limit(5)
 
-    const promiseSearch = await supabase
+    const { data: dataPubl, error: errorPubl } = await supabase
         .rpc('fuzzy_search_publication', { str1: query })
 
-    return [promiseItems, promiseSearch]
+    return [data, dataPubl]
 
 }
 

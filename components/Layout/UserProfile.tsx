@@ -1,7 +1,7 @@
 import { useAccount, useConnect, useSignMessage, useNetwork } from 'wagmi'
 //components
 import { Dialog } from 'design-system'
-import { Box, Button, Stack, Avatar, Text, IconUserSolid } from 'design-system'
+import { Box, Button, Stack, Avatar, Text, IconUserSolid, IconClose } from 'design-system'
 import { Dropdown, DropdownItem } from 'design-system'
 //state
 import { useStore } from 'contexts'
@@ -170,22 +170,56 @@ const UserProfile = () => {
             width={{ xs: '3/4', sm: '3/4', md: '96', lg: '96', xl: '96' }}
             size={'small'}
             trigger={'Connect Wallet'}>
-            <Box width='full' paddingX={'4'}
-            >
+            <Box width='full'>
                 <Stack direction='vertical'>
-                    {connectData?.connectors.map((x) => {
-                        if (!x.ready) return null
-                        return (<Button
-                            variant='tertiary'
-                            width='full'
-                            disabled={!x.ready} key={x.id} onClick={() => connect(x)}>
-                            {x.name}
-                        </Button>)
-                    })}
+                    <Box width='full'
+                        padding={'5'}
+                        position='relative'
+                        textAlign={'center'}
+                        borderBottomWidth={'0.75'}>
+
+                        <Text weight={'bold'}>Connect Wallet</Text>
+                        <Box position='absolute'
+                            cursor='pointer'
+                            transitionProperty='colors'
+                            transitionDuration={'150'}
+                            onClick={() => ToggleAuth(false)}
+                            top='4'
+                            color={{ 'hover': 'text', 'base': 'textTertiary' }}
+                            right='4'>
+                            <IconClose
+                                color={'inherit'}
+                            />
+                        </Box>
+
+
+                    </Box>
+                    <Box width='full' paddingX={'4'}
+                        paddingTop={'2'}
+                        paddingY={'6'}
+                    >
+                        <Stack direction='vertical'>
+                            {connectData?.connectors.map((x) => {
+                                if (!x.ready) return null
+                                return (<Button
+                                    variant='tertiary'
+                                    width='full'
+                                    disabled={!x.ready} key={x.id} onClick={() => connect(x)}>
+                                    {x.name}
+                                </Button>)
+                            })}
+                            {/* <Box width='full'
+                                padding={'2'}
+                                textAlign={'center'}
+                            >
+                                <Text color='textSecondary'>I don't have a wallet</Text>
+                            </Box> */}
+                        </Stack>
+                        {connectError && <Text>{connectError?.message ?? 'Failed to connect'}</Text>}
+                    </Box>
                 </Stack>
-                {connectError && <Text>{connectError?.message ?? 'Failed to connect'}</Text>}
-            </Box>
-        </Dialog>
+            </Box >
+        </Dialog >
     )
 }
 

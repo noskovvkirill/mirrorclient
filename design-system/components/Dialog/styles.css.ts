@@ -23,7 +23,6 @@ export const variants = recipe({
       display: 'flex',
       fontWeight: 'medium',
       height: 'fit',
-      minHeight: '80'
     }),
   ],
   variants: {

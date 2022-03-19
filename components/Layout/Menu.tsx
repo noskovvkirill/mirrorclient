@@ -9,6 +9,7 @@ const Menu = ({ publisher }: { publisher?: PublisherType }) => {
     return (
         <Box
             width='fit'
+            height='fit'
             borderRadius={'2xLarge'}
         >
             <Stack direction={'horizontal'} align='center'>

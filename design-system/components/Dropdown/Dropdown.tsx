@@ -20,6 +20,7 @@ type Props = {
 export const Dropdown = ({ children, width = '64', trigger, size = 'medium' }: Props) => {
   return (
     <Box
+      height={'fit'}
       as={DropdownRadix.Root}>
       <DropdownRadix.Trigger asChild>
         {trigger}

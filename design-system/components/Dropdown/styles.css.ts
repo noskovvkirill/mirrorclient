@@ -9,7 +9,6 @@ export const variants = recipe({
       position: 'fixed',
       borderRadius: '2xLarge',
       alignItems: 'center',
-      height: 'fit',
     }),
   ],
   variants: {

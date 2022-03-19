@@ -1,5 +1,5 @@
 import type { PublisherType } from 'types'
-import { Button, Avatar, Stack, Box, Text, HoverCard, AvatarGroup, Tag } from 'design-system'
+import { Button, Avatar, Stack, Box, Text, HoverCard, AvatarGroup, Tag, Skeleton } from 'design-system'
 import Link from 'next/link'
 //state
 import { useMemo } from 'react'
@@ -86,7 +86,7 @@ const PublisherBody = ({ publisher, size }: { publisher: PublisherType, size: 's
                         'bold'
                     }
                     size={size === 'default' ? 'extraLarge' : 'inherit'}
-                >{publisher?.project?.displayName}
+                >{AddressPrettyPrint(publisher?.project?.displayName || '', 16)}
                 </Text>
             </Stack>
         </Link></Box>
@@ -94,7 +94,8 @@ const PublisherBody = ({ publisher, size }: { publisher: PublisherType, size: 's
     return (
         <HoverCard width={'80'} padding={'0'} trigger={trigger}>
             <Stack>
-                <Box width='full' paddingX={'4'} paddingTop={'4'}>
+                <Box width='full'
+                    paddingX={'4'} paddingTop={'4'}>
                     <Stack direction={'horizontal'}>
                         <Avatar
                             size="16"
@@ -106,7 +107,7 @@ const PublisherBody = ({ publisher, size }: { publisher: PublisherType, size: 's
                             <Stack direction={'vertical'}
                                 space={'2'}
                                 align='flex-start'>
-                                <Text size='extraLarge' weight='bold' color='textTertiary'>{publisher.project?.displayName}</Text>
+                                <Text size='extraLarge' weight='bold' color='textTertiary'>{AddressPrettyPrint(publisher.project?.displayName || '', 16)}</Text>
                                 <Tag size='small'> {publisher.project?.address && AddressPrettyPrint(publisher.project?.address, 6)}</Tag>
                             </Stack>
                             <Text size='small'>{publisher.project?.description}</Text>
@@ -148,8 +149,16 @@ const Publisher = ({ publisher, ensLabel, size = 'default' }: IPublisher) => {
                     publisher={{ project: data.mirrorProject.projectDetails }} size={size} />
             )
         }
+        if (isValidating) {
+            return (
+                <Skeleton height={size === 'default' ? '10' : '6'} loading>
+                    <Text>Loading publisher.. It may take a couple seconds</Text>
+                </Skeleton>
+            )
+        }
         return <Box>{JSON.stringify(error)}</Box>
     }
+
 
     return (<PublisherBody publisher={publisher} size={size} />)
 

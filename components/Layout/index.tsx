@@ -38,7 +38,17 @@ const Layout = ({ children, title = 'Mirror feed', cover = '', twitterAuthor = '
     const scrollY = useScrollPosition(8) //framerate scroll check
     const [prevScroll, setPrevScroll] = useState(0)
 
-
+    const handleKey = (e: KeyboardEvent) => {
+        if (e.key === '/') {
+            setIsSearch(!isSearch)
+        }
+    }
+    useEffect(() => {
+        if (typeof window !== 'undefined') {
+            window.addEventListener('keydown', handleKey)
+            return (() => window.removeEventListener('keydown', handleKey))
+        }
+    }, [])
     useEffect(() => {
         const currentScroll = scrollY
         if (currentScroll >= Math.floor(window.innerHeight / 3) && scrollDir === 'bottom') {

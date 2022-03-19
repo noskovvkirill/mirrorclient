@@ -2,7 +2,7 @@ import thunder from 'src/fetcher'
 import useSWR from 'swr'
 import Root from './Root'
 import { render } from 'src/helpers/MarkdownSimpleParser'
-import { Box, Heading, Skeleton, SkeletonGroup, Stat, Tag, Text, Stack, Avatar } from 'design-system'
+import { Box, Heading, Skeleton, SkeletonGroup, Stat, Tag, Text, Stack } from 'design-system'
 import Publisher from '@/components/Publisher'
 import AddressPrettyPrint from 'src/helpers/AddressPrettyPrint'
 // import Image from 'next/image'
@@ -130,13 +130,15 @@ const EntryItem = ({ entry, isValidating, maxWidth, digest, error }: { error: an
                                 />
                             </Skeleton>
                             <Skeleton loading={isValidating || error}>
-                                <Box style={{
-                                    overflow: 'hidden',
-                                    WebkitLineClamp: '5',
-                                    lineClamp: '5',
-                                    display: '-webkit-box',
-                                    WebkitBoxOrient: 'vertical',
-                                }}>
+                                <Box
+                                    maxHeight={'28'}
+                                    style={{
+                                        overflow: 'hidden',
+                                        WebkitLineClamp: '5',
+                                        lineClamp: '5',
+                                        display: '-webkit-box',
+                                        WebkitBoxOrient: 'vertical',
+                                    }}>
                                     <Text
                                         size='small'
                                         color="textTertiary" weight={"normal"}>
