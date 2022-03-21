@@ -78,7 +78,9 @@ const HeaderFeed = ({ pathName }: { pathName: string }) => {
             .map((edge) => {
               if (!edge.isProtected)
                 return (
-                  <Box style={{ userSelect: 'none' }}
+                  <Box
+                    width='fit'
+                    style={{ userSelect: 'none' }}
                     cursor={fetchOption()[1] === edge.href ? 'default' : 'pointer'} key={'fetch_option_' + edge.name}>
                     <Stack space={'0'}>
                       {fetchOption()[1] === edge.href && (
@@ -93,6 +95,7 @@ const HeaderFeed = ({ pathName }: { pathName: string }) => {
                       >
                         <Box as={fetchOption()[1] === edge.href ? 'h1' : 'h2'}
                           lineHeight={'1.25'}
+                          width='fit'
                           fontWeight={'semiBold'}
                           fontSize={fetchOption()[1] === edge.href ? { xs: 'headingTwo', sm: 'headingTwo', md: 'headingOne', lg: 'headingOne' } : { xs: 'headingTwo', sm: 'headingTwo', md: 'headingTwo', lg: 'headingTwo' }}
                           color={{ base: fetchOption()[1] === edge.href ? "accent" : "textTertiary", 'hover': 'accent' }}

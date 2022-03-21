@@ -79,6 +79,10 @@ const SearchPanel = ({ setIsOpen, isSearch }: ISearch) => {
     const [searchMode, setSearchMode] = useState<'PUBLICATIONS' | 'ENTRIES' | undefined>(undefined)
 
     const handleKeyDown = (e: KeyboardEvent) => {
+        if (e.key === 'Escape' || e.key === 'Alt') {
+            setIsOpen(false)
+        }
+
         if (e.key === 'ArrowDown') {
             if (focusArea.current === 'input') {
                 e.preventDefault()

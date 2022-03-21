@@ -42,7 +42,7 @@ export const StoreProvider = ({ children }: { children: React.ReactNode[] | Reac
             setIsEmailPopUp(true)
         } else {
             setIsEmailPopUp(false)
-            // localStorage.setItem('EmailPopUpClose', 'true')
+            localStorage.setItem('EmailPopUpClose', 'true')
         }
     }, [isAuth])
 
@@ -50,23 +50,14 @@ export const StoreProvider = ({ children }: { children: React.ReactNode[] | Reac
         const isEmail = await fetch('/api/email/isEmail', {
             method: 'POST',
         })
-            .then(d => {
-                if (d.ok) {
-                    return true
-                } else {
-                    if (d.status === 509) {
-                        throw new Error('Someone else is already using this email');
-                    }
-                    return false
-                }
-            })
+            .then(d => d.json()).then(res => res.ok)
         console.log('Is User Email? 🦤 ', isEmail)
         return isEmail
     }
 
     const getUserSettings = async () => {
         console.log('Checking user email 💌')
-        const EmailPopUpClose = localStorage.getItem('isEmail')
+        const EmailPopUpClose = localStorage.getItem('EmailPopUpClose')
         //fetch user email 
         const isEmail = await getUserEmail()
         if (isEmail) {

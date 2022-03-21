@@ -29,11 +29,12 @@ async function handler(
         .select('*')
         .eq('id', req.session.siwe?.id)
 
+
     if (error || !data) {
         return res.status(500).json({ ok: false })
     }
 
-    if (data && data[0].email) {
+    if (data && data[0].email && data[0].email !== null) {
         return res.status(200).json({ ok: true })
     } else {
         return res.status(200).json({ ok: false })
