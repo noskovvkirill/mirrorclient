@@ -9,7 +9,7 @@ const Subscribe = () => {
 
     return (
         <Dialog isOpen={isEmailPopUp} setIsOpen={TogglePopUp}
-            width={{ xs: '3/4', sm: '3/4', md: '192', lg: '224', xl: '224' }}
+            width={{ xs: 'full', sm: 'full', md: '192', lg: '224', xl: '224' }}
         >
             <Box width='full' padding={'8'} paddingY='8'>
                 <Stack direction='vertical'
@@ -63,7 +63,11 @@ const Subscribe = () => {
 
                     <Stack direction='horizontal' space='2'>
                         <Link href='/settings'>
-                            <Button size='small'>Open Settings</Button>
+                            <Button
+                                onClick={() => {
+                                    TogglePopUp(false)
+                                }}
+                                size='small'>Open Settings</Button>
                         </Link>
                         <Button size='small'
                             onClick={() => TogglePopUp(false)}

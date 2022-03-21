@@ -109,6 +109,7 @@ const HeaderFeed = ({ pathName }: { pathName: string }) => {
               if (accountData && withEth.address) {
                 return (
                   <Box
+                    width='fit'
                     style={{ userSelect: 'none' }}
                     key={'fetch_option_' + edge.name}
                     cursor={
