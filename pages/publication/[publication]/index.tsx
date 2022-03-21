@@ -3,6 +3,7 @@
 import Layout from '@/components/Layout'
 import { Box, Stack, Tag, Text, Avatar, Button, IconLink, IconPlusSmall, AvatarGroup } from 'design-system'
 import GridPage from '@/components/Layout/GridPage'
+import { useAccount } from 'wagmi'
 
 //utils
 import { supabase } from 'src/client'
@@ -81,8 +82,9 @@ type Props = {
 
 const Publication = ({ entries, publisher }: Props) => {
     const router = useRouter()
-    const { isAuth, withEth, ToggleAuth } = useStore()
+    const { withEth } = useStore()
     const [isSubscribed, setIsSubscribed] = useState<boolean | null>(null)
+    const [{ data }] = useAccount()
 
     async function getSubscribed() {
         const { ok } = await fetch('/api/getSubscribedOne?publication=' + publisher?.domain?.split('.')[0])
@@ -239,7 +241,7 @@ const Publication = ({ entries, publisher }: Props) => {
                                                     variant={isSubscribed === false ? 'primary' : 'tertiary'}
                                                     loading={isSubscribed === null}
                                                     prefix={isSubscribed === false && <IconPlusSmall />}
-                                                    disabled={(withEth && isAuth) ? false : true}
+                                                    disabled={(withEth && data?.address) ? false : true}
                                                     size='small'>
                                                     {isSubscribed === true && (
                                                         'Unsubscribe'
@@ -253,7 +255,7 @@ const Publication = ({ entries, publisher }: Props) => {
 
 
                                                 </Button>
-                                                {(!withEth || !isAuth) && (
+                                                {(!withEth || !data?.address) && (
                                                     <Box maxWidth={'32'}>
                                                         <Text
                                                             weight={'bold'}

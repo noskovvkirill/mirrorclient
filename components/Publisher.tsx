@@ -149,7 +149,7 @@ const Publisher = ({ publisher, ensLabel, size = 'default' }: IPublisher) => {
                     publisher={{ project: data.mirrorProject.projectDetails }} size={size} />
             )
         }
-        if (isValidating) {
+        if (isValidating || error) {
             return (
                 <Skeleton height={size === 'default' ? '10' : '6'} loading>
                     <Text>Loading publisher.. It may take a couple seconds</Text>

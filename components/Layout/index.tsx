@@ -8,6 +8,7 @@ import React, { ReactNode, useEffect, useState } from 'react'
 import useScrollPosition from '@react-hook/window-scroll'
 import UserProfile from '@/components/Layout/UserProfile'
 import Menu from '@/components/Layout/Menu'
+import { Subscribe } from '@/components/Layout/PopUps'
 //utils
 // import { keyframes } from '@vanilla-extract/css'
 import type { PublisherType } from 'types'
@@ -39,7 +40,7 @@ const Layout = ({ children, title = 'Mirror feed', cover = '', twitterAuthor = '
     const [prevScroll, setPrevScroll] = useState(0)
 
     const handleKey = (e: KeyboardEvent) => {
-        if (e.key === '/') {
+        if (e.keyCode === 18 || e.key === 'Alt') {
             setIsSearch(!isSearch)
         }
     }
@@ -168,6 +169,8 @@ const Layout = ({ children, title = 'Mirror feed', cover = '', twitterAuthor = '
 
 
             </Box>
+
+            <Subscribe />
             <Box as='main'
                 backgroundColor={'backgroundTertiary'}
                 flex={1}

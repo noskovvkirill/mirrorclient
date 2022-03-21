@@ -39,6 +39,9 @@ const SearchBar = ({ isSearch, setIsOpen, isVisible, setIsVisible }: ISearch & {
                     onClick={() => setIsOpen(true)}>
                     <Input
                         size={'small'}
+                        suffix={<Text
+                            size='small'
+                            color='textTertiary'>⌥</Text>}
                         width={{ xs: 'full', sm: '64', md: '64', lg: '96', xl: '96' }}
                         inputMode='search'
                         readOnly hideLabel placeholder='search' label='Search' />

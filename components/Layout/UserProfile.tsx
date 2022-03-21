@@ -39,7 +39,7 @@ const UserProfile = () => {
             const message = new SiweMessage({
                 domain: window.location.host,
                 address,
-                statement: 'Sign in with Ethereum to the app.',
+                statement: 'Sign in with Ethereum to the MirrorFeed App',
                 expirationTime: new Date(Number(new Date()) + 604800000).toISOString(),
                 uri: window.location.origin,
                 version: '1',
@@ -57,6 +57,7 @@ const UserProfile = () => {
                 },
                 body: JSON.stringify({ message, signature: signRes.data }),
             })
+
             if (!verifyRes.ok) throw new Error('Error verifying message')
             setState((x) => ({ ...x, address, loading: false }))
         } catch (error) {

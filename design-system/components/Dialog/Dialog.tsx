@@ -26,7 +26,7 @@ type Props = {
 
 
 
-export const Dialog = ({ children, trigger = 'Trigger', size = 'medium', width = '128', isOpen, setIsOpen }: Props) => {
+export const Dialog = ({ children, trigger, size = 'medium', width = '128', isOpen, setIsOpen }: Props) => {
 
   // const opacityValue = useAnimation('linear', 500, 0, isOpen)
 
@@ -38,9 +38,11 @@ export const Dialog = ({ children, trigger = 'Trigger', size = 'medium', width =
         if (setIsOpen) { setIsOpen(isOpen) }
       }}
     >
-      <DialogRadix.Trigger asChild>
-        <Button size={size}>{trigger}</Button>
-      </DialogRadix.Trigger>
+      {trigger && (
+        <DialogRadix.Trigger asChild>
+          <Button size={size}>{trigger}</Button>
+        </DialogRadix.Trigger>
+      )}
       <DialogRadix.Portal>
         <DialogRadix.Overlay asChild>
           <Box width='full' height='full'
