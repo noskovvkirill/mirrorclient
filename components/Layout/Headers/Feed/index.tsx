@@ -1,10 +1,11 @@
 
 //components
-import { Box, Stack, Text, Heading, Tag } from 'design-system'
+import { Box, Stack, Text,  Tag } from 'design-system'
 import Link from 'next/link'
 //state 
 import { useStore } from 'contexts'
 import { useAccount } from 'wagmi'
+import {useRouter} from 'next/router'
 
 type FeedType = typeof fetchOptions[number];
 type FeedTypeEdge = Pick<FeedType, "edges">["edges"][number];
@@ -45,6 +46,7 @@ export const fetchOptions = [
 const HeaderFeed = ({ pathName }: { pathName: string }) => {
   const [{ data: accountData }] = useAccount()
   const { ToggleAuth, withEth } = useStore()
+  const router = useRouter()
 
   const fetchOption = () => {
     if (pathName === '/') return ['/', '/']
@@ -95,6 +97,13 @@ const HeaderFeed = ({ pathName }: { pathName: string }) => {
                       >
                         <Box as={fetchOption()[1] === edge.href ? 'h1' : 'h2'}
                           lineHeight={'1.25'}
+                          onKeyDown={(e) => {
+                            if (e.key === 'Enter') {
+                              e.preventDefault()
+                              router.push(edge.href)
+                            }
+                          }}
+                          tabIndex={0}
                           width='fit'
                           fontWeight={'semiBold'}
                           fontSize={fetchOption()[1] === edge.href ? { xs: 'headingTwo', sm: 'headingTwo', md: 'headingOne', lg: 'headingOne' } : { xs: 'headingTwo', sm: 'headingTwo', md: 'headingTwo', lg: 'headingTwo' }}
@@ -126,13 +135,20 @@ const HeaderFeed = ({ pathName }: { pathName: string }) => {
                         passHref
                       >
                         <Box
+                          tabIndex={0}
+                          onKeyDown={(e) => {
+                            if (e.key === 'Enter') {
+                              e.preventDefault()
+                              router.push(edge.href)
+                            }
+                          }}
                           lineHeight={'1.25'}
                           fontWeight={'semiBold'}
                           as={fetchOption()[1] === edge.href ? 'h1' : 'h2'}
                           fontSize={fetchOption()[1] === edge.href ? { xs: 'headingTwo', sm: 'headingTwo', md: 'headingOne', lg: 'headingOne' } : { xs: 'headingTwo', sm: 'headingTwo', md: 'headingTwo', lg: 'headingTwo' }}
                           color={{ base: fetchOption()[1] === edge.href ? "accent" : "textTertiary", 'hover': 'accent' }}
                           key={edge.name}>
-                          {edge.name}
+                          {edge.name} 
                         </Box>
                       </Link>
                     </Stack>
@@ -141,14 +157,28 @@ const HeaderFeed = ({ pathName }: { pathName: string }) => {
               }
               return (
                 <Box
+                width='fit'
                   style={{
                     userSelect: 'none',
                     pointerEvents: !withEth.address ? 'all' : 'auto'
                   }}
-
+                  tabIndex={0}
                   cursor={fetchOption()[1] === edge.href ? 'default' : 'pointer'}
                   key={'fetch_option_' + edge.name}
+                  onKeyPress={(e)=>{
+                    if(e.key === 'Enter'){
+                      if(!accountData || !accountData?.address) {
+                        ToggleAuth(true)
+                      }
+                      if (!withEth.address) {
+                        alert('Sign in with Ethereum')
+                      }
+                    }
+                  }}
                   onClick={() => {
+                    if(!accountData || !accountData?.address) {
+                      ToggleAuth(true)
+                    }
                     if (!withEth.address) {
                       alert('Sign in with Ethereum')
                     }
@@ -163,6 +193,7 @@ const HeaderFeed = ({ pathName }: { pathName: string }) => {
                     )}
 
                     <Box
+                
                       as={fetchOption()[1] === edge.href ? 'h1' : 'h2'}
                       fontWeight={'semiBold'}
                       lineHeight={'1.25'}
@@ -217,6 +248,7 @@ const HeaderFeed = ({ pathName }: { pathName: string }) => {
                         passHref
                       >
                         <Box
+                         tabIndex={0}
                           fontWeight={'semiBold'}
                           lineHeight={'1.25'}
                           as={fetchOption()[0] === option.baseHref ? 'h1' : 'h2'}

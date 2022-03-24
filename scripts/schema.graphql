@@ -1,0 +1,2886 @@
+schema {
+  query: query
+  mutation: mutations
+}
+
+"""Publication type"""
+type publication {
+  id: Int
+  ensLabel: String
+  displayName: String
+  avatarURL: String
+  entries: [entry]
+  crowdfundEntries: [crowdfund]
+  posts: [PostType]
+  publicationSettings: publicationSettings
+  contributors: [contributor]
+  nft: nft
+}
+
+"""Crowdfund type"""
+type crowdfund {
+  _id: String
+  id: Int
+  crowdfundDraftId: Int
+  name: String
+  symbol: String
+  title: String
+  contributorAddress: String
+  description: String
+  content: String
+  publication: publication @deprecated(reason: "Use publisher to fetch creator and operator info")
+  operator: UserProfileType @deprecated(reason: "Use publisher to fetch creator and operator info")
+  address: String
+  fundingRecipient: String
+  goal: String
+  stretchGoal: String
+  network: String
+  transactionHash: String
+  contributionLimit: String
+  endsAt: Int
+  version: String
+  editions: [edition]
+  metadata: CrowdfundMetadataType
+  publishStatus: String
+  createdAt: String
+  blockState: BlockStateType
+  exchangeRate: String
+  token: mirrorERC20Token
+  publisher: PublisherType
+  events: [CrowdfundEvent]
+}
+
+type UserProfileType {
+  address: String
+  displayName: String
+  avatarURL: String
+  contributor: contributor
+  nfts: [NFTType]
+  editions: EditionsType
+  notificationSettings: NotificationSettingsType
+  theme: UserProfileThemeType
+  ens: String
+  headerImage: MediaAssetType
+  description: String
+  gaTrackingID: String
+  mailingListURL: String
+  domain: String
+  memberships: [ProjectType]
+  members: [ProjectType]
+}
+
+"""Contributor type"""
+type contributor {
+  address: String
+  id: String
+  displayName: String
+  avatarURL: String
+  publications: [publication]
+  signingKeys: [signingKey]
+}
+
+"""Returns information about a signing key"""
+type signingKey {
+  id: Int
+  publicKey: String
+  signature: signingKeySignature
+}
+
+"""Display the signature proving ownership of a signing key"""
+type signingKeySignature {
+  id: Int
+  signingKeyId: Int
+  signature: String
+  message: String
+}
+
+type NFTType {
+  contract: NFTContractType
+  name: String
+  tokenId: String
+  imageURL: String
+  imagePreviewUrl: String
+  imageThumbnailUrl: String
+  imageOriginalUrl: String
+  animationUrl: String
+  animationOriginalUrl: String
+}
+
+type NFTContractType {
+  address: String
+  name: String
+  symbol: String
+}
+
+type EditionsType {
+  purchased: [EditionPurchasedType]
+}
+
+type EditionPurchasedType {
+  blockNumber: Int
+  transactionHash: String
+  logIndex: Int
+  event: String
+  editionId: String
+  tokenId: String
+  numSold: String
+  serial: String
+  amountPaid: String
+  buyer: String
+  edition: edition
+}
+
+"""Edition type"""
+type edition {
+  _id: String
+  id: Int
+  title: String
+  quantity: Int
+  description: String
+  price: Float
+  allocation: Int
+  editionId: Int
+  entryId: Int
+  contentHash: String
+  fundingRecipient: String
+  transactionHash: String
+  editionContractAddress: String
+  version: String
+  singleArtifact: Boolean
+  attributes: [EditionAttribute]
+  crowdfund: crowdfund
+  primaryMedia: MediaAssetType
+  thumbnailMedia: MediaAssetType
+  mediaURL: String
+  artifacts: [editionArtifact]
+  operator: UserProfileType @deprecated(reason: "Use publisher to fetch creator and operator info")
+  creator: contributor @deprecated(reason: "Use publisher to fetch creator and operator info")
+  publication: publication @deprecated(reason: "Use publisher to fetch creator and operator info")
+  entry: entry
+  events: [EditionEventsType]
+  tokenIds: [String]
+  publisher: PublisherType
+  draftDigest: String
+  blockState: BlockStateType
+}
+
+"""Edition Attribute type"""
+type EditionAttribute {
+  trait_type: String
+  display_type: String
+  value: String
+}
+
+"""description"""
+type MediaAssetType {
+  id: Int
+  mimetype: String
+  sizes: MediaAssetSizesType
+  cid: String
+  url: String
+}
+
+"""description"""
+type MediaAssetSizesType {
+  og: MediaAssetSizeType
+  lg: MediaAssetSizeType
+  md: MediaAssetSizeType
+  sm: MediaAssetSizeType
+}
+
+"""description"""
+type MediaAssetSizeType {
+  height: Int
+  width: Int
+  src: String
+}
+
+"""Edition Artifact type"""
+type editionArtifact {
+  tokenId: Int
+  editionId: Int
+  url: String
+}
+
+"""Events for an edition with contract address and ID"""
+type EditionEventsType {
+  event: String
+  blockNumber: Int
+  logIndex: Int
+  transactionHash: String
+  network: String
+  quantity: String
+  price: String
+  fundingRecipient: String
+  editionId: String
+  tokenId: String
+  numSold: String
+  buyer: String
+  feePercent: String
+  sender: String
+  newFee: String
+  feesAccrued: String
+  previousOwner: String
+  newOwner: String
+  amountWithdrawn: String
+  feeAmount: String
+  amountPaid: String
+  contentHash: String
+  receiver: String
+  previousCreator: String
+  newCreator: String
+  from: String
+  to: String
+  owner: String
+  approved: String
+  operator: String
+  avatarURL: String
+  twitterUsername: String
+  collectorAddress: String
+  serialNumber: String
+  digest: String
+  draftDigest: String
+}
+
+"""The publisher of the block"""
+type PublisherType {
+  """The project that published the block"""
+  project: ProjectType
+
+  """The member that published on behalf of the project"""
+  member: ProjectType
+}
+
+type ProjectType {
+  _id: String
+  address: String
+  displayName: String
+  avatarURL: String
+  notificationSettings: NotificationSettingsType
+  theme: UserProfileThemeType
+  ens: String
+  headerImage: MediaAssetType
+  description: String
+  gaTrackingID: String
+  mailingListURL: String
+  domain: String
+  memberships: [ProjectType]
+  members: [ProjectType]
+  pendingMemberships: [ProjectType]
+  pendingMembers: [ProjectType]
+  posts: [PostType]
+  featureFlags: FeatureFlagStatusType
+  navigation: NavigationType
+}
+
+type NotificationSettingsType {
+  writeRace: Boolean
+}
+
+"""User Profile Theme"""
+type UserProfileThemeType {
+  colorMode: ColorModeType
+  accent: AccentType
+}
+
+enum ColorModeType {
+  DARK
+  LIGHT
+}
+
+enum AccentType {
+  BLUE
+  GREEN
+  INDIGO
+  ORANGE
+  PINK
+  PURPLE
+  RED
+  TEAL
+  YELLOW
+  FOREGROUND
+}
+
+union PostType = entry | crowdfund
+
+type FeatureFlagStatusType {
+  isPluginsTabEnabled: Boolean
+}
+
+type NavigationType {
+  section: NavigationSectionType
+  content: NavigationContentType
+}
+
+type NavigationSectionType {
+  isFundingEnabled: Boolean
+  isNFTsEnabled: Boolean
+  isGovernanceEnabled: Boolean
+}
+
+type NavigationContentType {
+  isCrowdfundsEnabled: Boolean
+  isSplitsEnabled: Boolean
+  isTokensEnabled: Boolean
+  isEditionsEnabled: Boolean
+  isTokenRaceEnabled: Boolean
+  isAuctionsEnabled: Boolean
+}
+
+"""Provides information about the state of the block"""
+type BlockStateType {
+  """Status of the block"""
+  status: BlockStatusEnum
+}
+
+enum BlockStatusEnum {
+  CREATED
+  CONFIRMED
+  PENDING
+  DROPPED
+  FAILED
+}
+
+"""CrowdfundMetadata Type"""
+type CrowdfundMetadataType {
+  coverImage: MediaAssetType
+  podium: PodiumType
+}
+
+"""Podium Type"""
+type PodiumType {
+  first: PodiumFieldType
+  second: PodiumFieldType
+  third: PodiumFieldType
+  duration: Int
+}
+
+"""PodiumField Type"""
+type PodiumFieldType {
+  title: String
+  description: String
+  primaryMedia: MediaAssetType
+  thumbnailMedia: MediaAssetType
+}
+
+"""MirrorERC20Token type"""
+type mirrorERC20Token {
+  id: Int
+  name: String
+  symbol: String
+  numDecimals: String
+  totalSupply: String
+  totalSupplyFormatted: String
+  operator: UserProfileType @deprecated(reason: "Use publisher to fetch creator and operator info")
+  description: String
+  publication: publication @deprecated(reason: "Use publisher to fetch creator and operator info")
+  tokenAddress: String
+  iconMedia: MediaAssetType
+  network: String
+  transactionHash: String
+  contributionLimit: String
+  ownerAddress: String
+  version: String
+  createdAt: String
+  publisher: PublisherType
+}
+
+"""CrowdfundEvent Type"""
+type CrowdfundEvent {
+  id: Int
+  event: String
+  amount: String
+  amountRaised: String
+  amountFormatted: Float
+  amountRaisedFormatted: String
+  creatorAllocation: String
+  value: String
+  address: String
+  from: String
+  to: String
+  blockNumber: Int
+  logIndex: Int
+  network: String
+  transactionHash: String
+  editionId: Int
+  tokenId: Int
+  crowdfundId: Int
+  timestamp: String
+}
+
+"""Publication Settings type"""
+type publicationSettings {
+  publicationLabel: String
+  settings: String
+  digest: String
+  contributorAddress: String
+  key: String
+  signature: String
+  timestamp: Int
+}
+
+"""NFT type"""
+type nft {
+  id: Int
+  name: String
+  tokenURI: String
+  contributorAddress: String
+  address: String
+  contentHash: String
+  network: String
+  tokenId: Int
+  transactionHash: String
+  entryDigest: String
+}
+
+"""Entry type"""
+type entry {
+  _id: String
+  id: Int
+  entryId: Int
+  digest: String
+  originalDigest: String
+  title: String
+  hideTitleInEntry: Boolean
+  body: String
+  timestamp: Int
+  publishedAtTimestamp: Int
+  publishStatus: String
+  canonicalUrl: String
+  publicationId: Int
+  userProfileId: Int
+  featuredImageId: Int
+  arweaveTransactionRequest: ArweaveTransactionRequestType
+  latestBlockData: LatestBlockDataType
+
+  """Transaction hash that includes NFT event"""
+  nftTransactionHash: String
+
+  """address of the token that has the NFT"""
+  nftAddress: Int
+
+  """Optional token id of the NFT"""
+  nftTokenId: Int
+  publication: publication @deprecated(reason: "Use publisher to fetch creator and operator info")
+  userProfile: UserProfileType @deprecated(reason: "Use publisher to fetch creator and operator info")
+  contributor: contributor @deprecated(reason: "Use publisher to fetch creator and operator info")
+  author: UserProfileType @deprecated(reason: "Use publisher to fetch creator and operator info")
+  nft: nft
+  authorship: Authorship @deprecated(reason: "Use publisher to fetch creator and operator info")
+  contributors: [contributor] @deprecated(reason: "Use collaborator to get bylines")
+  editions: [edition]
+  featuredImage: MediaAssetType
+  publisher: PublisherType
+  collaborators: [ProjectType]
+  settings: EntrySettingsType
+}
+
+"""Describes an Arweave Transaction Request"""
+type ArweaveTransactionRequestType {
+  id: Int
+  transactionId: String
+  entryId: Int
+}
+
+"""LatestBlockDataType type"""
+type LatestBlockDataType {
+  number: Int
+  timestamp: Int
+}
+
+"""Contains verification of authorship"""
+type Authorship {
+  publicKey: String
+  signature: String
+}
+
+"""Entry SEO settings"""
+type EntrySettingsType {
+  """Meta image"""
+  metaImage: MediaAssetType
+
+  """Meta title"""
+  title: String
+
+  """Meta description"""
+  description: String
+}
+
+"""API Queries [Read]"""
+type query {
+  publication(ensLabel: String, publicOnly: Boolean): publication @deprecated(reason: "Publications are deprecated, please use Project* and User* endpoints")
+  publicationFeed(ensLabel: String, publicOnly: Boolean): publication @deprecated(reason: "Publications are deprecated, please use Project* and User* endpoints")
+  publicationContributors(ensLabel: String): [contributor] @deprecated(reason: "Publications are deprecated, please use Project* and User* endpoints")
+  publications: [publication] @deprecated(reason: "Publications are deprecated, please use Project* and User* endpoints")
+
+  """Endpoint for querying a contributor's information"""
+  contributor(address: String): contributor @deprecated(reason: "Publications are deprecated, please use Project* and User* endpoints")
+
+  """Endpoint for querying a contributor's information"""
+  contributorsByAddress(addresses: [String]): [contributor] @deprecated(reason: "Publications are deprecated, please use Project* and User* endpoints")
+  nextContributorId: Int @deprecated(reason: "Publications are deprecated, please use Project* and User* endpoints")
+
+  """Endpoint for querying an Entry by digest"""
+  entry(digest: String): entry
+
+  """All the entries for a user address"""
+  entries(publicOnly: Boolean, projectAddress: String): [entry]
+
+  """Top 20 entries"""
+  topEntries: [entry]
+
+  """Endpoint for returning ENS information for a given domain"""
+  resolveENS(
+    """The full name of the ENS domain, e.g. test.mirror.xyz"""
+    name: String
+  ): ENS
+
+  """Endpoint for returning ENS information for a given address"""
+  lookupENS(
+    """The address to look up"""
+    address: String
+  ): ENS
+
+  """Endpoint for querying a contributor's profile information"""
+  addressInfo(address: String): addressInfo
+
+  """Endpoint for querying for settings for a publication"""
+  publicationSettings(publicationLabel: String): publicationSettings @deprecated(reason: "Publications are deprecated, please use Project* and User* endpoints")
+  verifiedAccounts: [VerifiedAccount] @deprecated(reason: "This feed is no longer used")
+  verifiedAccount(address: String): VerifiedAccount @deprecated(reason: "This feed is no longer used")
+
+  """Endpoint for getting whether a user is verified"""
+  isVerified(address: String): Boolean @deprecated(reason: "This feed is no longer used")
+  verifiedAccountsAfterTimestamp(
+    """Timestamp in MS"""
+    timestamp: String
+  ): [VerifiedAccount] @deprecated(reason: "This feed is no longer used")
+  registrationEvent(ensLabel: String): registrationEvent
+  registrationEvents: [registrationEvent]
+  registeredProfiles: [RegisteredProfile]
+  verifiedVotes: [VerifiedVoteType] @deprecated(reason: "This feed is no longer used")
+  votingPower(account: String): VotingPowerType @deprecated(reason: "This feed is no longer used")
+  verifiedVotesByRound(round: String, limit: Int, offset: Int): [VerifiedVoteType] @deprecated(reason: "This feed is no longer used")
+
+  """Endpoint for querying a user's crowdfunds"""
+  crowdfunds(projectAddress: String): [CrowdfundListType]
+
+  """Get dropped crowdfunds"""
+  droppedCrowdfunds(userAddress: String): [crowdfund]
+
+  """Endpoint for querying a crowdfund at an address"""
+  crowdfundAtAddress(address: String): crowdfund
+
+  """Endpoint for querying a crowdfund at an address"""
+  crowdfundBlockData(address: String): CrowdfundBlock
+
+  """Endpoint for querying a user's crowdfund entries"""
+  crowdfundEntries(userAddress: String, ensLabel: String): [crowdfund] @deprecated(reason: "Use projectFeed to query")
+
+  """Endpoint for querying a contributor's NFTs"""
+  nfts(contributorAddress: String): [nft] @deprecated(reason: "This is no longer supported")
+
+  """Endpoint for querying a single NFT"""
+  nft(address: String, tokenId: Int): nft @deprecated(reason: "This is no longer supported")
+
+  """Endpoint for querying a project reserveAuctions"""
+  reserveAuctions(
+    """Project address"""
+    projectAddress: String
+  ): [reserveAuction]
+
+  """Endpoint for querying a reserve auction by tokenId at an address"""
+  reserveAuction(nftAddress: String, tokenId: Int, auctionId: String): reserveAuction
+  socialProfiles: [SocialProfileType] @deprecated(reason: "This feed is no longer used")
+  socialProfile(
+    """Wallet address of the user"""
+    address: String
+  ): SocialProfileType @deprecated(reason: "This field can be retrieved from ProjectType")
+  writeRaceProfiles: [WriteRaceProfileType] @deprecated(reason: "This feed is no longer used")
+  leaderboard: [LeaderboardType] @deprecated(reason: "This feed is no longer used")
+  twitterProfile(username: String): TwitterProfileType @deprecated(reason: "This field can be retrieved from ProjectType")
+  twitterProfilesById(ids: [Int]): [TwitterProfileType] @deprecated(reason: "This field can be retrieved from ProjectType")
+  splits(
+    """Project address"""
+    projectAddress: String
+  ): [SplitType]
+  split(address: String): SplitType
+  unverifiedTwitterProfiles: [UnverifiedTwitterProfileType] @deprecated(reason: "This feed is no longer used")
+
+  """Endpoint for querying a contributor's editions for a publication"""
+  editions(
+    """Address of project"""
+    projectAddress: String
+
+    """Where clause"""
+    where: EditionWhereInputType
+  ): [edition]
+  edition(editionId: Int, editionContractAddress: String): edition
+
+  """Endpoint for querying a user's activity feed"""
+  userActivityFeed(address: String): [ActivityPropertiesType]
+
+  """Endpoint for querying a user's email verification status"""
+  email(address: String): email
+
+  """Endpoint for querying a crowdfund's event data"""
+  crowdfundEvents(address: String): [crowdfundEvents]
+  userProfile(address: String): UserProfileType
+  me(
+    """Digest"""
+    digest: String
+
+    """Public key used to sign the data"""
+    key: String
+
+    """Signature with content"""
+    signature: String
+
+    """Unix Timestamp in seconds"""
+    timestamp: String
+    userAddress: String
+    projectAddress: String
+  ): ProjectType
+  verifyPublicKey(
+    """User Mirror Public Key"""
+    publicKey: String
+  ): PublicKeyVerification
+  address(
+    """User Mirror Public Key"""
+    publicKey: String
+  ): String @deprecated(reason: "Please use verifyPublicKey")
+  mirrorProject(
+    """Address/ENS/domain of Mirror project"""
+    address: String
+  ): MirrorProjectType
+  projectThemeOptions: ProjectThemeOptionsType
+
+  """Endpoint for querying a whether a user has responded to a survey"""
+  hasUserSubmittedSurvey(address: String, surveyId: Int): Boolean
+  getSurvey(
+    """ID of the survey"""
+    surveyId: Int
+
+    """Address of the crowdfund"""
+    crowdfundAddress: String
+  ): SurveyType
+
+  """Endpoint for querying a contributor's crowdfund drafts"""
+  crowdfundDraftById(
+    """The Ethereum address associated with the user"""
+    userAddress: String
+
+    """The Ethereum address associated with the project"""
+    projectAddress: String
+
+    """Digest"""
+    digest: String
+
+    """Public key used to sign the crowdfund data"""
+    key: String
+
+    """Signature with content related to the crowdfund"""
+    signature: String
+
+    """Unix Timestamp in seconds"""
+    timestamp: String
+
+    """Crowdfund draft ID"""
+    id: Int
+  ): CrowdfundDraft
+
+  """Endpoint for querying all contracts"""
+  contracts: [Contract]
+
+  """Endpoint for querying proposals made by user"""
+  proposals(address: String): [Proposal]
+
+  """Endpoint for querying a single proposal"""
+  proposal(cid: String): Proposal
+
+  """Endpoint for querying voting data for user"""
+  proposalVotingPower(cid: String, address: String): ProposalUserVotingPower
+
+  """Endpoint for querying vote data for an entry"""
+  proposalEntryVotes(proposalCid: String, proposalEntryCid: String): [ProposalEntryVote]
+  writeRaceSearch(usernameOrAccount: String, roundNumber: Int): [WriteRaceRoundDataType]
+  writeRaceVotingPower(address: String, roundNumber: Int): WriteRaceVotingPowerType
+  writeRaceCurrentUser(account: String, roundNumber: Int): WriteRaceCurrentUser
+  writeRaceCurrentRound(limit: Int, offset: Int): WriteRaceCurrentRound
+  writeRaceLeaderboard(round: Int): WriteRaceLeaderboardType
+  writeRaceGenesisWriters: [WriteRaceLeaderboardWinnerType]
+  mirrorPoll(
+    """Database ID of poll"""
+    id: Int
+  ): MirrorPollType
+  mirrorPollCanRespond(
+    """Database ID of poll"""
+    pollId: Int
+
+    """User address"""
+    address: String
+  ): Boolean
+  mirrorPollUser(
+    """Database ID of poll"""
+    pollId: Int
+
+    """User address"""
+    address: String
+  ): MirrorPollUser
+
+  """Endpoint for querying a dutch auction"""
+  dutchAuction(
+    """Address of the proxy contract"""
+    address: String
+  ): DutchAuctionType
+  editionOpenSale(
+    """Database ID of sale"""
+    id: Int
+  ): editionOpenSale
+
+  """Endpoint for querying a user's tokens created on Mirror"""
+  mirrorERC20Tokens(projectAddress: String): [mirrorERC20Token]
+
+  """Endpoint for querying a token at an address"""
+  mirrorERC20TokenAtAddress(tokenAddress: String): mirrorERC20Token
+
+  """Endpoint for querying a user's tokens created on Mirror"""
+  crowdfundTokenApprovalMetadata(crowdfundAddress: String, projectAddress: String): crowdfundTokenApprovalMetadata
+
+  """Endpoint for querying a project feed by ens name, domain, or address"""
+  projectFeed(projectAddress: String): ProjectType
+
+  """Endpoint for querying all plugins for a project"""
+  plugins(projectAddress: String): [PluginType]
+
+  """List of all available plugins"""
+  pluginsList: [PluginType]
+
+  """Endpoint for querying a edition draft"""
+  editionDraft(
+    """Digest of the draft"""
+    digest: String
+  ): EditionDraftType
+}
+
+"""ENS type"""
+type ENS {
+  name: String
+  address: String
+}
+
+"""Provides some basic information about an Etheruem address"""
+type addressInfo {
+  ens: String
+  writeTokens: String
+  hasOnboarded: Boolean
+}
+
+type VerifiedAccount {
+  twitterProfileId: Int
+  account: String
+  username: String
+  signature: String
+  name: String
+  twitterId: String
+  avatarURL: String
+  followerCount: Int
+  promptResponse: promptResponse
+}
+
+"""PromptResponse type"""
+type promptResponse {
+  id: Int
+  content: String
+  createdAt: String
+}
+
+"""RegistrationEvent type"""
+type registrationEvent {
+  id: Int
+  account: String
+  ensLabel: String
+  transactionHash: String
+}
+
+type RegisteredProfile {
+  id: Int
+  account: String
+  username: String
+  avatarURL: String
+}
+
+type VerifiedVoteType {
+  account: String
+  candidate: String
+  round: String
+  signature: String
+  amount: Int
+  createdAt: Int
+}
+
+type VotingPowerType {
+  account: String
+  votingPower: Float
+  round: String
+  reasons: String
+}
+
+union CrowdfundListType = CrowdfundDraft | crowdfund
+
+"""CrowdfundDraft type"""
+type CrowdfundDraft {
+  _id: String
+  id: Int
+  data: String
+  name: String
+  symbol: String
+  title: String
+  crowdfundDraftId: Int
+  publisher: PublisherType
+  digest: String
+}
+
+"""CrowdfundBlock type"""
+type CrowdfundBlock {
+  name: String
+  symbol: String
+  contractAddress: String
+  valueCurrent: String
+  stretchGoal: Float
+  fundingCap: Float
+  tokensIssued: String
+  isRedeemable: Boolean
+  isActive: Boolean
+  operatorEquityPercent: String
+  contributionLimit: String
+  fundingRecipientAddress: String
+  operator: UserProfileType
+  backers: [CrowdfundBacker]
+  events: [CrowdfundEvent]
+  podiumDuration: Int
+  podiumStartTime: Int
+  minPodiumBid: String
+  accountBalance: String
+  totalSupply: String
+  status: String
+}
+
+"""CrowdfundBacker Type"""
+type CrowdfundBacker {
+  eth: String
+  tokens: String
+  address: String
+  blockNumber: Int
+  avatarURL: String
+  twitterUsername: String
+  percentage: String
+}
+
+"""ReserveAuction type"""
+type reserveAuction {
+  _id: String
+  id: Int
+  tokenId: Int
+  duration: Int
+  address: String
+  nftAddress: String
+  auctionId: String
+  creatorShareRecipientAddress: String
+  creatorAddress: String
+  fundsRecipientAddress: String
+  deployerAddress: String
+  curatorAddress: String
+  curatorFee: String
+  version: String
+  reservePrice: String
+  network: String
+  transactionHash: String
+  createdAt: String
+  events: [ReserveAuctionEvent]
+  operator: UserProfileType @deprecated(reason: "Use publisher to fetch creator and operator info")
+  deployer: contributor @deprecated(reason: "Use publisher to fetch creator and operator info")
+  publication: publication @deprecated(reason: "Use publisher to fetch creator and operator info")
+  publisher: PublisherType
+}
+
+"""ReserveAuctionEvent type"""
+type ReserveAuctionEvent {
+  event: String
+  blockNumber: Int
+  logIndex: Int
+  transactionHash: String
+  network: String
+  nftContractAddress: String
+  tokenId: String
+  curator: String
+  amount: String
+  winner: String
+  nftCreator: String
+  fundsRecipient: String
+  value: String
+  sender: String
+  duration: String
+  reservePrice: String
+  curatorFeePercent: String
+  creator: String
+  originalCreator: String
+  zoraAddress: String
+  creatorShareRecipient: String
+  firstBid: String
+  extended: String
+  timestamp: String
+  auctionId: String
+}
+
+type SocialProfileType {
+  address: String
+  twitter: TwitterProfileType
+  mirror: MirrorProfileType
+}
+
+type TwitterProfileType {
+  id: Int
+  username: String
+  avatarURL: String
+  twitterId: String
+  followerCount: Int
+  name: String
+}
+
+type MirrorProfileType {
+  contributor: contributor
+}
+
+type WriteRaceProfileType {
+  address: String
+  twitter: TwitterProfileType
+  mirror: MirrorProfileType
+  promptResponse: promptResponse
+}
+
+type LeaderboardType {
+  title: String
+  numVotes: Int
+  candidates: Int
+  profiles: [LeaderboardProfileType]
+}
+
+type LeaderboardProfileType {
+  numVotes: Int
+  votingPower: Int
+  account: String
+  username: String
+  avatarURL: String
+  followerCount: Int
+  backers: [LeaderboardBackerType]
+  ensDomain: String
+  notHighlighted: Boolean
+}
+
+type LeaderboardBackerType {
+  amount: Int
+  account: String
+  username: String
+  avatarURL: String
+  followerCount: Int
+}
+
+"""Returns information about a split"""
+type SplitType {
+  _id: String
+  id: Int
+  name: String
+  address: String
+  transactionHash: String
+  network: String
+  splitAllocations: [SplitAllocationType]
+  events: [SplitEventType]
+  operator: UserProfileType @deprecated(reason: "Use publisher to fetch creator and operator info")
+  publication: publication @deprecated(reason: "Use publisher to fetch creator and operator info")
+  publisher: PublisherType
+  version: String
+}
+
+"""Returns information about a split allocation"""
+type SplitAllocationType {
+  id: Int
+  address: String
+  scaledPercent: Int
+  splitAmount: Float
+  account: String
+  userProfile: UserProfileType
+}
+
+"""Events for a split"""
+type SplitEventType {
+  event: String
+  account: String
+  amount: String
+  amountFormatted: String
+  asset: String
+  blockNumber: Int
+  category: String
+  currentWindow: String
+  from: String
+  fundsAvailable: String
+  fundsAvailableFormatted: String
+  logIndex: Int
+  network: String
+  success: String
+  to: String
+  transactionHash: String
+}
+
+type UnverifiedTwitterProfileType {
+  id: Int
+  address: String
+  twitterProfile: TwitterProfileType
+}
+
+"""where"""
+input EditionWhereInputType {
+  digest: String
+}
+
+type ActivityPropertiesType {
+  key: String
+  detailValue: String
+}
+
+"""Email type"""
+type email {
+  verificationStatus: VerificationStatusEnum
+}
+
+enum VerificationStatusEnum {
+  EMAIL_NOT_VERIFIED
+  EMAIL_VERIFIED
+  EMAIL_NOT_SUBMITTED
+}
+
+"""Crowdfund Events type"""
+type crowdfundEvents {
+  event: String
+  amount: String
+  amountRaised: String
+  amountFormatted: Float
+  amountRaisedFormatted: Float
+  creatorAllocation: String
+  value: String
+  address: String
+  from: String
+  to: String
+  blockNumber: Int
+  logIndex: Int
+  network: String
+  transactionHash: String
+  tokenId: String
+  editionId: String
+}
+
+type PublicKeyVerification {
+  address: String
+}
+
+type MirrorProjectType {
+  isRegistered: Boolean
+  projectDetails: ProjectType
+}
+
+"""Project Theme"""
+type ProjectThemeOptionsType {
+  colorModes: [String]
+  accents: [String]
+}
+
+"""Type for a survey"""
+type SurveyType {
+  prompt: String
+  backers: [String]
+  title: String
+  description: String
+}
+
+"""Contract type"""
+type Contract {
+  name: String
+  abi: String
+  address: String
+  version: String
+}
+
+"""Proposal Type"""
+type Proposal {
+  _id: String
+  cid: String
+  erc20Address: String
+  erc721Address: String
+  startDate: String
+  endDate: String
+  tokenName: String
+  tokenSymbol: String
+  title: String
+  description: String
+  prompt: String
+  tokenThreshold: Float
+  tokenIds: [String]
+  highlightedWinners: Int
+  coverImage: MediaAssetType
+  status: String
+  snapshot: ProposalSnapshot
+  results: [ProposalResult]
+  resultsCid: String
+  entries: [ProposalEntry]
+  operator: UserProfileType @deprecated(reason: "Use publisher to fetch creator and operator info")
+  publication: publication @deprecated(reason: "Use publisher to fetch creator and operator info")
+  erc721Multiplier: Int
+  publisher: PublisherType
+}
+
+"""Proposal Snapshot Type"""
+type ProposalSnapshot {
+  cid: String
+  blockNumber: String
+}
+
+"""Proposal Type"""
+type ProposalResult {
+  votes: Float
+  proposalEntryCid: String
+  proposalCid: String
+  body: String
+  entryAuthorAddress: String
+  isHighlighted: Boolean
+  position: Int
+}
+
+"""Proposal Entry Type"""
+type ProposalEntry {
+  address: String
+  body: String
+  cid: String
+  proposalCid: String
+  votes: Float
+  twitter: TwitterProfileType
+}
+
+"""proposal voting power (user)"""
+type ProposalUserVotingPower {
+  totalVotes: Float
+  availableVotes: Float
+  multisigs: [ProposalVotingPowerMultisig]
+}
+
+"""proposal voting power (multisig)"""
+type ProposalVotingPowerMultisig {
+  totalVotes: Float
+  availableVotes: Float
+  address: String
+}
+
+"""Proposal entry vote data"""
+type ProposalEntryVote {
+  votes: Float
+  address: String
+  twitter: TwitterProfileType
+}
+
+"""Write race round responses data"""
+type WriteRaceRoundDataType {
+  address: String
+  votes: Int
+  voters: [WriteRaceVoterDataType]
+  twitter: TwitterProfileType
+  response: String
+  score: Float
+}
+
+"""Write race voter data for prompt response"""
+type WriteRaceVoterDataType {
+  address: String
+  twitter: TwitterProfileType
+  votes: Int
+}
+
+"""Voting Power"""
+type WriteRaceVotingPowerType {
+  totalVotes: Int
+  availableVotes: Int
+}
+
+"""Current User Details"""
+type WriteRaceCurrentUser {
+  address: String
+  votes: Int
+  voters: [WriteRaceVoterDataType]
+  twitter: TwitterProfileType
+  response: String
+  isRegistered: Boolean
+  isWinner: Boolean
+  rank: Int
+}
+
+"""Current round details"""
+type WriteRaceCurrentRound {
+  round: Int
+  status: String
+  startsAt: String
+  endsAt: String
+  roundDetails: WriteRaceRoundType
+  isQuadratic: Boolean
+  isPaused: Boolean
+}
+
+"""Write race round data"""
+type WriteRaceRoundType {
+  roundData: [WriteRaceRoundDataType]
+  votesCast: Int
+  candidates: Int
+  currentPrompt: String
+  roundNumber: Int
+  voters: Int
+}
+
+""""""
+type WriteRaceLeaderboardType {
+  isQuadratic: Boolean
+  votes: Int
+  candidates: Int
+  winners: [WriteRaceLeaderboardWinnerType]
+  voters: Int
+}
+
+"""Write Race Winner"""
+type WriteRaceLeaderboardWinnerType {
+  voters: [WriteRaceVoterDataType]
+  address: String
+  votes: Int
+  score: Float
+  votingPower: Int
+  twitter: TwitterProfileType
+  ensLabel: String
+}
+
+"""mirror poll"""
+type MirrorPollType {
+  _id: String
+  id: Int
+  title: String
+  description: String
+  prompt: String
+  status: MirrorPollStatusEnum
+  endsAt: String
+  startsAt: String
+  coverImage: MediaAssetType
+  choices: [MirrorPollChoice]
+}
+
+enum MirrorPollStatusEnum {
+  DELETED
+  ENDED
+  LIVE
+  CREATED
+}
+
+"""Mirror poll choice"""
+type MirrorPollChoice {
+  id: Int
+  title: String
+  description: String
+  responses: [MirrorPollResponse]
+}
+
+"""Mirror poll response"""
+type MirrorPollResponse {
+  address: String
+  twitter: TwitterProfileType
+}
+
+"""User data for a mirror poll"""
+type MirrorPollUser {
+  hasPermission: Boolean
+  existingVote: Int
+}
+
+"""Dutch Auction"""
+type DutchAuctionType {
+  _id: String
+  events: [DutchAuctionEventType]
+  status: DutchAuctionStatusType
+  operator: UserProfileType @deprecated(reason: "Use publisher to fetch creator and operator info")
+  publication: publication @deprecated(reason: "Use publisher to fetch creator and operator info")
+  address: String
+  transactionHash: String
+  version: String
+  fundsRecipientAddress: String
+  name: String
+  subheading: String
+  description: String
+  tokenIds: [Int]
+  prices: [Float]
+  totalSupply: Int
+  collected: Int
+  currentPrice: Float
+  timeRemaining: String
+  nextBlock: String
+  edition: edition
+  isPaused: Boolean
+  collectors: [CollectorType]
+  totalRaised: Float
+  hasStarted: Boolean
+  network: String
+  publisher: PublisherType
+}
+
+"""Dutch Auction Event"""
+type DutchAuctionEventType {
+  blockNumber: Int
+  logIndex: Int
+  network: String
+  transactionHash: String
+  event: String
+  tokenId: String
+  recipient: String
+  amount: String
+  fee: String
+  price: String
+  account: String
+  priceFormatted: String
+  amountFormatted: String
+  feeFormatted: String
+}
+
+enum DutchAuctionStatusType {
+  CREATED
+  PENDING
+  CONFIRMED
+  DROPPED
+  FAILED
+}
+
+"""Dutch Auction Collectors"""
+type CollectorType {
+  address: String
+  user: UserProfileType
+  price: Float
+}
+
+"""EditionOpenSale type"""
+type editionOpenSale {
+  id: Int
+  token: String
+  operator: String
+  recipient: String
+  symbol: String
+  startTokenId: String
+  endTokenId: String
+  price: String
+  userProfile: UserProfileType @deprecated(reason: "Use publisher to fetch creator and operator info")
+  publication: publication @deprecated(reason: "Use publisher to fetch creator and operator info")
+  contract: Contract
+  h: String
+  network: String
+  transactionHash: String
+  contributionLimit: String
+  version: String
+  createdAt: String
+  open: Boolean
+  status: String
+  publisher: PublisherType
+  purchases: [editionOpenSalePurchase]
+}
+
+"""EditionOpenSalePurchase Type"""
+type editionOpenSalePurchase {
+  tokenId: Int
+  buyer: String
+  recipient: String
+  twitterUsername: String
+  avatarURL: String
+  transactionHash: String
+}
+
+"""CrowdfundTokenApprovalMetadata type"""
+type crowdfundTokenApprovalMetadata {
+  id: Int
+  status: String
+  tokenAddress: String
+  crowdfundAddress: String
+  numberOfTokensToApprove: String
+  tokenOwnerAddress: String
+  transactionHash: String
+}
+
+type PluginType {
+  _id: Int
+  key: String
+  name: String
+  description: String
+  category: String
+  imageURL: String
+  installed: Boolean
+}
+
+"""Edition draft type"""
+type EditionDraftType {
+  _id: String
+  publisher: PublisherType
+  digest: String
+  title: String
+  quantity: Int
+  description: String
+  price: Float
+  fundingRecipient: String
+  thumbnailMedia: MediaAssetType
+  primaryMedia: MediaAssetType
+  singleArtifact: Boolean
+  baseUriHash: String
+  contentHash: String
+}
+
+"""API Mutations [Create, Update, Delete]"""
+type mutations {
+  """Endpoint for onboarding a contributor"""
+  registerContributor(
+    """The Ethereum address associated with the contributor"""
+    contributorEthAddress: String
+
+    """The name of the publication"""
+    publicationDisplayName: String
+
+    """The label of the ENS domain"""
+    publicationENSLabel: String
+
+    """The URL of the publication's Avatar"""
+    publicationAvatarURL: String
+
+    """The contributor's display name"""
+    contributorDisplayName: String
+
+    """The URL of the contributor's avatar"""
+    contributorAvatarURL: String
+
+    """The public key for the EC keypair used for signing from a device"""
+    signingKey: String
+
+    """The signature proving ownership of the signing key"""
+    ethSignature: String
+  ): contributor @deprecated(reason: "Publications are deprecated, please use Project* and User* endpoints")
+
+  """Endpoint for onboarding a contributor"""
+  registerContributorForPublication(
+    """The Ethereum address associated with the contributor"""
+    address: String
+
+    """The label of the ENS domain"""
+    ensLabel: String
+
+    """The contributor's display name"""
+    displayName: String
+
+    """The URL of the contributor's avatar"""
+    avatarURL: String
+
+    """The public key for the EC keypair used for signing from a device"""
+    signingKey: String
+
+    """The signature proving ownership of the signing key"""
+    ethSignature: String
+  ): contributor @deprecated(reason: "Publications are deprecated, please use Project* and User* endpoints")
+
+  """Endpoint for updating contributor settings"""
+  updateContributorSettings(contributorAddress: String, settings: String, digest: String, key: String, signature: String, timestamp: Int): contributor @deprecated(reason: "Publications are deprecated, please use Project* and User* endpoints")
+
+  """Endpoint for removing a contributor from a publication"""
+  removeContributor(contributorAddress: String, ensLabel: String, contractAddress: String, transactionHash: String, network: String): success @deprecated(reason: "Publications are deprecated, please use Project* and User* endpoints")
+
+  """Endpoint for updating an entry's status"""
+  changeEntryStatus(
+    """The digest of the original entry's content"""
+    originalDigest: String
+
+    """The status of the entry: `public` or `hidden`"""
+    status: String
+
+    """The digest for the JSON object including originalDigest and status"""
+    digest: String
+
+    """The signature from the contributor's signing key"""
+    signature: String
+
+    """The Ethereum address of the contributor"""
+    userAddress: String
+
+    """The public key that signed the content"""
+    key: String
+
+    """
+    The UNIX timestamp in seconds to be displayed as publication date for the entry
+    """
+    timestamp: Int
+  ): Boolean @deprecated(reason: "Use updateEntry endpoint")
+
+  """Endpoint for creating a new entry"""
+  createEntry(
+    """The Ethereum address associated with the user"""
+    userAddress: String
+
+    """The Ethereum address associated with the project"""
+    projectAddress: String
+
+    """The entry's title"""
+    title: String
+
+    """The entry's main content"""
+    body: String
+
+    """The digest of the content's data"""
+    digest: String
+
+    """The signature from the contributor's signing key"""
+    signature: String
+
+    """The public key that signed the content"""
+    key: String
+
+    """
+    The UNIX timestamp in seconds to be displayed as publication date for the entry
+    """
+    timestamp: Int
+
+    """The status of the entry: `public` or `draft`"""
+    status: String
+
+    """ID of associated NFT if there is one"""
+    nftId: Int
+
+    """Address for entry contributors"""
+    entryContributorAddresses: [String]
+
+    """ID of featured image if there is one"""
+    featuredImageId: Int
+
+    """ID of featured image if there is one"""
+    hideTitleInEntry: Boolean
+
+    """Entry SEO Settings"""
+    settings: EntrySettingsInputType
+  ): entry
+
+  """Endpoint for onboarding a contributor"""
+  addSigningKey(
+    """The Ethereum address associated with the contributor"""
+    ethAddress: String
+
+    """The public key for the EC keypair used for signing from a device"""
+    publicKey: String
+
+    """The signature proving ownership of the signing key by the contributor"""
+    signature: String
+  ): signingKey
+
+  """Endpoint for onboarding a non-member"""
+  addNonMemberSigningKey(
+    """The Ethereum address associated with the user"""
+    ethAddress: String
+
+    """The public key for the EC keypair used for signing from a device"""
+    publicKey: String
+
+    """The signature proving ownership of the signing key by the contributor"""
+    signature: String
+  ): signingKey @deprecated(reason: "This feed is no longer used")
+
+  """Endpoint for testing signing keys"""
+  _testSigning(address: String, signature: String, timestamp: String): Boolean
+
+  """Endpoint for updating an entry"""
+  updateEntry(
+    """The Ethereum address associated with the user"""
+    userAddress: String
+
+    """The Ethereum address associated with the project"""
+    projectAddress: String
+
+    """The digest of the original entry's content"""
+    originalDigest: String
+
+    """The entry's title"""
+    title: String
+
+    """The entry's main content"""
+    body: String
+
+    """The ENS label for the publication to publish to"""
+    ensLabel: String
+
+    """The digest of the content's data"""
+    digest: String
+
+    """The signature from the contributor's signing key"""
+    signature: String
+
+    """The public key that signed the content"""
+    key: String
+
+    """
+    The UNIX timestamp in seconds to be displayed as publication date for the entry
+    """
+    timestamp: Int
+
+    """The status of the entry: `public` or `draft`"""
+    status: String
+
+    """ID of associated NFT if there is one"""
+    nftId: Int
+
+    """Address for entry contributors"""
+    entryContributorAddresses: [String]
+
+    """ID of featured image if there is one"""
+    featuredImageId: Int
+
+    """ID of featured image if there is one"""
+    hideTitleInEntry: Boolean
+
+    """Entry SEO Settings"""
+    settings: EntrySettingsInputType
+  ): entry
+
+  """Endpoint for updating settings"""
+  updateSettings(
+    """The label of the publication being updated"""
+    publicationLabel: String
+
+    """New name for publication"""
+    publicationDisplayName: String
+
+    """New publication avatar"""
+    publicationAvatarURL: String
+
+    """New display name for contributor"""
+    contributorDisplayName: String
+
+    """New contributor avatar URL"""
+    contributorAvatarURL: String
+
+    """The UNIX timestamp in seconds"""
+    timestamp: Int
+
+    """The digest of the content's data"""
+    digest: String
+
+    """The signature from the contributor's signing key"""
+    signature: String
+
+    """The public key that signed the content"""
+    key: String
+  ): Boolean
+
+  """Endpoint for updating publication settings"""
+  updatePublicationSettings(publicationLabel: String, settings: String, digest: String, contributorAddress: String, key: String, signature: String, timestamp: Int): publicationSettings @deprecated(reason: "Publications are deprecated, please use Project* and User* endpoints")
+  verifyTweet(tweetId: String, account: String): Boolean @deprecated(reason: "Please use V2")
+  verifyTweetV2(username: String, account: String): Boolean
+  removeTwitter(address: String, signature: String, digest: String, key: String, timestamp: String): Boolean
+
+  """Save a registration event, get user number back"""
+  saveRegistrationEvent(ensLabel: String, account: String, transactionHash: String): registrationEvent @deprecated(reason: "The data updates automatically from block processing")
+  verifyVote(candidate: String, round: String, signature: String, account: String, amount: Int): Boolean
+
+  """Endpoint for creating a new crowdfund"""
+  createCrowdfund(
+    """The Ethereum address associated with the user"""
+    userAddress: String
+
+    """The Ethereum address associated with the project"""
+    projectAddress: String
+
+    """Digest"""
+    digest: String
+
+    """Public key used to sign the crowdfund data"""
+    key: String
+
+    """Signature with content related to the crowdfund"""
+    signature: String
+
+    """Unix Timestamp in seconds"""
+    timestamp: String
+
+    """Name of the token"""
+    name: String
+
+    """Token symbol"""
+    symbol: String
+    description: String
+    baseURI: String
+    tokenAddress: String
+    publishStatus: String
+
+    """An Ethereum address that receives the funds"""
+    fundingRecipient: String
+
+    """The address of the crowdfund"""
+    address: String
+
+    """The soft-cap goal in wei"""
+    goal: String
+
+    """The hard-cap goal in wei"""
+    stretchGoal: String
+
+    """Network on which it's deployed: e.g. mainnet or rinkeby"""
+    network: String
+
+    """Unix timestamp in seconds describing when the Crowdfund ends"""
+    endsAt: Int
+
+    """The version of the crowdfund being used"""
+    version: String
+
+    """Transaction hash when it was deployed"""
+    transactionHash: String
+
+    """Max contribution per address. Not enforced on-chain"""
+    contributionLimit: String
+
+    """Address of the deployer"""
+    operator: String
+
+    """Percentage of equity kept by the operator"""
+    operatorEquityPercent: String
+    editions: [EditionForSignatureType]
+
+    """The ID of the draft"""
+    crowdfundDraftId: Int
+
+    """Crowdfund entry content - a JSON of the markdown."""
+    content: String
+
+    """
+    Crowdfund entry metadata - a JSON of stuff like cover image, podium details, etc.
+    """
+    metadata: String
+    title: String
+    exchangeRate: String
+  ): crowdfund
+
+  """Endpoint for setting transaction hash on a crowdfund"""
+  setCrowdfundTransactionHash(
+    """The Ethereum address associated with the user"""
+    userAddress: String
+
+    """The Ethereum address associated with the project"""
+    projectAddress: String
+
+    """Digest"""
+    digest: String
+
+    """Public key used to sign the crowdfund data"""
+    key: String
+
+    """Signature with content related to the crowdfund"""
+    signature: String
+
+    """Unix Timestamp in seconds"""
+    timestamp: String
+
+    """Address of crowdfund"""
+    crowdfundAddress: String
+
+    """Transaction hash when it was deployed"""
+    transactionHash: String
+  ): Boolean
+
+  """Endpoint for update crowdfund"""
+  updateCrowdfund(
+    """The Ethereum address associated with the user"""
+    userAddress: String
+
+    """The Ethereum address associated with the project"""
+    projectAddress: String
+
+    """Digest"""
+    digest: String
+
+    """Public key used to sign the crowdfund data"""
+    key: String
+
+    """Signature with content related to the crowdfund"""
+    signature: String
+
+    """Unix Timestamp in seconds"""
+    timestamp: String
+
+    """Crowdfund address"""
+    address: String
+
+    """Crowdfund entry content - a JSON of the markdown."""
+    content: String
+  ): crowdfund
+
+  """Endpoint to update crowdfund publish status"""
+  updateCrowdfundPublishStatus(
+    """The Ethereum address associated with the user"""
+    userAddress: String
+
+    """The Ethereum address associated with the project"""
+    projectAddress: String
+
+    """Digest"""
+    digest: String
+
+    """Public key used to sign the crowdfund data"""
+    key: String
+
+    """Signature with content related to the crowdfund"""
+    signature: String
+
+    """Unix Timestamp in seconds"""
+    timestamp: String
+
+    """Crowdfund address"""
+    crowdfundAddress: String
+
+    """Publish status"""
+    publishStatus: String
+  ): crowdfund
+
+  """Endpoint to reinstate a draft"""
+  reinstateCrowdfundDraft(
+    """The Ethereum address associated with the user"""
+    userAddress: String
+
+    """The Ethereum address associated with the project"""
+    projectAddress: String
+
+    """Digest"""
+    digest: String
+
+    """Public key used to sign the crowdfund data"""
+    key: String
+
+    """Signature with content related to the crowdfund"""
+    signature: String
+
+    """Unix Timestamp in seconds"""
+    timestamp: String
+
+    """Crowdfund address"""
+    crowdfundAddress: String
+  ): CrowdfundDraft
+
+  """Endpoint for creating a new NFT"""
+  createNFT(
+    """Name of the token"""
+    name: String
+
+    """Token URI"""
+    tokenURI: String
+
+    """The Ethereum address associated with the contributor"""
+    contributorAddress: String
+
+    """The address of the NFT"""
+    address: String
+
+    """Content hash"""
+    contentHash: String
+
+    """Network on which it's deployed: e.g. mainnet or rinkeby"""
+    network: String
+
+    """ID of token on contract"""
+    tokenId: Int
+
+    """Transaction hash when it was deployed"""
+    transactionHash: String
+
+    """Digest of the entry"""
+    entryDigest: String
+  ): nft @deprecated(reason: "This is no longer supported")
+
+  """Endpoint for creating a new reserve auction"""
+  createReserveAuction(
+    """The Ethereum address associated with the user"""
+    userAddress: String
+
+    """The Ethereum address associated with the project"""
+    projectAddress: String
+
+    """The name of the auction"""
+    name: String
+
+    """Token ID for the NFT"""
+    tokenId: Int
+
+    """Number of seconds that the auction runs for"""
+    duration: Int
+
+    """Address of the auction contract"""
+    address: String
+
+    """Address of the NFT contract"""
+    nftAddress: String
+
+    """The address that receives funds for the auction sale"""
+    fundsRecipientAddress: String
+
+    """Specified creator of the NFT"""
+    curatorAddress: String
+
+    """Specified creator of the NFT"""
+    curatorFee: String
+
+    """Specified creator of the NFT"""
+    version: String
+
+    """Reserve price for the NFT"""
+    reservePrice: String
+
+    """E.g. mainnet or rinkeby"""
+    network: String
+
+    """Transaction hash for the createAuction call"""
+    transactionHash: String
+
+    """
+    Auction ID on the contract (eg keccak256(abi.encode(nftContractAddress, tokenId)))
+    """
+    auctionId: String
+  ): reserveAuction
+
+  """Endpoint for creating a new prompt response"""
+  createPromptResponse(
+    """The content in the prompt response"""
+    content: String
+
+    """ID for the respondent (FK to TwitterProfiles table)"""
+    respondentId: Int
+
+    """The signature of the prompt response"""
+    signature: String
+
+    """String representation of the timestamp"""
+    timestamp: String
+
+    """String representation of the timestamp"""
+    contentHash: String
+  ): promptResponse
+
+  """Endpoint for creating a split"""
+  createSplit(
+    """The Ethereum address associated with the user"""
+    userAddress: String
+
+    """The Ethereum address associated with the project"""
+    projectAddress: String
+    name: String
+    address: String
+    transactionHash: String
+    network: String
+    version: String
+  ): SplitType
+
+  """Endpoint for creating split allocations"""
+  createSplitAllocations(splitAllocations: [SplitAllocationInputType]): Boolean
+
+  """Endpoint for creating a new crowdfund"""
+  createEdition(
+    """The Ethereum address associated with the user"""
+    userAddress: String
+
+    """The Ethereum address associated with the project"""
+    projectAddress: String
+    title: String
+    quantity: Int
+    price: Float
+    artifactThumbnailId: Int
+    artifactPrimaryId: Int
+    key: String
+    digest: String
+    signature: String
+    fundingRecipient: String
+    network: String
+    transactionHash: String
+    description: String
+    editionContractAddress: String
+    version: String
+    singleArtifact: Boolean
+    crowdfundAddress: String
+    contentHash: String
+    baseUriHash: String
+    editionId: Int
+
+    """Timestamp"""
+    timestamp: String
+  ): edition
+
+  """Endpoint for creating crowdfund editions"""
+  createCrowdfundEditions(
+    """The Ethereum address associated with the user"""
+    userAddress: String
+
+    """The Ethereum address associated with the project"""
+    projectAddress: String
+    editions: [EditionInputType]
+    key: String
+    digest: String
+    signature: String
+    fundingRecipient: String
+    network: String
+    transactionHash: String
+    editionContractAddress: String
+    version: String
+    crowdfundAddress: String
+  ): [edition]
+
+  """Endpoint for creating entry editions"""
+  createEntryEditions(
+    """The Ethereum address associated with the user"""
+    userAddress: String
+
+    """The Ethereum address associated with the project"""
+    projectAddress: String
+    editions: [EditionInputType]
+    key: String
+    digest: String
+    signature: String
+    fundingRecipient: String
+    network: String
+    transactionHash: String
+    editionContractAddress: String
+    version: String
+    entryId: Int
+  ): [edition]
+
+  """Endpoint for setting edition(s) transactionHash"""
+  setEditionTransactionHash(
+    """The Ethereum address associated with the user"""
+    userAddress: String
+
+    """The Ethereum address associated with the project"""
+    projectAddress: String
+
+    """Digest"""
+    digest: String
+
+    """Public key used to sign the crowdfund data"""
+    key: String
+
+    """Signature with content related to the crowdfund"""
+    signature: String
+
+    """Unix Timestamp in seconds"""
+    timestamp: String
+    ids: [Int]
+    transactionHash: String
+    fundingRecipient: String
+    network: String
+  ): Boolean
+
+  """Endpoint for setting edition(s) transactionHash"""
+  setEditionTransactionHashWithUserProfile(
+    ids: [Int]
+    userAddress: String
+    transactionHash: String
+    fundingRecipient: String
+    network: String
+    signature: String
+    digest: String
+    key: String
+
+    """Unix timestamp in seconds"""
+    timestamp: String
+  ): Boolean @deprecated(reason: "This feed is no longer used")
+
+  """Endpoint for setting up a new media asset"""
+  createMediaAsset(
+    mimetype: String
+    sizes: MediaAssetSizesInputType
+
+    """IPFS content identifier for the media file"""
+    cid: String
+  ): MediaAssetType
+
+  """Endpoint for adding a user email"""
+  addEmail(email: String, address: String, signature: String, digest: String, key: String, timestamp: String): email
+
+  """Endpoint for verifying a user's email"""
+  verifyEmail(token: String): email
+
+  """Endpoint for updating write race notification settings"""
+  setWriteRaceNotification(address: String, value: Boolean, signature: String, digest: String, timestamp: String, key: String): Boolean
+
+  """Endpoint for creating a user profile"""
+  createUserProfile(address: String, displayName: String, avatarURL: String): UserProfileType @deprecated(reason: "This feed is no longer used")
+
+  """Endpoint for updating a user profile"""
+  updateUserProfile(address: String, settings: String, digest: String, key: String, signature: String, timestamp: String): UserProfileType @deprecated(reason: "Publications are deprecated, please use Project* and User* endpoints")
+
+  """Endpoint for updating a user profile theme"""
+  updateUserProfileTheme(address: String, digest: String, key: String, signature: String, timestamp: String, colorMode: ColorModeType, accent: AccentType): UserProfileThemeType @deprecated(reason: "Publications are deprecated, please use Project* and User* endpoints")
+
+  """Endpoint for relinking ens"""
+  relinkEns(address: String, digest: String, key: String, signature: String, timestamp: String): ENS
+
+  """Endpoint for setting a user profile header image"""
+  setUserProfileHeaderImage(address: String, digest: String, key: String, signature: String, timestamp: String, headerImageId: Int): MediaAssetType @deprecated(reason: "Publications are deprecated, please use Project* and User* endpoints")
+
+  """Endpoint for adding a survey response"""
+  addSurveyResponse(address: String, content: String, signature: String, surveyId: Int, contentHash: String, timestamp: String, crowdfundAddress: String): Boolean
+
+  """Endpoint for creating a crowdfund draft"""
+  createCrowdfundDraft(
+    """The Ethereum address associated with the user"""
+    userAddress: String
+
+    """Address of the project"""
+    projectAddress: String
+
+    """Digest"""
+    digest: String
+
+    """Public key used to sign the crowdfund data"""
+    key: String
+
+    """Signature with content related to the crowdfund"""
+    signature: String
+
+    """Unix Timestamp in seconds"""
+    timestamp: String
+
+    """JSON payload of the draft data"""
+    data: String
+  ): CrowdfundDraft
+
+  """Endpoint for editing a crowdfund draft"""
+  editCrowdfundDraft(
+    """The Ethereum address associated with the user"""
+    userAddress: String
+
+    """The Ethereum address associated with the project"""
+    projectAddress: String
+
+    """Digest"""
+    digest: String
+
+    """Public key used to sign the crowdfund data"""
+    key: String
+
+    """Signature with content related to the crowdfund"""
+    signature: String
+
+    """Unix Timestamp in seconds"""
+    timestamp: String
+
+    """ID of the draft"""
+    id: Int
+
+    """JSON payload of the draft data"""
+    data: String
+  ): CrowdfundDraft
+
+  """Endpoint for deleting a crowdfund draft"""
+  deleteCrowdfundDraft(
+    """The Ethereum address associated with the user"""
+    userAddress: String
+
+    """The Ethereum address associated with the project"""
+    projectAddress: String
+
+    """Digest"""
+    digest: String
+
+    """Public key used to sign the crowdfund data"""
+    key: String
+
+    """Signature with content related to the crowdfund"""
+    signature: String
+
+    """Unix Timestamp in seconds"""
+    timestamp: String
+
+    """ID of the draft"""
+    id: Int
+  ): Boolean
+
+  """Endpoint for creating or updating a crowdfund draft"""
+  createOrUpdateCrowdfundDraft(
+    """The Ethereum address associated with the user"""
+    userAddress: String
+
+    """The Ethereum address associated with the project"""
+    projectAddress: String
+
+    """Digest"""
+    digest: String
+
+    """Public key used to sign the crowdfund data"""
+    key: String
+
+    """Signature with content related to the crowdfund"""
+    signature: String
+
+    """Unix Timestamp in seconds"""
+    timestamp: String
+
+    """ID of the draft"""
+    id: Int
+
+    """JSON payload of the draft data"""
+    data: String
+  ): CrowdfundDraft
+
+  """Endpoint for setting the crowdfund ID for a crowdfund draft"""
+  setCrowdfundIdForCrowdfundDraft(
+    """The Ethereum address associated with the user"""
+    userAddress: String
+
+    """The Ethereum address associated with the project"""
+    projectAddress: String
+
+    """Digest"""
+    digest: String
+
+    """Public key used to sign the crowdfund data"""
+    key: String
+
+    """Signature with content related to the crowdfund"""
+    signature: String
+
+    """Unix Timestamp in seconds"""
+    timestamp: String
+
+    """ID of the draft"""
+    id: Int
+
+    """crowdfundId"""
+    crowdfundId: Int
+  ): Boolean
+
+  """Endpoint for creating a new proposal"""
+  createProposal(
+    """The Ethereum address associated with the user"""
+    userAddress: String
+
+    """The Ethereum address associated with the project"""
+    projectAddress: String
+    digest: String
+    signature: String
+    timestamp: Int
+    key: String
+    title: String
+    description: String
+    erc20Address: String
+    erc721Address: String
+    tokenIds: [String]
+    coverImageId: Int
+    tokenThreshold: Float
+    startDate: String
+    endDate: String
+    prompt: String
+    highlightedWinners: Int
+    entries: [ProposalEntryInput]
+    erc721Multiplier: Int
+  ): Proposal
+
+  """Endpoint for canceling a new proposal"""
+  cancelProposal(
+    """The Ethereum address associated with the user"""
+    userAddress: String
+
+    """The Ethereum address associated with the project"""
+    projectAddress: String
+    digest: String
+    signature: String
+    timestamp: Int
+    key: String
+
+    """cid of proposal"""
+    cid: String
+  ): Boolean
+
+  """Endpoint for canceling a new proposal"""
+  voteOnProposal(
+    """Content hash"""
+    digest: String
+    signature: String
+    timestamp: Int
+    address: String
+
+    """cid of proposal"""
+    proposalCid: String
+
+    """cid of proposal entry"""
+    proposalEntryCid: String
+
+    """Votes to allocate"""
+    votes: Float
+
+    """Address of multisig"""
+    multisigAddress: String
+  ): ProposalUserVotingPower
+
+  """Endpoint for adding a multisig to a user"""
+  addMultisig(
+    address: String
+    multisigAddress: String
+    signature: String
+    contentHash: String
+
+    """Timestamp string in ms"""
+    timestamp: String
+  ): Boolean
+  mirrorPollResponse(
+    pollId: Int
+    choiceId: Int
+    address: String
+    signature: String
+    digest: String
+    key: String
+
+    """Unix timestamp in seconds"""
+    timestamp: String
+  ): Boolean
+
+  """Endpoint for creating a new Mirror ERC20 token"""
+  createMirrorERC20Token(
+    """Name of the token"""
+    name: String
+
+    """Token symbol"""
+    symbol: String
+
+    """Number of decimals"""
+    numDecimals: Int
+
+    """Total supply of tokens"""
+    totalSupply: String
+    description: String
+
+    """The Ethereum address associated with the user"""
+    userAddress: String
+
+    """The address of the token"""
+    tokenAddress: String
+
+    """Network on which it's deployed: e.g. mainnet or rinkeby"""
+    network: String
+
+    """The version of the crowdfund being used"""
+    version: String
+
+    """Address of the operator"""
+    operatorAddress: String
+
+    """Signature with content related to the crowdfund"""
+    signature: String
+    timestamp: String
+
+    """Digest generated from content related to crowdfund"""
+    digest: String
+
+    """Public key used to sign the crowdfund data"""
+    key: String
+    ensLabel: String
+    iconMediaAssetId: Int
+    projectAddress: String
+    nonce: Int
+  ): mirrorERC20Token
+
+  """Endpoint for setting transaction hash on a Mirror ERC20 token"""
+  setMirrorERC20TokenTransactionHash(
+    """Address of MirrorERC20"""
+    tokenAddress: String
+
+    """Address of user who created Mirror ERC20 token"""
+    userAddress: String
+
+    """Transaction hash when it was deployed"""
+    transactionHash: String
+
+    """Signature"""
+    signature: String
+
+    """Digest"""
+    digest: String
+
+    """Timestamp"""
+    timestamp: String
+
+    """Public key used to sign the crowdfund data"""
+    key: String
+  ): Boolean
+
+  """Endpoint for creating a new crowdfund"""
+  createEditionsOpenSale(h: String, contractAddress: String, userProfileId: Int, token: String, startTokenId: Int, endTokenId: Int, operator: String, recipient: String, price: String, open: Boolean, network: String, transactionHash: String, projectAddress: String): editionOpenSale
+
+  """Endpoint for creating a new Mirror ERC20 token approval"""
+  createCrowdfundTokenApproval(
+    """Address of crowdfund"""
+    crowdfundAddress: String
+
+    """Address of user that's logged in"""
+    userAddress: String
+
+    """Approval amount"""
+    approvalAmount: String
+
+    """Signature"""
+    signature: String
+
+    """Digest"""
+    digest: String
+
+    """Timestamp"""
+    timestamp: String
+
+    """Public key used to sign the crowdfund data"""
+    key: String
+  ): Boolean
+
+  """Endpoint for setting transaction hash on a Mirror ERC20 token"""
+  setTransactionHashForCrowdfundTokenApproval(
+    """Address of user who created Mirror ERC20 token"""
+    userAddress: String
+
+    """Address of user who created Mirror ERC20 token"""
+    crowdfundAddress: String
+
+    """Transaction hash when it was deployed"""
+    transactionHash: String
+
+    """Signature"""
+    signature: String
+
+    """Digest"""
+    digest: String
+
+    """Timestamp"""
+    timestamp: String
+
+    """Public key used to sign the crowdfund data"""
+    key: String
+  ): Boolean
+
+  """Endpoint for creating a dutch auction"""
+  createDutchAuction(
+    """The Ethereum address associated with the user"""
+    userAddress: String
+
+    """The Ethereum address associated with the project"""
+    projectAddress: String
+
+    """Digest"""
+    digest: String
+
+    """Public key used to sign the crowdfund data"""
+    key: String
+
+    """Signature with content related to the crowdfund"""
+    signature: String
+
+    """Unix Timestamp in seconds"""
+    timestamp: String
+    name: String
+    description: String
+    subheading: String
+    editionContractAddress: String
+    dutchAuctionAddress: String
+    fundsRecipientAddress: String
+    version: String
+    network: String
+    startTokenId: Int
+    endTokenId: Int
+    pricesInEth: [String]
+    interval: Int
+  ): DutchAuctionType
+  setDutchAuctionTransactionHash(
+    """The Ethereum address associated with the user"""
+    userAddress: String
+
+    """The Ethereum address associated with the project"""
+    projectAddress: String
+
+    """Digest"""
+    digest: String
+
+    """Public key used to sign the crowdfund data"""
+    key: String
+
+    """Signature with content related to the crowdfund"""
+    signature: String
+
+    """Unix Timestamp in seconds"""
+    timestamp: String
+
+    """Address of the dutch auction"""
+    dutchAuctionAddress: String
+
+    """Transaction hash when it was deployed"""
+    transactionHash: String
+  ): Boolean
+
+  """Endpoint for inviting a project contributor"""
+  inviteProjectContributor(
+    """Address of project"""
+    projectAddress: String
+
+    """Address of user making the request"""
+    userAddress: String
+
+    """Digest"""
+    digest: String
+
+    """Public key used to sign the data"""
+    key: String
+
+    """Signature with content"""
+    signature: String
+
+    """Unix Timestamp in seconds"""
+    timestamp: String
+
+    """Address of contributor"""
+    contributorAddress: String
+  ): ProjectType
+
+  """Endpoint for accepting a project contributor invite"""
+  acceptProjectContributorInvite(
+    """Address of project"""
+    projectAddress: String
+
+    """Address of user making the request"""
+    userAddress: String
+
+    """Digest"""
+    digest: String
+
+    """Public key used to sign the data"""
+    key: String
+
+    """Signature with content"""
+    signature: String
+
+    """Unix Timestamp in seconds"""
+    timestamp: String
+  ): ProjectType
+
+  """Endpoint for revoking a project contributor"""
+  revokeProjectContributor(
+    """Address of project"""
+    projectAddress: String
+
+    """Address of user making the request"""
+    userAddress: String
+
+    """Digest"""
+    digest: String
+
+    """Public key used to sign the data"""
+    key: String
+
+    """Signature with content"""
+    signature: String
+
+    """Unix Timestamp in seconds"""
+    timestamp: String
+
+    """Address of contributor"""
+    contributorAddress: String
+  ): ProjectType
+
+  """Endpoint for updating a project"""
+  updateProject(
+    """Address of project"""
+    projectAddress: String
+
+    """Address of user making the request"""
+    userAddress: String
+
+    """Digest"""
+    digest: String
+
+    """Public key used to sign the data"""
+    key: String
+
+    """Signature with content"""
+    signature: String
+
+    """Unix Timestamp in seconds"""
+    timestamp: String
+    settings: String
+  ): ProjectType
+
+  """Endpoint for setting a project header image"""
+  setProjectHeaderImage(
+    """Address of project"""
+    projectAddress: String
+
+    """Address of user making the request"""
+    userAddress: String
+
+    """Digest"""
+    digest: String
+
+    """Public key used to sign the data"""
+    key: String
+
+    """Signature with content"""
+    signature: String
+
+    """Unix Timestamp in seconds"""
+    timestamp: String
+    headerImageId: Int
+  ): MediaAssetType
+
+  """Endpoint for updating a user profile theme"""
+  updateProjectTheme(
+    """Address of project"""
+    projectAddress: String
+
+    """Address of user making the request"""
+    userAddress: String
+
+    """Digest"""
+    digest: String
+
+    """Public key used to sign the data"""
+    key: String
+
+    """Signature with content"""
+    signature: String
+
+    """Unix Timestamp in seconds"""
+    timestamp: String
+    colorMode: ColorModeType
+    accent: AccentType
+  ): ProjectThemeType
+
+  """Endpoint for updating a plugin's installation status for a project"""
+  updatePluginStatus(
+    """The Ethereum address associated with the user"""
+    userAddress: String
+
+    """The Ethereum address associated with the project"""
+    projectAddress: String
+
+    """Digest"""
+    digest: String
+
+    """Public key used to sign the crowdfund data"""
+    key: String
+
+    """Signature with content related to the crowdfund"""
+    signature: String
+
+    """Unix Timestamp in seconds"""
+    timestamp: String
+
+    """Database ID for a plugin record"""
+    pluginId: Int
+
+    """Whether to install or uinstall the plugin"""
+    install: Boolean
+  ): PluginType
+
+  """Endpoint for creating an edition draft"""
+  createEditionDraft(
+    """The Ethereum address associated with the user"""
+    userAddress: String
+
+    """The Ethereum address associated with the project"""
+    projectAddress: String
+
+    """Digest"""
+    digest: String
+
+    """Public key used to sign the crowdfund data"""
+    key: String
+
+    """Signature with content related to the crowdfund"""
+    signature: String
+
+    """Unix Timestamp in seconds"""
+    timestamp: String
+    title: String
+    quantity: Int
+    description: String
+    price: Float
+    fundingRecipient: String
+    artifactThumbnailId: Int
+    artifactPrimaryId: Int
+    singleArtifact: Boolean
+    baseUriHash: String
+    contentHash: String
+  ): EditionDraftType
+
+  """Endpoint for a updating an edition draft"""
+  updateEditionDraft(
+    """The Ethereum address associated with the user"""
+    userAddress: String
+
+    """The Ethereum address associated with the project"""
+    projectAddress: String
+
+    """Digest"""
+    digest: String
+
+    """Public key used to sign the crowdfund data"""
+    key: String
+
+    """Signature with content related to the crowdfund"""
+    signature: String
+
+    """Unix Timestamp in seconds"""
+    timestamp: String
+    title: String
+    quantity: Int
+    description: String
+    price: Float
+    fundingRecipient: String
+    artifactThumbnailId: Int
+    artifactPrimaryId: Int
+    singleArtifact: Boolean
+    baseUriHash: String
+    contentHash: String
+
+    """Original digest of the draft"""
+    draftDigest: String
+  ): EditionDraftType
+
+  """Endpoint for an reinstating edition draft"""
+  reinstateEditionDraft(
+    """The Ethereum address associated with the user"""
+    userAddress: String
+
+    """The Ethereum address associated with the project"""
+    projectAddress: String
+
+    """Digest"""
+    digest: String
+
+    """Public key used to sign the crowdfund data"""
+    key: String
+
+    """Signature with content related to the crowdfund"""
+    signature: String
+
+    """Unix Timestamp in seconds"""
+    timestamp: String
+
+    """Original digest of the draft"""
+    draftDigest: String
+  ): EditionDraftType
+
+  """Endpoint for creating edition from draft"""
+  createEditionFromDraft(
+    """The Ethereum address associated with the user"""
+    userAddress: String
+
+    """The Ethereum address associated with the project"""
+    projectAddress: String
+
+    """Digest"""
+    digest: String
+
+    """Public key used to sign the crowdfund data"""
+    key: String
+
+    """Signature with content related to the crowdfund"""
+    signature: String
+
+    """Unix Timestamp in seconds"""
+    timestamp: String
+
+    """Original digest of the draft"""
+    draftDigest: String
+    network: String
+    editionContractAddress: String
+    version: String
+  ): edition
+}
+
+"""Success type"""
+type success {
+  success: Boolean
+}
+
+"""Used to control meta settings"""
+input EntrySettingsInputType {
+  """Meta image ID"""
+  metaImageId: Int
+
+  """Meta title"""
+  title: String
+
+  """Meta description"""
+  description: String
+}
+
+"""Edition For Signature type"""
+input EditionForSignatureType {
+  title: String
+  description: String
+  quantity: Int
+  price: Float
+  contentHash: String
+}
+
+"""description"""
+input SplitAllocationInputType {
+  splitId: Int
+  address: String
+  scaledPercent: Int
+}
+
+"""Edition Input type"""
+input EditionInputType {
+  title: String
+  description: String
+  quantity: Int
+  price: Float
+  contentHash: String
+  artifactPrimaryId: Int
+  artifactThumbnailId: Int
+  singleArtifact: Boolean
+  attributes: [EditionAttributeInputType]
+}
+
+"""description"""
+input EditionAttributeInputType {
+  trait_type: String
+  display_type: String
+  value: String
+}
+
+"""description"""
+input MediaAssetSizesInputType {
+  og: MediaAssetSizeInputType
+  lg: MediaAssetSizeInputType
+  md: MediaAssetSizeInputType
+  sm: MediaAssetSizeInputType
+}
+
+"""description"""
+input MediaAssetSizeInputType {
+  height: Int
+  width: Int
+  src: String
+  size: String
+}
+
+"""Proposal entry input (single)"""
+input ProposalEntryInput {
+  body: String
+  address: String
+  twitterUsername: String
+}
+
+"""Project Theme"""
+type ProjectThemeType {
+  colorMode: ColorModeType
+  accent: AccentType
+}

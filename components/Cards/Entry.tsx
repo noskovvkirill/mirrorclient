@@ -9,6 +9,7 @@ import AddressPrettyPrint from 'src/helpers/AddressPrettyPrint'
 import { getFirstImage } from 'src/helpers/MarkdownUtils'
 import type { BoxMaxWidth } from './Root'
 import Link from 'next/link'
+import { useRouter } from 'next/router'
 import { useState } from 'react'
 //types
 import { EntryType } from 'types'
@@ -57,14 +58,28 @@ const fetcher = (digest: string) => {
 
 const EntryItem = ({ entry, isValidating, maxWidth, digest, error }: { error: any, isValidating: boolean, entry?: EntryType, digest: string, maxWidth?: BoxMaxWidth }) => {
     const [isImageError, setIsImageError] = useState(false)
+    const router = useRouter()
     // console.log('entry', entry)
     return (
         <Root maxWidth={maxWidth}>
             <Box display="flex"
+                tabIndex={0}
                 position={"relative"}
                 borderRadius={"3xLarge"}
+                onKeyDown={(e)=>{
+                    if (e.key === 'Enter') {
+                        if(entry?.publisher?.project?.domain){
+                            router.push('/publication/' + entry?.publisher?.project?.domain.split('.')[0] + '/' + digest)
+                        } else {
+                            router.push('/member/' + entry?.publisher?.member?.address + '/' + digest)
+                        }
+                    }
+                }}
+             
                 width="full" flexDirection="column"
-                gap="4" backgroundColor={"background"}>
+                gap="4" backgroundColor={{'focus': 'backgroundSecondary','base':'background'}}
+                
+                >
                 {!isValidating && !error && (
                     <Link href={
                         entry?.publisher?.project?.domain

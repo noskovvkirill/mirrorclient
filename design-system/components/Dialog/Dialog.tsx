@@ -1,6 +1,7 @@
 import * as React from 'react'
 import { Box } from '../Box'
 import { Button } from '../Button'
+import { Stack } from '../Stack';
 import * as DialogRadix from '@radix-ui/react-dialog';
 import { ReactNodeNoStrings } from '../../types'
 import * as styles from './styles.css'
@@ -46,15 +47,36 @@ export const Dialog = ({ children, trigger, size = 'medium', width = '128', isOp
       <DialogRadix.Portal>
         <DialogRadix.Overlay asChild>
           <Box width='full' height='full'
+
             position="fixed" left={"0"} top={"0"}
             className={styles.overlayStyle}
           ></Box>
         </DialogRadix.Overlay>
+
         <Box as={DialogRadix.Content}
-          width={width}
-          className={styles.variants()}
-          style={{ left: '50%', top: '50%', transform: 'translate(-50%, -50%)' }}>
+           width={width}
+           display={'flex'}
+           alignItems={'center'}
+            justifyContent={'center'}
+           overflow={'hidden'}
+           height='full'
+           maxHeight={'full'}
+               zIndex='100'
+               position="fixed" left={"0"} top={"0"}
+               paddingY={'16'}
+               style={{
+                   left: '50%', top: '50%', bottom:'0',
+                   transform: 'translate(-50%, -50%)'
+               }}
+               paddingX={'4'}
+         
+          >
+          <Box 
+          width='full'
+          className={styles.variants()}>
           {children}
+          </Box>
+ 
         </Box>
       </DialogRadix.Portal>
     </DialogRadix.Root>)

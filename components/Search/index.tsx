@@ -28,7 +28,7 @@ const SearchBar = ({ isSearch, setIsOpen, isVisible, setIsVisible }: ISearch & {
     return (
         <>
             {!isSearch && (
-                <Box as='button'
+                <Box 
                     position={(!isSearch && !isVisible) ? 'relative' : 'relative'}
                     // style={{ transform: (!isSearch && !isVisible) ? 'translateY(-1000px)' : 'translateY(0)' }}
                     transitionProperty='all'
@@ -37,7 +37,13 @@ const SearchBar = ({ isSearch, setIsOpen, isVisible, setIsVisible }: ISearch & {
                         setIsVisible(true)
                     }}
                     onClick={() => setIsOpen(true)}>
+                      
+                        <Box
+                            display={{ xs: 'none', sm:  'flex', md:  'flex', lg:  'flex', xl: 'flex' }}
+
+                        >
                     <Input
+                        tabIndex={-1}
                         size={'small'}
                         suffix={<Box
                             display={{ xs: 'none', sm: 'none', md: 'inline-block', lg: 'inline-block', xl: 'inline-block' }}
@@ -47,6 +53,17 @@ const SearchBar = ({ isSearch, setIsOpen, isVisible, setIsVisible }: ISearch & {
                         width={{ xs: 'full', sm: '64', md: '64', lg: '96', xl: '96' }}
                         inputMode='search'
                         readOnly hideLabel placeholder='search' label='Search' />
+                        </Box>
+                        <Box
+                            display={{ xs: 'flex', sm: 'none', md: 'none', lg: 'none', xl: 'none' }}
+                        >
+                            <Button shape={'circle'}
+                            size='small'
+                            variant={'tertiary'}
+                            >
+                                 <IconSearch />
+                            </Button>
+                        </Box>
                 </Box>
             )}
             {isSearch && (
@@ -196,26 +213,40 @@ const SearchPanel = ({ setIsOpen, isSearch }: ISearch) => {
                             >
                                 &nbsp;
                             </Box>
-                            <Box width='full' height='full'
+                            {/* <Box width='full' height='full'
+                            > */}
+                            <Box 
+                            width='full'
+                            overflow={'hidden'}
+                            height='full'
+                            maxHeight={'full'}
                                 zIndex='100'
                                 position="fixed" left={"0"} top={"0"}
-                                paddingBottom={'4'}
-                                overflow='scroll'>
-                                <Box position='absolute'
+                                paddingY={'16'}
+                                style={{
+                                    left: '50%', top: '0', bottom:'0',
+                                    transform: 'translate(-50%, 0%)'
+                                }}
+                                paddingX={'4'}
+                                >
+                                <Stack align={'center'} justify={'flex-start'}>
+                                <Box 
                                     boxShadow={'1'}
                                     ref={ref}
                                     borderColor={'accent'}
                                     borderRadius={'2xLarge'}
                                     padding={'8'}
                                     width={{ 'xs': 'full', 'sm': '3/4', 'md': '3/4', 'lg': '1/2', 'xl': '1/2' }}
+                                    height={'full'}
+                                    overflow={'scroll'}
                                     backgroundColor={'backgroundSecondary'}
-                                    style={{
-                                        left: '50%', top: '64px',
-                                        transform: 'translate(-50%, 0%)'
-                                    }}
 
                                 >
                                     <Stack align={'center'} justify={'flex-start'}>
+                                        <Box position='sticky' 
+                                        width='full'
+                                        zIndex={'100'}
+                                        top='0'>
                                         <Input
                                             onFocus={() => focusArea.current = 'input'}
                                             prefix={<IconSearch />}
@@ -229,6 +260,7 @@ const SearchPanel = ({ setIsOpen, isSearch }: ISearch) => {
                                                 }
                                             }}
                                         />
+                                        </Box>
 
                                         <Box width='full' paddingY='2' >
                                             <Toolbar.Root ref={filterArea}
@@ -434,7 +466,9 @@ const SearchPanel = ({ setIsOpen, isSearch }: ISearch) => {
 
                                     </Stack>
                                 </Box>
+                                </Stack>
                             </Box>
+                            {/* </Box> */}
                         </>
                         ,
 

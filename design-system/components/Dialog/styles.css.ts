@@ -16,11 +16,11 @@ export const variants = recipe({
   base: [
     atoms({
       boxShadow: '1',
-      position: 'fixed',
       borderRadius: '2xLarge',
       backgroundColor: 'groupBackground',
       alignItems: 'center',
       display: 'flex',
+      justifyContent: 'center',
       fontWeight: 'medium',
       height: 'fit',
     }),

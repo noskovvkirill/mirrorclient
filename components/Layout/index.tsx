@@ -72,7 +72,7 @@ const Layout = ({ children, title = 'Mirror feed', cover = '', twitterAuthor = '
 
     }, [scrollY, scrollDir, prevScroll])
 
-
+ 
 
     return (
         <Box
@@ -140,14 +140,15 @@ const Layout = ({ children, title = 'Mirror feed', cover = '', twitterAuthor = '
 
 
                 <Box
-                    flexGrow={1}
+                    flexGrow={{xs: 0, sm: 1, md: 1, lg: 1, xl: 1}}
                     flexBasis={'0'}
                 >
                     <Box position='relative'>
                         <Menu publisher={publisher} />
                     </Box>
                 </Box>
-                <Box>
+                <Box
+                >
                     <Search
                         setIsVisible={setIsPinnedList}
                         isVisible={isPinnedList}

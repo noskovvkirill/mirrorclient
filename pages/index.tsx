@@ -146,9 +146,13 @@ const RenderCard = ({ defaultState, pathName }: { defaultState: EntryType['diges
 
 const Page = ({ entries }: Props) => {
   const router = useRouter()
-
+ 
   return (
-    <Layout>
+    <Layout
+    title={'Mirror Feed'}
+    description={'A feed of the latest news and updates from the web3 platfrom Mirror.xyz.'}
+    cover={'https://mirrorfeed.xyz/cover.png'}
+    >
       <Box width={'full'}>
         <Header pathName={router.pathname} />
         <RenderCard
