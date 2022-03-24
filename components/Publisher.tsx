@@ -107,7 +107,7 @@ const PublisherBody = ({ publisher, size }: { publisher: PublisherType, size: 's
                             <Stack direction={'vertical'}
                                 space={'2'}
                                 align='flex-start'>
-                                <Text size='extraLarge' weight='bold' color='textTertiary'>{AddressPrettyPrint(publisher.project?.displayName || '', 16)}</Text>
+                                <Text size='extraLarge' weight='bold' color='textTertiary'>{AddressPrettyPrint(publisher.project?.displayName || '', 14)}</Text>
                                 <Tag size='small'> {publisher.project?.address && AddressPrettyPrint(publisher.project?.address, 6)}</Tag>
                             </Stack>
                             <Text size='small'>{publisher.project?.description}</Text>

@@ -45,7 +45,7 @@ export const fetchOptions = [
 
 const HeaderFeed = ({ pathName }: { pathName: string }) => {
   const [{ data: accountData }] = useAccount()
-  const { ToggleAuth, withEth } = useStore()
+  const { ToggleAuth, withEth, setNotifications } = useStore()
   const router = useRouter()
 
   const fetchOption = () => {
@@ -171,7 +171,12 @@ const HeaderFeed = ({ pathName }: { pathName: string }) => {
                         ToggleAuth(true)
                       }
                       if (!withEth.address) {
-                        alert('Sign in with Ethereum')
+                        setNotifications((prev) => {
+                          const newNotification = {
+                            message:'Please Sign In With Ethereum to view subscriptions',
+                          }
+                          return [...prev, newNotification]
+                        })
                       }
                     }
                   }}
@@ -180,7 +185,12 @@ const HeaderFeed = ({ pathName }: { pathName: string }) => {
                       ToggleAuth(true)
                     }
                     if (!withEth.address) {
-                      alert('Sign in with Ethereum')
+                      setNotifications((prev) => {
+                        const newNotification = {
+                          message:'Please Sign In With Ethereum to view subscriptions',
+                        }
+                        return [...prev, newNotification]
+                      })
                     }
                   }}>
 

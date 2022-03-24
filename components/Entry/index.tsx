@@ -112,7 +112,7 @@ type Collaborator = Flatten<Pick<EntryType, 'collaborators'>['collaborators']>
 
 const EntryItem = ({ entry }: { entry?: EntryType }) => {
     const Contributors = <Box paddingTop={'4'}>
-        <Stack direction={"horizontal"} space={"4"} align={"center"}>
+        <Stack direction={"horizontal"} space={"4"} align={"center"}  wrap={true}>
             <Stack direction={"horizontal"} space={"2"} align={"center"}>
                 <Avatar
                     size="6"
@@ -209,7 +209,7 @@ const EntryItem = ({ entry }: { entry?: EntryType }) => {
                             style={{ hyphens: 'auto', wordBreak:'normal' }}
                             marginBottom="auto" paddingLeft={"6"} paddingRight={"6"}>
                             <Stack space={"4"}>
-                                <Text size={{xs:'extraLarge', sm:'headingTwo', md:'headingTwo', lg:'headingOne', xl:'headingOne'}} weight='bold'
+                                <Text size={{xs:'headingTwo', sm:'headingTwo', md:'headingTwo', lg:'headingOne', xl:'headingOne'}} weight='bold'
                                     lineHeight='none'>{entry?.title}</Text>
                                 {Contributors}
                                 <Text size='large'

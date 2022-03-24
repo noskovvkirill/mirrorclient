@@ -5,6 +5,7 @@ import PageLoadProgress from '@/components/Layout/PageLoadProgress'
 import Search from '@/components/Search'
 //state
 import React, { ReactNode, useEffect, useState } from 'react'
+import { useStore } from 'contexts'
 import useScrollPosition from '@react-hook/window-scroll'
 import UserProfile from '@/components/Layout/UserProfile'
 import Menu from '@/components/Layout/Menu'
@@ -12,7 +13,8 @@ import { Subscribe } from '@/components/Layout/PopUps'
 //utils
 // import { keyframes } from '@vanilla-extract/css'
 import type { PublisherType } from 'types'
-
+import type {NotificationType} from 'contexts'
+import * as Toast from '@/components/Toast'
 
 type Props = {
     children?: ReactNode;
@@ -38,6 +40,8 @@ const Layout = ({ children, title = 'Mirror feed', cover = '', twitterAuthor = '
     const [scrollDir, setScrollDir] = useState<'top' | 'bottom' | 'stale'>('stale')
     const scrollY = useScrollPosition(8) //framerate scroll check
     const [prevScroll, setPrevScroll] = useState(0)
+    const {notifications } = useStore()
+
 
     const handleKey = (e: KeyboardEvent) => {
         if (e.keyCode === 18 || e.key === 'Alt') {
@@ -172,15 +176,31 @@ const Layout = ({ children, title = 'Mirror feed', cover = '', twitterAuthor = '
             </Box>
 
             <Subscribe />
+            <Toast.Provider 
+                 swipeDirection={'down'}
+                duration={6000}>
             <Box as='main'
                 backgroundColor={'backgroundTertiary'}
                 flex={1}
+           
                 justifyContent={'flex-start'}
                 flexDirection={'column'}
                 paddingX={{ sm: '2.5', xs: '2.5', md: '6', lg: '8', xl: '8' }}
             >
                 {children}
+
+                {notifications.map((item:NotificationType, index)=>{
+                    return (
+                        <Toast.Root key={'toast'+index}>
+                        <Toast.Description>{item.message}</Toast.Description>
+                    </Toast.Root>
+                    )
+                })}
+            
+
+                <Toast.Viewport/>
             </Box>
+            </Toast.Provider>
 
             {toolbar && (<Box as='section'
                 position='fixed'

@@ -9,6 +9,10 @@ type SignedWithEthAccount = {
     loading?: boolean
 }
 
+export type NotificationType = {
+    message: string
+}
+
 type StoreContext = {
     isAuth: boolean;
     isEmailPopUp: boolean;
@@ -16,6 +20,8 @@ type StoreContext = {
     ToggleAuth: (newState?: boolean) => void;
     setWithEth: (fn: (oldState: SignedWithEthAccount) => SignedWithEthAccount) => void
     withEth: SignedWithEthAccount;
+    notifications:NotificationType[];
+    setNotifications: (fn: (oldState: NotificationType[]) => NotificationType[]) => void;
 }
 const Store = createContext<StoreContext | null>(null)
 
@@ -27,6 +33,8 @@ export const StoreProvider = ({ children }: { children: React.ReactNode[] | Reac
     const [withEth, setWithEth] = useState<SignedWithEthAccount>({})
     const [isEmail, setIsEmail] = useState<boolean>(false)
     const [isEmailPopUp, setIsEmailPopUp] = useState<boolean>(false)
+
+    const [notifications, setNotifications] = useState<any>([])
 
     const ToggleAuth = useCallback((newState?: boolean) => {
         if (newState) {
@@ -83,8 +91,13 @@ export const StoreProvider = ({ children }: { children: React.ReactNode[] | Reac
         TogglePopUp,
         withEth,
         setWithEth,
-        isEmailPopUp
-    }), [isAuth, withEth, TogglePopUp, ToggleAuth, isEmailPopUp])
+        isEmailPopUp,
+        notifications,
+        setNotifications
+    }), [isAuth, withEth, TogglePopUp, ToggleAuth, 
+        notifications,
+        setNotifications,
+        isEmailPopUp])
 
     return (
         <Store.Provider value={value}>
