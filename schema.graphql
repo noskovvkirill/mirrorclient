@@ -160,6 +160,7 @@ type edition {
   events: [EditionEventsType]
   tokenIds: [String]
   publisher: PublisherType
+  draftDigest: String
   blockState: BlockStateType
 }
 
@@ -175,6 +176,7 @@ type MediaAssetType {
   id: Int
   mimetype: String
   sizes: MediaAssetSizesType
+  cid: String
   url: String
 }
 
@@ -236,6 +238,8 @@ type EditionEventsType {
   twitterUsername: String
   collectorAddress: String
   serialNumber: String
+  digest: String
+  draftDigest: String
 }
 
 """The publisher of the block"""
@@ -245,7 +249,7 @@ type PublisherType {
 
   """The member that published on behalf of the project"""
   member: ProjectType
-} 
+}
 
 type ProjectType {
   _id: String
@@ -468,6 +472,7 @@ type entry {
   featuredImage: MediaAssetType
   publisher: PublisherType
   collaborators: [ProjectType]
+  settings: EntrySettingsType
 }
 
 """Describes an Arweave Transaction Request"""
@@ -489,6 +494,18 @@ type Authorship {
   signature: String
 }
 
+"""Entry SEO settings"""
+type EntrySettingsType {
+  """Meta image"""
+  metaImage: MediaAssetType
+
+  """Meta title"""
+  title: String
+
+  """Meta description"""
+  description: String
+}
+
 """API Queries [Read]"""
 type query {
   publication(ensLabel: String, publicOnly: Boolean): publication @deprecated(reason: "Publications are deprecated, please use Project* and User* endpoints")
@@ -508,6 +525,9 @@ type query {
 
   """All the entries for a user address"""
   entries(publicOnly: Boolean, projectAddress: String): [entry]
+
+  """Top 20 entries"""
+  topEntries: [entry]
 
   """Endpoint for returning ENS information for a given domain"""
   resolveENS(
@@ -647,23 +667,26 @@ type query {
 
   """Endpoint for querying a contributor's crowdfund drafts"""
   crowdfundDraftById(
-    """Crowdfund draft ID"""
-    id: Int
+    """The Ethereum address associated with the user"""
+    userAddress: String
 
-    """Signature"""
-    signature: String
+    """The Ethereum address associated with the project"""
+    projectAddress: String
 
     """Digest"""
     digest: String
 
-    """Unix Timestamp"""
-    timestamp: String
-
-    """Address of user who created crowdfund draft"""
-    address: String
-
     """Public key used to sign the crowdfund data"""
     key: String
+
+    """Signature with content related to the crowdfund"""
+    signature: String
+
+    """Unix Timestamp in seconds"""
+    timestamp: String
+
+    """Crowdfund draft ID"""
+    id: Int
   ): CrowdfundDraft
 
   """Endpoint for querying all contracts"""
@@ -732,6 +755,12 @@ type query {
 
   """List of all available plugins"""
   pluginsList: [PluginType]
+
+  """Endpoint for querying a edition draft"""
+  editionDraft(
+    """Digest of the draft"""
+    digest: String
+  ): EditionDraftType
 }
 
 """ENS type"""
@@ -970,6 +999,7 @@ type SplitType {
   operator: UserProfileType @deprecated(reason: "Use publisher to fetch creator and operator info")
   publication: publication @deprecated(reason: "Use publisher to fetch creator and operator info")
   publisher: PublisherType
+  version: String
 }
 
 """Returns information about a split allocation"""
@@ -1392,6 +1422,23 @@ type PluginType {
   installed: Boolean
 }
 
+"""Edition draft type"""
+type EditionDraftType {
+  _id: String
+  publisher: PublisherType
+  digest: String
+  title: String
+  quantity: Int
+  description: String
+  price: Float
+  fundingRecipient: String
+  thumbnailMedia: MediaAssetType
+  primaryMedia: MediaAssetType
+  singleArtifact: Boolean
+  baseUriHash: String
+  contentHash: String
+}
+
 """API Mutations [Create, Update, Delete]"""
 type mutations {
   """Endpoint for onboarding a contributor"""
@@ -1516,6 +1563,9 @@ type mutations {
 
     """ID of featured image if there is one"""
     hideTitleInEntry: Boolean
+
+    """Entry SEO Settings"""
+    settings: EntrySettingsInputType
   ): entry
 
   """Endpoint for onboarding a contributor"""
@@ -1593,6 +1643,9 @@ type mutations {
 
     """ID of featured image if there is one"""
     hideTitleInEntry: Boolean
+
+    """Entry SEO Settings"""
+    settings: EntrySettingsInputType
   ): entry
 
   """Endpoint for updating settings"""
@@ -1927,6 +1980,7 @@ type mutations {
     address: String
     transactionHash: String
     network: String
+    version: String
   ): SplitType
 
   """Endpoint for creating split allocations"""
@@ -2042,7 +2096,13 @@ type mutations {
   ): Boolean @deprecated(reason: "This feed is no longer used")
 
   """Endpoint for setting up a new media asset"""
-  createMediaAsset(mimetype: String, sizes: MediaAssetSizesInputType): MediaAssetType
+  createMediaAsset(
+    mimetype: String
+    sizes: MediaAssetSizesInputType
+
+    """IPFS content identifier for the media file"""
+    cid: String
+  ): MediaAssetType
 
   """Endpoint for adding a user email"""
   addEmail(email: String, address: String, signature: String, digest: String, key: String, timestamp: String): email
@@ -2625,11 +2685,139 @@ type mutations {
     """Whether to install or uinstall the plugin"""
     install: Boolean
   ): PluginType
+
+  """Endpoint for creating an edition draft"""
+  createEditionDraft(
+    """The Ethereum address associated with the user"""
+    userAddress: String
+
+    """The Ethereum address associated with the project"""
+    projectAddress: String
+
+    """Digest"""
+    digest: String
+
+    """Public key used to sign the crowdfund data"""
+    key: String
+
+    """Signature with content related to the crowdfund"""
+    signature: String
+
+    """Unix Timestamp in seconds"""
+    timestamp: String
+    title: String
+    quantity: Int
+    description: String
+    price: Float
+    fundingRecipient: String
+    artifactThumbnailId: Int
+    artifactPrimaryId: Int
+    singleArtifact: Boolean
+    baseUriHash: String
+    contentHash: String
+  ): EditionDraftType
+
+  """Endpoint for a updating an edition draft"""
+  updateEditionDraft(
+    """The Ethereum address associated with the user"""
+    userAddress: String
+
+    """The Ethereum address associated with the project"""
+    projectAddress: String
+
+    """Digest"""
+    digest: String
+
+    """Public key used to sign the crowdfund data"""
+    key: String
+
+    """Signature with content related to the crowdfund"""
+    signature: String
+
+    """Unix Timestamp in seconds"""
+    timestamp: String
+    title: String
+    quantity: Int
+    description: String
+    price: Float
+    fundingRecipient: String
+    artifactThumbnailId: Int
+    artifactPrimaryId: Int
+    singleArtifact: Boolean
+    baseUriHash: String
+    contentHash: String
+
+    """Original digest of the draft"""
+    draftDigest: String
+  ): EditionDraftType
+
+  """Endpoint for an reinstating edition draft"""
+  reinstateEditionDraft(
+    """The Ethereum address associated with the user"""
+    userAddress: String
+
+    """The Ethereum address associated with the project"""
+    projectAddress: String
+
+    """Digest"""
+    digest: String
+
+    """Public key used to sign the crowdfund data"""
+    key: String
+
+    """Signature with content related to the crowdfund"""
+    signature: String
+
+    """Unix Timestamp in seconds"""
+    timestamp: String
+
+    """Original digest of the draft"""
+    draftDigest: String
+  ): EditionDraftType
+
+  """Endpoint for creating edition from draft"""
+  createEditionFromDraft(
+    """The Ethereum address associated with the user"""
+    userAddress: String
+
+    """The Ethereum address associated with the project"""
+    projectAddress: String
+
+    """Digest"""
+    digest: String
+
+    """Public key used to sign the crowdfund data"""
+    key: String
+
+    """Signature with content related to the crowdfund"""
+    signature: String
+
+    """Unix Timestamp in seconds"""
+    timestamp: String
+
+    """Original digest of the draft"""
+    draftDigest: String
+    network: String
+    editionContractAddress: String
+    version: String
+  ): edition
 }
 
 """Success type"""
 type success {
   success: Boolean
+}
+
+"""Used to control meta settings"""
+input EntrySettingsInputType {
+  """Meta image ID"""
+  metaImageId: Int
+
+  """Meta title"""
+  title: String
+
+  """Meta description"""
+  description: String
 }
 
 """Edition For Signature type"""

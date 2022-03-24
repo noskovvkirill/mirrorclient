@@ -219,6 +219,10 @@ const SearchPanel = ({ setIsOpen, isSearch }: ISearch) => {
                             width='full'
                             overflow={'hidden'}
                             height='full'
+                            display='flex'
+                            alignItems='center'
+                            justifyContent='flex-start'
+                            flexDirection='column'
                             maxHeight={'full'}
                                 zIndex='100'
                                 position="fixed" left={"0"} top={"0"}
@@ -229,22 +233,28 @@ const SearchPanel = ({ setIsOpen, isSearch }: ISearch) => {
                                 }}
                                 paddingX={'4'}
                                 >
-                                <Stack align={'center'} justify={'flex-start'}>
                                 <Box 
                                     boxShadow={'1'}
                                     ref={ref}
                                     borderColor={'accent'}
                                     borderRadius={'2xLarge'}
-                                    padding={'8'}
+                                    paddingY={'8'}
+                                    paddingBottom='0'
                                     width={{ 'xs': 'full', 'sm': '3/4', 'md': '3/4', 'lg': '1/2', 'xl': '1/2' }}
-                                    height={'full'}
-                                    overflow={'scroll'}
+                                    height={'fit'}
+                                    maxHeight={'full'}
+                                    overflow={'hidden'}
                                     backgroundColor={'backgroundSecondary'}
+                                    display='flex'
+                                    flexDirection='column'
+                                    alignItems='center'
+                                    justifyContent={'flex-start'}
+                                    gap={'4'}
 
                                 >
-                                    <Stack align={'center'} justify={'flex-start'}>
                                         <Box position='sticky' 
                                         width='full'
+                                        paddingX={'8'}
                                         zIndex={'100'}
                                         top='0'>
                                         <Input
@@ -262,7 +272,21 @@ const SearchPanel = ({ setIsOpen, isSearch }: ISearch) => {
                                         />
                                         </Box>
 
-                                        <Box width='full' paddingY='2' >
+                                        <Box width='full'
+                                            display={'flex'}
+                                            justifyContent={'flex-start'}
+                                        maxHeight={'full'}
+                                        paddingX={'8'}
+                                        alignItems={'center'}
+                                        flexDirection={'column'}
+                                        overflow={'scroll'}
+                                        gap={'0'}
+                                        paddingBottom='4'
+                                        >
+                             
+                                        <Box width='full' 
+                                        paddingTop='2'
+                                        paddingY='5' >
                                             <Toolbar.Root ref={filterArea}
                                                 onFocus={() => focusArea.current = 'filter'}
                                             >
@@ -290,7 +314,9 @@ const SearchPanel = ({ setIsOpen, isSearch }: ISearch) => {
                                         </Box>
 
                                         {(searchMode === 'PUBLICATIONS' || searchMode === undefined) && (
-                                            <Box width='full' paddingY='4'>
+                                            <Box width='full' 
+                                            paddingY='4'
+                                            >
                                                 <Stack align={'center'} justify={'flex-start'}>
                                                     <Box width='full'>
                                                         <Text color='textSecondary' weight='bold'>Publications</Text>
@@ -343,7 +369,7 @@ const SearchPanel = ({ setIsOpen, isSearch }: ISearch) => {
                                                                                     ? '/publication/' + item.ensLabel + '/'
                                                                                     : '/member/' + item.ensLabel + '/'
                                                                             } passHref>
-                                                                                <Box width='full'
+                                                                                <Box width='fit'
                                                                                 >
                                                                                     <Publisher ensLabel={item.type === 'ADDRESS' ? item.ensLabel : item.ensLabel + '.mirror.xyz'} size='default' />
                                                                                 </Box>
@@ -370,7 +396,9 @@ const SearchPanel = ({ setIsOpen, isSearch }: ISearch) => {
 
 
                                         {(searchMode === 'ENTRIES' || searchMode === undefined) && (
-                                            <Box width='full' paddingY='4'>
+                                            <Box width='full' paddingY='4'
+                                          
+                                            >
                                                 <Stack align={'center'} justify={'flex-start'}>
                                                     <Box width='full'>
                                                         <Text color='textSecondary' weight='bold'>Entries</Text>
@@ -462,13 +490,9 @@ const SearchPanel = ({ setIsOpen, isSearch }: ISearch) => {
                                                     )}
                                                 </Stack>
                                             </Box>)}
-
-
-                                    </Stack>
+                                            </Box>
+                                        </Box>
                                 </Box>
-                                </Stack>
-                            </Box>
-                            {/* </Box> */}
                         </>
                         ,
 

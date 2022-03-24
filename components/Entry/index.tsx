@@ -206,13 +206,14 @@ const EntryItem = ({ entry }: { entry?: EntryType }) => {
                         flexDirection="column" justifyContent={"space-between"}>
                         <Box width="full" as='section'
                             overflow={'hidden'}
-                            style={{ wordBreak: 'break-all' }}
+                            style={{ hyphens: 'auto', wordBreak:'normal' }}
                             marginBottom="auto" paddingLeft={"6"} paddingRight={"6"}>
                             <Stack space={"4"}>
-                                <Text size='headingOne' weight='bold'
+                                <Text size={{xs:'extraLarge', sm:'headingTwo', md:'headingTwo', lg:'headingOne', xl:'headingOne'}} weight='bold'
                                     lineHeight='none'>{entry?.title}</Text>
                                 {Contributors}
                                 <Text size='large'
+                                    whiteSpace='pre-wrap'
                                     lineHeight={'1.5'}
                                     color="text" weight={"normal"}>
                                     {entry?.body && processor.processSync(entry?.body).result}
