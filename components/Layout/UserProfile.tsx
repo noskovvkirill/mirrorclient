@@ -111,11 +111,13 @@ const UserProfile = () => {
                                         : AddressPrettyPrint(accountData.address)
                                     }</Text>
                             </Box>
+                            {!state.loading && (
                             <Button size='small' shape='circle' variant='tertiary'>
                                 {accountData.ens?.avatar
                                     ? (<Avatar src={accountData.ens?.avatar} label="ENS Avatar" />)
                                     : <IconUserSolid />}
                             </Button>
+                            )}
 
                         </Stack>
                     </Box>

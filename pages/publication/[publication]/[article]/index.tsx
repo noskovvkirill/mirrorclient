@@ -75,8 +75,8 @@ const Article = ({ entry }: Props) => {
         <Layout publisher={entry?.publisher}
             description={entry.body?.slice(0, 120)}
             cover={entry.featuredImage?.url}
-            title={entry.title + ' — by' + entry.publication?.displayName} twitterAuthor={entry.author?.displayName}>
-            <Box width='full' paddingY={'16'}>
+            title={entry.title + ' — by' + entry.author?.displayName} twitterAuthor={entry.author?.displayName}>
+            <Box width='full' paddingY={{xs:'10', sm:'10', md:'16',lg:'16', xl:'16'}}>
                 <Entry entry={entry} />
             </Box>
         </Layout>

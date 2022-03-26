@@ -80,21 +80,32 @@ const PublisherBody = ({ publisher, size }: { publisher: PublisherType, size: 's
                         src={publisher?.project?.avatarURL}
                     />
                 }
-                <Text
-                    color={size === 'default' ? 'textTertiary' : 'textSecondary'}
-                    weight={
-                        'bold'
-                    }
-                    size={size === 'default' ? 'extraLarge' : 'inherit'}
-                >{AddressPrettyPrint(publisher?.project?.displayName || '', 16)}
-                </Text>
+                <Link href={
+                publisher?.project?.domain
+                    ? '/publication/' + publisher?.project?.domain.split('.')[0] + '/'
+                    : '/member/' + publisher?.member?.address + '/'
+            } passHref>    
+                <Box cursor='pointer'>
+                        <Text
+                            color={size === 'default' ? 'textTertiary' : 'textSecondary'}
+                            weight={
+                                'bold'
+                            }
+                            size={size === 'default' ? 'extraLarge' : 'inherit'}
+                        >{AddressPrettyPrint(publisher?.project?.displayName || '', 16)}
+                        </Text>
+                </Box>
+                </Link>   
+                
             </Stack>
         </Link></Box>
 
     return (
         <HoverCard width={'80'} padding={'0'} trigger={trigger}>
             <Stack>
+              
                 <Box width='full'
+            
                     paddingX={'4'} paddingTop={'4'}>
                     <Stack direction={'horizontal'}>
                         <Avatar
@@ -114,6 +125,8 @@ const PublisherBody = ({ publisher, size }: { publisher: PublisherType, size: 's
                         </Stack>
                     </Stack>
                 </Box>
+            
+
                 <Box as='hr' width={'full'} borderTopWidth={'0.75'}></Box>
                 <Box paddingX={'4'} paddingBottom={'4'}>
                     <Stack direction='horizontal'>

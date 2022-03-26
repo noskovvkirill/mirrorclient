@@ -1,19 +1,21 @@
 // import Root from './Root'
 import { Box, Tag, Text, Stack, Avatar, Spinner } from 'design-system'
 import AddressPrettyPrint from 'src/helpers/AddressPrettyPrint'
+import Link from 'next/link'
 //utils
 import { unified } from 'unified'
 import remarkRehype from 'remark-rehype'
 import remarkParse from 'remark-parse'
 import rehypeReact from 'rehype-react'
-import { createElement, Fragment } from 'react'
+import React, { createElement, Fragment } from 'react'
 import remarkUnwrapImages from 'remark-unwrap-images'
 import * as dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
+import dynamic from 'next/dynamic'
 dayjs.extend(relativeTime)
+
 //types
 import { EntryType } from 'types'
-import dynamic from 'next/dynamic'
 
 const DynamicEmbed = dynamic(() =>
     import('./Embeds'), {
@@ -84,21 +86,138 @@ const Hr = () => {
     )
 }
 
+const StyledH1 = ({ children, }: { children: React.ReactNode}) => {
+    return (
+        <Box as={'h1'}
+            fontSize={'headingTwo'}
+            fontWeight='bold'
+            marginTop={'9'}
+            marginBottom={'3'}
+            >
+            {children}
+            </Box>
+    )
+}
+
+const StyledH2 = ({ children, }: { children: React.ReactNode}) => {
+    return (
+        <Box as={'h2'}
+            fontSize={'headingTwo'}
+            fontWeight='bold'
+            marginTop={'9'}
+            marginBottom={'3'}
+            >
+            {children}
+            </Box>
+    )
+}
+
+const StyledH3 = ({ children, }: { children: React.ReactNode}) => {
+    return (
+        <Box as={'h3'}
+            fontSize={'extraLarge'}
+            fontWeight='bold'
+            marginTop={'9'}
+            marginBottom={'3'}
+            >
+            {children}
+            </Box>
+    )
+}
+
+
+const StyledH4 = ({ children, }: { children: React.ReactNode}) => {
+    return (
+        <Box as={'h4'}
+            fontSize={'extraLarge'}
+            fontWeight='bold'
+            marginTop={'9'}
+            marginBottom={'3'}
+            >
+            {children}
+            </Box>
+    )
+}
+
+const StyledH5 = ({ children, }: { children: React.ReactNode}) => {
+    return (
+        <Box as={'h2'}
+            fontSize={'extraLarge'}
+            fontWeight='semiBold'
+            marginTop={'9'}
+            marginBottom={'3'}
+            >
+            {children}
+            </Box>
+    )
+}
 
 
 
+const StyledText = ({children}:{children:React.ReactNode | React.ReactNode[]}) => {
+    return(
+        <Text size='large'
+        whiteSpace='pre-wrap'
+        lineHeight={'1.5'}
+        color="text" weight={"normal"}>
+            {children}
+        </Text>
+    )
+}
+
+const StyledListUl = ({children}:{children:React.ReactNode | React.ReactNode[]}) => {
+    return(
+        <Box fontSize={'large'}
+        whiteSpace='pre-wrap'
+        as='ul'
+        marginY={'0.5'}
+        display='flex'
+        flexDirection={'column'}
+        gap='1.5'
+        style={{listStyle:'inside'}}
+        // padding='0'
+        lineHeight={'none'}
+        color="text" fontWeight={"normal"}>
+            {children}
+        </Box>
+    )
+    }
+
+const StyledList = ({children}:{children:React.ReactNode | React.ReactNode[]}) => {
+    return(
+        <Box fontSize={'large'}
+        whiteSpace='pre-wrap'
+        as='li'
+        // marginX={'-4'}
+        marginTop={'0.5'}
+        padding='0'
+        lineHeight={'1.625'}
+        color="text" fontWeight={"normal"}>
+            {children}
+        </Box>
+    )
+}
 
 const processor = unified()
     .use(remarkParse)
     .use(remarkUnwrapImages)
     .use(remarkRehype)
     .use(rehypeReact,
+        //@ts-ignore
         {
             createElement: createElement, Fragment: Fragment,
             components: {
                 img: Image,
                 hr: Hr,
-                a: DynamicEmbed
+                h1:StyledH1,
+                h2:StyledH2,
+                h3:StyledH3,
+                h4:StyledH4,
+                h5:StyledH5,
+                a: DynamicEmbed,
+                p: StyledText,
+                li: StyledList,
+                ul: StyledListUl
             },
         },
 
@@ -111,8 +230,14 @@ type Flatten<T> = T extends any[] ? T[number] : T;
 type Collaborator = Flatten<Pick<EntryType, 'collaborators'>['collaborators']>
 
 const EntryItem = ({ entry }: { entry?: EntryType }) => {
-    const Contributors = <Box paddingTop={'4'}>
+    const Contributors = <Box paddingTop={'4'} paddingBottom={'8'}>
         <Stack direction={"horizontal"} space={"4"} align={"center"}  wrap={true}>
+        <Link href={
+                entry?.publisher?.project?.domain
+                    ? '/publication/' + entry?.publisher?.project?.domain.split('.')[0] + '/'
+                    : '/member/' + entry?.publisher?.member?.address + '/'
+            } passHref>    
+            <Box cursor='pointer'>            
             <Stack direction={"horizontal"} space={"2"} align={"center"}>
                 <Avatar
                     size="6"
@@ -125,6 +250,8 @@ const EntryItem = ({ entry }: { entry?: EntryType }) => {
 
                 <Tag>{AddressPrettyPrint(entry?.publisher?.project?.address || "0x", 6)}</Tag>
             </Stack>
+            </Box>   
+        </Link>
 
             {entry?.collaborators?.map((collaborator: Collaborator) => {
                 if (collaborator?.displayName === entry?.publisher?.project?.displayName) {
@@ -197,7 +324,7 @@ const EntryItem = ({ entry }: { entry?: EntryType }) => {
                         </Box>
 
                     }
-
+ 
 
                     <Box
                         maxWidth={'192'}
@@ -207,17 +334,12 @@ const EntryItem = ({ entry }: { entry?: EntryType }) => {
                         <Box width="full" as='section'
                             overflow={'hidden'}
                             style={{ hyphens: 'auto', wordBreak:'normal' }}
-                            marginBottom="auto" paddingLeft={"6"} paddingRight={"6"}>
+                            marginBottom="auto" paddingLeft={{sm:'2', xs:'2', md:"6", lg:'6', xl:'6'}} paddingRight={{sm:'2', xs:'2', md:"6", lg:'6', xl:'6'}}>
                             <Stack space={"4"}>
                                 <Text size={{xs:'headingTwo', sm:'headingTwo', md:'headingTwo', lg:'headingOne', xl:'headingOne'}} weight='bold'
                                     lineHeight='none'>{entry?.title}</Text>
                                 {Contributors}
-                                <Text size='large'
-                                    whiteSpace='pre-wrap'
-                                    lineHeight={'1.5'}
-                                    color="text" weight={"normal"}>
                                     {entry?.body && processor.processSync(entry?.body).result}
-                                </Text>
                             </Stack>
                         </Box>
                     </Box>

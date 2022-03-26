@@ -1,13 +1,14 @@
-import { Box } from 'design-system'
-import { ReactPropTypes } from 'react'
-import Crowdfund from 'components/Cards/Crowdfund'
-import Poll from 'components/Cards/Poll'
+import { Box, Stack } from 'design-system'
+
+// import Crowdfund from 'components/Cards/Crowdfund'
+// import Poll from 'components/Cards/Poll'
 import Edition from 'components/Cards/Edition'
 import TweetEmbed from 'react-tweet-embed'
 
 const StyledLink = ({ href, children }: { href?: string, children?: any }) => {
     return (
         <Box as='a'
+            wordBreak='break-word'
             color={'accent'}
             style={{ textDecoration: 'underline', textUnderlineOffset: '0.2 rem' }}
             href={href}>{children}</Box>
@@ -82,10 +83,18 @@ const Embeds = ({ href, children }: { href?: string, children?: any }) => {
     //         <Nft contract={links[0]} tokenId={links[1]}/> 
     //     )
     // }
-
-    // if (new URL(href).host === 'twitter.com') {
-    //     return (<Box paddingY={'6'}><TweetEmbed tweetId={result[3]} options={{ cards: 'hidden' }} /></Box>)
-    // }
+ 
+    if (new URL(href).host === 'twitter.com') {
+        return (<Box 
+        width='full'
+        flex='auto'
+         display='flex' justifyContent={'center'}>
+            <Box display='block' width='fit' maxWidth='full'>
+                <TweetEmbed tweetId={href.split('/')[href.split('/').length-1]}
+                options={{ cards: 'hidden' }} />
+                </Box>
+            </Box>)
+    }
 
 
     return (

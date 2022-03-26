@@ -58,6 +58,8 @@ const fetcher = (digest: string) => {
 
 const EntryItem = ({ entry, isValidating, maxWidth, digest, error }: { error: any, isValidating: boolean, entry?: EntryType, digest: string, maxWidth?: BoxMaxWidth }) => {
     const [isImageError, setIsImageError] = useState(false)
+    const [isCoverError, setIsCoverError] = useState(false)
+
     const router = useRouter()
     // console.log('entry', entry)
     return (
@@ -104,10 +106,11 @@ const EntryItem = ({ entry, isValidating, maxWidth, digest, error }: { error: an
                     borderTopLeftRadius="3xLarge"
                     borderTopRightRadius={"3xLarge"}
                     position={"relative"}>
-                    {entry?.featuredImage?.url
+                    {entry?.featuredImage?.url && !isCoverError
                         ? <img
                             style={{ userSelect: 'none', objectFit: 'cover', width: '100%', height: '100%' }}
                             loading="lazy"
+                            onError={() => setIsCoverError(true)}
                             alt={entry?.title + 'cover image'}
                             src={entry?.featuredImage?.url} />
                         : entry?.body && getFirstImage(entry?.body) && !isImageError
