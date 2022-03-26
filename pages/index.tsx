@@ -150,7 +150,7 @@ const Page = ({ entries }: Props) => {
   return (
     <Layout
     title={'Mirror Feed'}
-    description={'A feed of the latest news and updates from the web3 platfrom Mirror.xyz.'}
+    description={'Subscribe to your favourite Mirror.xyz publications and authors'}
     cover={'https://mirrorfeed.xyz/cover.png'}
     >
       <Box width={'full'}>

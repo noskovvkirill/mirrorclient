@@ -103,6 +103,7 @@ const UserProfile = () => {
                 <Dropdown trigger={
                     <Box>
                         <Stack direction='horizontal' align='center'>
+                            {!state.loading && (
                             <Box display={{ xs: 'none', sm: 'none', md: 'inline-block', lg: 'inline-block', xl: 'inline-block' }}>
                                 <Text
                                     weight={'medium'}
@@ -111,6 +112,7 @@ const UserProfile = () => {
                                         : AddressPrettyPrint(accountData.address)
                                     }</Text>
                             </Box>
+                            )}
                             {!state.loading && (
                             <Button size='small' shape='circle' variant='tertiary'>
                                 {accountData.ens?.avatar
