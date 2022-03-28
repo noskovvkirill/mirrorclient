@@ -1,29 +1,48 @@
 import Layout from '@/components/Layout'
 import { Box, Text, Stack } from 'design-system'
-
+import Image from 'next/image'
 
 const Page = () => {
     return (
-        <Layout>
+        <Layout color='pink'> 
             <Box width={'full'} height='full'>
                 <Stack direction='horizontal' align='center' justify='center'>
                     <Box maxWidth='192' paddingY={'12'} paddingX='1.5'>
-                        <Stack>
+                        <Stack direction='vertical'>
                             <Text
                                 weight='bold'
-                                size='headingOne' lineHeight={'1.375'} color='accent'>
+                                size='headingOne' lineHeight={'1.375'} color='pink'>
                                 About us
+                            </Text>
+                            <Stack direction='vertical' space='4'>
+                            <Text
+                                color='textSecondary'
+                                size='large' lineHeight={'1.375'} >
+                                MirrorFeed is a reader for decentralized publishing platform Mirror.xyz.
                             </Text>
                             <Text
                                 color='textSecondary'
                                 size='large' lineHeight={'1.375'} >
-                                MirrorFeed is a reader for decentralized publishing platform Mirror.xyz.<br />
-                                We aggregate the contents from the Mirror ecosystem in one place.<br />
+                                We aggregate the contents from the Mirror ecosystem in one place
+                            </Text>
+                            <Text
+                                color='textSecondary'
+                                size='large' lineHeight={'1.375'} >
                                 The goal is to build the set of web3 native tools for curation and discovery that works for the Mirror community.
                             </Text>
+                            <Box 
+                            position='relative'
+                            height='96'
+                            width='full' maxWidth='full' overflow='hidden'>
+                            <Image src={'/cover.png'} 
+                            layout='responsive'
+                            alt='cover'
+                            width={'1200px'} height={'630px'} />
+                            </Box>
                             <Text color='textTertiary'>
                                 Built by noskovvkirill.eth
                             </Text>
+                            </Stack>
                         </Stack>
                     </Box>
                 </Stack>

@@ -19,6 +19,7 @@ import * as Toast from '@/components/Toast'
 type Props = {
     children?: ReactNode;
     title?: string;
+    color?: 'blue' | 'purple' | 'pink' | 'green'
     toolbar?: ReactNode | ReactNode[];
     publisher?: PublisherType
     description?: string;
@@ -33,7 +34,9 @@ export const history: Array<{
 
 
 
-const Layout = ({ children, title = 'Mirror feed', cover = '', twitterAuthor = '@noskovvkirill', description = 'Curation feed', toolbar, publisher }: Props) => {
+const Layout = ({ 
+    color='blue',
+    children, title = 'Mirror feed', cover = '', twitterAuthor = '@noskovvkirill', description = 'Curation feed', toolbar, publisher }: Props) => {
 
     const [isPinnedList, setIsPinnedList] = useState(false)
     const [isSearch, setIsSearch] = useState(false)
@@ -54,6 +57,7 @@ const Layout = ({ children, title = 'Mirror feed', cover = '', twitterAuthor = '
             return (() => window.removeEventListener('keydown', handleKey))
         }
     }, [])
+
     useEffect(() => {
         const currentScroll = scrollY
         if (currentScroll >= Math.floor(window.innerHeight / 3) && scrollDir === 'bottom') {
@@ -118,7 +122,12 @@ const Layout = ({ children, title = 'Mirror feed', cover = '', twitterAuthor = '
                     userSelect: 'none',
                     top: 0,
                     left: 0,
-                    background: 'linear-gradient(to top, rgba(0, 0, 0, 0) 20%, rgba(0, 124, 255, 0.3) 100%)',
+                    background: 
+                    color === 'blue' ? 'linear-gradient(to top, rgba(0, 0, 0, 0) 20%, rgba(0, 124, 255, 0.3) 100%)'
+                    : color === 'pink' ? 'linear-gradient(to top, rgba(0, 0, 0, 0) 20%, rgba(255, 0, 255, 0.3) 100%)' 
+                    : color === 'purple' ? 'linear-gradient(to top, rgba(0, 0, 0, 0) 20%, rgba(255, 0, 255, 0.3) 100%)'
+                    : color === 'green' ? 'linear-gradient(to top, rgba(0, 0, 0, 0) 20%, rgba(0, 255, 0, 0.3) 100%)'
+                    : 'linear-gradient(to top, rgba(0, 0, 0, 0) 20%, rgba(0, 124, 255, 0.3) 100%)'
                 }}
             >
             </Box>

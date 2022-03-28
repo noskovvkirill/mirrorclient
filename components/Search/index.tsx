@@ -43,7 +43,12 @@ const SearchBar = ({ isSearch, setIsOpen, isVisible, setIsVisible }: ISearch & {
 
                         >
                     <Input
-                        tabIndex={-1}
+                        tabIndex={0}
+                        onKeyDown={(e) => {
+                            if (e.key === 'Enter') {
+                                setIsOpen(true)
+                            }
+                        }}
                         size={'small'}
                         suffix={<Box
                             display={{ xs: 'none', sm: 'none', md: 'inline-block', lg: 'inline-block', xl: 'inline-block' }}
@@ -61,7 +66,7 @@ const SearchBar = ({ isSearch, setIsOpen, isVisible, setIsVisible }: ISearch & {
                             size='small'
                             variant={'tertiary'}
                             >
-                                 <IconSearch />
+                                 <IconSearch  size={'6'}/>
                             </Button>
                         </Box>
                 </Box>

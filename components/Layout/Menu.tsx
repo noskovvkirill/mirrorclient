@@ -6,6 +6,25 @@ import Publisher from '@/components/Publisher'
 
 const Menu = ({ publisher }: { publisher?: PublisherType }) => {
     const router = useRouter()
+    // const trigger =  <Button
+    //         variant='tertiary'
+    //         size='small'
+    //         shape={'circle'}>
+    //         <IconMenu />
+    //     </Button>
+
+    const triggerMobile =  <Button
+    variant={'secondary'}
+    tone={router.pathname === '/' ? 'blue' : router.pathname === '/about' ? 'pink' : 'purple'}
+    size='small'
+    >
+        <Stack direction='horizontal' align='center' space={'1.5'}>
+           <IconMenu size={'6'}/>
+        {router.pathname === '/' ? 'Home' : router.pathname === '/about'  ? 'About' : 'Trending'}
+        </Stack>
+    </Button>
+    
+        
     return (
         <Box
             width='fit'
@@ -14,13 +33,7 @@ const Menu = ({ publisher }: { publisher?: PublisherType }) => {
         >
             <Stack direction={'horizontal'} align='center'>
                 <Dropdown trigger={
-                    <Button
-                        // tabIndex={0}
-                        variant='tertiary'
-                        size='small'
-                        shape='circle'>
-                        <IconMenu />
-                    </Button>
+                   triggerMobile
                 }>
 
                     <DropdownItem width='full'
@@ -31,19 +44,15 @@ const Menu = ({ publisher }: { publisher?: PublisherType }) => {
                         Feed
                     </DropdownItem>
 
-
-
                     <DropdownItem
                         disabled
                         onClick={() => router.push('/trending')}
                         width='full'
                         size='small'
                         variant={'secondary'}
-                        // variant={router.pathname === '/trending' ? 'primary' : 'tertiary'}
                         prefix={<Tag size='small' tone={'blue'}>Soon</Tag>}
                     >
                         Trending
-                        {/* Trending <Tag tone={'green'}>Coming soon</Tag> */}
                     </DropdownItem>
 
 

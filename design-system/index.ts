@@ -15,6 +15,7 @@ export {
   IconNFT,
   HoverCard,
   MediaPicker,
+  Select,
   Skeleton,
   SkeletonGroup,
   Spinner,
