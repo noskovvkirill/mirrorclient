@@ -184,6 +184,7 @@ const Publication = ({ entries, publisher }: Props) => {
                             />
 
                             <Text
+                               align={'center'}
                                 color='text'
                                 weight={
                                     'bold'

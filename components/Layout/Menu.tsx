@@ -5,13 +5,14 @@ import type { PublisherType } from 'types'
 import Publisher from '@/components/Publisher'
 
 const Menu = ({ publisher }: { publisher?: PublisherType }) => {
+    
     const router = useRouter()
-    // const trigger =  <Button
-    //         variant='tertiary'
-    //         size='small'
-    //         shape={'circle'}>
-    //         <IconMenu />
-    //     </Button>
+    const trigger =  <Button
+            variant='tertiary'
+            size='small'
+            shape={'circle'}>
+            <IconMenu />
+        </Button>
 
     const triggerMobile =  <Button
     variant={'secondary'}
@@ -23,7 +24,7 @@ const Menu = ({ publisher }: { publisher?: PublisherType }) => {
         {router.pathname !== '/about' ? 'Home' : 'About'}
         </Stack>
     </Button>
-    
+
         
     return (
         <Box
@@ -35,7 +36,9 @@ const Menu = ({ publisher }: { publisher?: PublisherType }) => {
                 <Dropdown 
                 width={{xs:'72', sm:'72', md:'64', lg:'64', xl:'64'}}
                 trigger={
-                   triggerMobile
+                    (router.pathname.split('/').includes('publication') || router.pathname.split('/').includes('member')) 
+                    ? trigger 
+                    : triggerMobile
                 }>
 
                     <DropdownItem width='full'
@@ -72,10 +75,14 @@ const Menu = ({ publisher }: { publisher?: PublisherType }) => {
 
 
                 <Box
-                    display={{ sm: 'none', xs: 'none', md: 'none', lg: 'block', xl: 'block' }}
+                    // display={{ sm: 'none', xs: 'none', md: 'none', lg: 'block', xl: 'block' }}
                     style={{ userSelect: 'none' }}
                 >
                     {!publisher && (
+                        <Box
+                        width='fit'
+                        display={{ sm: 'none', xs: 'none', md: 'none', lg: 'block', xl: 'block' }}
+                        >
                         <Text
                             color='textTertiary'
                             weight={
@@ -84,6 +91,7 @@ const Menu = ({ publisher }: { publisher?: PublisherType }) => {
                             size='extraLarge'
                         >Mirrorfeed
                         </Text>
+                        </Box>
                     )}
                     {publisher && (
                         <Publisher publisher={publisher} />

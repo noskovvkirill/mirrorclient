@@ -85,8 +85,9 @@ const PublisherBody = ({ publisher, size }: { publisher: PublisherType, size: 's
                     ? '/publication/' + publisher?.project?.domain.split('.')[0] + '/'
                     : '/member/' + publisher?.member?.address + '/'
             } passHref>    
-                <Box cursor='pointer'>
+                <Box cursor='pointer' whiteSpace='nowrap'>
                         <Text
+                        
                             color={size === 'default' ? 'textTertiary' : 'textSecondary'}
                             weight={
                                 'bold'

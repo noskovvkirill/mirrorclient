@@ -268,7 +268,7 @@ const EntryItem = ({ entry }: { entry?: EntryType }) => {
                             src={collaborator?.avatarURL} />
                         <Text
                             weight={"semiBold"}
-                            color='textSecondary'>{collaborator?.displayName}</Text>
+                            color='textSecondary'>{AddressPrettyPrint(collaborator?.displayName || '', 16)}</Text>
 
                         <Tag>{AddressPrettyPrint(collaborator?.address || "0x", 6)}</Tag>
                     </Stack>
