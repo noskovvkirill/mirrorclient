@@ -21,7 +21,10 @@ const supabaseUrl = 'https://tcmqmkigakxeiuratohw.supabase.co'
 const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_SECRET || ''
 const supabase = createClient(supabaseUrl, supabaseKey)
 
-export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
+export const getServerSideProps: GetServerSideProps = async ({ req, res, query }) => {
+
+  const isEmail = query?.email === 'confirmed' ? true : false
+
   const domains = req?.headers?.host?.split(".");
   const subdomain =
     domains &&
@@ -47,10 +50,10 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
 
     if (error || data === null) {
       console.log('error fetch', error)
-      return { props: { entries: [] } }
+      return { props: { entries: [], isEmail:isEmail } }
     }
     const newdata = data?.map(({ digest }) => digest) as EntryType['digest'][] | null
-    return { props: { entries: newdata } }
+    return { props: { entries: newdata, isEmail:isEmail } }
   }
 
   //cache subdomain page if redirected
@@ -67,7 +70,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
   //     },
   //   }
   // }
-  return ({ props: { entries: [] } })
+  return ({ props: { entries: [], isEmail:isEmail } })
   // return {
   //   redirect: {
   //     destination: process.env.NODE_ENV === "development" ? `http://${"mirrorfeed"}.xyz/${subdomain}` : `https://${"mirrorfeed"}.xyz/${subdomain}`,
@@ -78,7 +81,8 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
 
 
 type Props = {
-  entries: EntryType['digest'][]
+  entries: EntryType['digest'][],
+  isEmail?: boolean
 }
 
 
@@ -144,11 +148,12 @@ const RenderCard = ({ defaultState, pathName }: { defaultState: EntryType['diges
 }
 
 
-const Page = ({ entries }: Props) => {
+const Page = ({ entries, isEmail=false }: Props) => {
   const router = useRouter()
  
   return (
     <Layout
+    isEmail={isEmail}
     title={'Mirror Feed'}
     description={'Subscribe to your favourite Mirror.xyz publications and authors'}
     cover={'https://mirrorfeed.xyz/cover.png'}

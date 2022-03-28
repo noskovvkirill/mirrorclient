@@ -15,12 +15,12 @@ const Menu = ({ publisher }: { publisher?: PublisherType }) => {
 
     const triggerMobile =  <Button
     variant={'secondary'}
-    tone={router.pathname === '/' ? 'blue' : router.pathname === '/about' ? 'pink' : 'purple'}
+    tone={router.pathname !== '/about' ? 'blue' : 'pink' }
     size='small'
     >
         <Stack direction='horizontal' align='center' space={'1.5'}>
            <IconMenu size={'6'}/>
-        {router.pathname === '/' ? 'Home' : router.pathname === '/about'  ? 'About' : 'Trending'}
+        {router.pathname !== '/about' ? 'Home' : 'About'}
         </Stack>
     </Button>
     
@@ -32,7 +32,9 @@ const Menu = ({ publisher }: { publisher?: PublisherType }) => {
             borderRadius={'2xLarge'}
         >
             <Stack direction={'horizontal'} align='center'>
-                <Dropdown trigger={
+                <Dropdown 
+                width={{xs:'72', sm:'72', md:'64', lg:'64', xl:'64'}}
+                trigger={
                    triggerMobile
                 }>
 

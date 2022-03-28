@@ -9,7 +9,7 @@ import { useStore } from 'contexts'
 import useScrollPosition from '@react-hook/window-scroll'
 import UserProfile from '@/components/Layout/UserProfile'
 import Menu from '@/components/Layout/Menu'
-import { Subscribe } from '@/components/Layout/PopUps'
+import { Subscribe, EmailConfirmed } from '@/components/Layout/PopUps'
 //utils
 // import { keyframes } from '@vanilla-extract/css'
 import type { PublisherType } from 'types'
@@ -19,6 +19,7 @@ import * as Toast from '@/components/Toast'
 type Props = {
     children?: ReactNode;
     title?: string;
+    isEmail?: boolean;
     color?: 'blue' | 'purple' | 'pink' | 'green'
     toolbar?: ReactNode | ReactNode[];
     publisher?: PublisherType
@@ -35,7 +36,7 @@ export const history: Array<{
 
 
 const Layout = ({ 
-    color='blue',
+    color='blue',isEmail=false,
     children, title = 'Mirror feed', cover = '', twitterAuthor = '@noskovvkirill', description = 'Curation feed', toolbar, publisher }: Props) => {
 
     const [isPinnedList, setIsPinnedList] = useState(false)
@@ -185,6 +186,7 @@ const Layout = ({
             </Box>
 
             <Subscribe />
+            <EmailConfirmed isOpen={isEmail}/>
             <Toast.Provider 
                  swipeDirection={'down'}
                 duration={6000}>

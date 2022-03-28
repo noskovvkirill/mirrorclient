@@ -46,7 +46,7 @@ export default async function handler(
                 return res.redirect(400, '/')
             }
 
-            return res.redirect('/')
+            return res.redirect('/?email=confirmed')
         }
     }
     return res.redirect(400, '/')

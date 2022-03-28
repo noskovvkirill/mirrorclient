@@ -1,5 +1,6 @@
 import Subscribe from "./Subscribe";
-
+import EmailConfirmed from "./EmailConfirmed";
 export {
-    Subscribe
+    Subscribe,
+    EmailConfirmed
 }
