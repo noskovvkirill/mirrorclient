@@ -37,10 +37,11 @@ const fetcher = (address: string) => {
 interface IPublisher {
     publisher?: PublisherType,
     ensLabel?: string,
-    size?: 'small' | 'default'
+    size?: 'small' | 'default',
+    hideLabel?: boolean,
 }
 
-const PublisherBody = ({ publisher, size }: { publisher: PublisherType, size: 'small' | 'default' }) => {
+const PublisherBody = ({ publisher, size, hideLabel=false}: { publisher: PublisherType, size: 'small' | 'default',  hideLabel?: boolean }) => {
 
     const members = useMemo(() => publisher.project?.members?.filter(member => member).map((member) => {
         return (
@@ -59,6 +60,7 @@ const PublisherBody = ({ publisher, size }: { publisher: PublisherType, size: 's
                 ? '/publication/' + publisher?.project?.domain.split('.')[0] + '/'
                 : publisher?.member?.ens || '/'
         } passHref>
+            <Box>
             <Stack direction={"horizontal"} space={size === 'default' ? "4" : "2"} align={"center"}>
                 {size === 'default'
                     ? <Button
@@ -80,11 +82,12 @@ const PublisherBody = ({ publisher, size }: { publisher: PublisherType, size: 's
                         src={publisher?.project?.avatarURL}
                     />
                 }
-                <Link href={
+                {/* <Link href={
                 publisher?.project?.domain
                     ? '/publication/' + publisher?.project?.domain.split('.')[0] + '/'
                     : '/member/' + publisher?.member?.address + '/'
-            } passHref>    
+            } passHref>     */}
+            {!hideLabel && (
                 <Box cursor='pointer' whiteSpace='nowrap'>
                         <Text
                         
@@ -96,9 +99,10 @@ const PublisherBody = ({ publisher, size }: { publisher: PublisherType, size: 's
                         >{AddressPrettyPrint(publisher?.project?.displayName || '', 16)}
                         </Text>
                 </Box>
-                </Link>   
+                )}
+                {/* </Link>    */}
                 
-            </Stack>
+            </Stack></Box>
         </Link></Box>
 
     return (
@@ -150,7 +154,7 @@ const PublisherBody = ({ publisher, size }: { publisher: PublisherType, size: 's
 }
 
 
-const Publisher = ({ publisher, ensLabel, size = 'default' }: IPublisher) => {
+const Publisher = ({ publisher, ensLabel, size = 'default', hideLabel=false }: IPublisher) => {
 
     const { data, error, isValidating } = useSWR(!publisher ? ensLabel : null, fetcher, {
         revalidateOnFocus: false
@@ -160,6 +164,7 @@ const Publisher = ({ publisher, ensLabel, size = 'default' }: IPublisher) => {
         if (data && data?.mirrorProject?.projectDetails) {
             return (
                 <PublisherBody
+                hideLabel={hideLabel}
                     publisher={{ project: data.mirrorProject.projectDetails }} size={size} />
             )
         }
@@ -174,7 +179,9 @@ const Publisher = ({ publisher, ensLabel, size = 'default' }: IPublisher) => {
     }
 
 
-    return (<PublisherBody publisher={publisher} size={size} />)
+    return (<PublisherBody 
+        hideLabel={hideLabel}
+        publisher={publisher} size={size} />)
 
 }
 

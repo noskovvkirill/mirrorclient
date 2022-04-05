@@ -1,9 +1,7 @@
-import { Box, Stack } from 'design-system'
-
-// import Crowdfund from 'components/Cards/Crowdfund'
-// import Poll from 'components/Cards/Poll'
+import { Box } from 'design-system'
 import Edition from 'components/Cards/Edition'
 import TweetEmbed from 'react-tweet-embed'
+import styles from '../../styles/Tweet.module.css'
 
 const StyledLink = ({ href, children }: { href?: string, children?: any }) => {
     return (
@@ -89,10 +87,12 @@ const Embeds = ({ href, children }: { href?: string, children?: any }) => {
         width='full'
         flex='auto'
          display='flex' justifyContent={'center'}>
-            <Box display='block' width='fit' maxWidth='full'>
-                <TweetEmbed tweetId={href.split('/')[href.split('/').length-1]}
+            {/* <Box display='block' width='fit' maxWidth='full'> */}
+                <TweetEmbed 
+                className={styles.tweet}
+                tweetId={href.split('/')[href.split('/').length-1]}
                 options={{ cards: 'hidden' }} />
-                </Box>
+                {/* </Box> */}
             </Box>)
     }
 

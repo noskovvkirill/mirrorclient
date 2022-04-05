@@ -14,3 +14,18 @@ a {
 * {
   box-sizing: border-box;
 }
+
+@media (max-width: 600px) {
+  .tweet {
+      width:256px;
+  }
+}
+@media (min-width: 600px) {
+  .tweet {
+      width:512px;
+  }
+}
+
+.tweet{
+  max-width:'100%',
+}

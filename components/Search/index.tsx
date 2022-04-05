@@ -1,8 +1,7 @@
 //state
 import { useOnClickOutside } from 'hooks/useClickOutside'
-import useLockBodyScroll from 'hooks/useLockBodyScroll'
 import { useThrottleCallback } from '@react-hook/throttle'
-import { useRef, useEffect, useState } from 'react'
+import { useRef, useEffect, useState , useCallback} from 'react'
 import { createPortal } from 'react-dom'
 import { useRouter } from 'next/router'
 //components
@@ -17,20 +16,26 @@ import * as dayjs from 'dayjs'
 import SearchQuery from 'src/search'
 import relativeTime from 'dayjs/plugin/relativeTime'
 dayjs.extend(relativeTime)
+//type
+import {MutableRefObject} from 'react'
 
 
 interface ISearch {
     setIsOpen: (newState: boolean) => void;
     isSearch: boolean;
+    search?:MutableRefObject<any>;
 }
 
 const SearchBar = ({ isSearch, setIsOpen, isVisible, setIsVisible }: ISearch & { isVisible: boolean, setIsVisible: (newState: boolean) => void; }) => {
+    const ref = useRef<any>(null)
+    const search = useRef<any>(null)
+
     return (
         <>
             {!isSearch && (
                 <Box 
+                ref={search}
                     position={(!isSearch && !isVisible) ? 'relative' : 'relative'}
-                    // style={{ transform: (!isSearch && !isVisible) ? 'translateY(-1000px)' : 'translateY(0)' }}
                     transitionProperty='all'
                     transitionDuration={'500'}
                     onMouseEnter={() => {
@@ -72,26 +77,41 @@ const SearchBar = ({ isSearch, setIsOpen, isVisible, setIsVisible }: ISearch & {
                 </Box>
             )}
             {isSearch && (
-                <SearchPanel setIsOpen={setIsOpen} isSearch />
+                <SearchPanel 
+                search={ref}
+                setIsOpen={setIsOpen} isSearch />
             )}
         </>
     )
 }
 
-const SearchPanel = ({ setIsOpen, isSearch }: ISearch) => {
-
-    useLockBodyScroll()
+const SearchPanel =  ({ setIsOpen, isSearch, search }: ISearch)  => {
 
     const router = useRouter()
 
     const ref = useRef<HTMLDivElement>(null)
+    const originalBodyStyle = useRef<any>(null)
 
     const publicationArea = useRef<any>(null)
     const entryArea = useRef<any>(null)
     const filterArea = useRef<any>(null)
 
-    const search = useRef<any>()
-    useOnClickOutside(ref, () => { setIsOpen(false) })
+    useEffect(()=>{
+        if(isSearch && search?.current && document.activeElement !== search.current){
+            console.log('focus')
+            search?.current.focus()
+        }
+    },[isSearch, search])
+
+    const closeCallback = useCallback(()=>{
+        document.body.style.overflow = originalBodyStyle.current
+        //@ts-ignore-next-line
+        document?.activeElement?.blur()
+        setIsOpen(false) 
+    },[search])
+
+    useOnClickOutside(ref, closeCallback)
+
 
     const focusArea = useRef<'input' | 'filter' | 'publications' | 'entries'>('input')
 
@@ -105,6 +125,7 @@ const SearchPanel = ({ setIsOpen, isSearch }: ISearch) => {
     const handleKeyDown = (e: KeyboardEvent) => {
         if (e.key === 'Escape' || e.key === 'Alt') {
             setIsOpen(false)
+            return
         }
 
         if (e.key === 'ArrowDown') {
@@ -131,24 +152,38 @@ const SearchPanel = ({ setIsOpen, isSearch }: ISearch) => {
             if (focusArea.current === 'filter') {
                 e.preventDefault()
                 focusArea.current = 'input'
-                search.current.focus()
+                search?.current.focus()
             }
         }
     }
 
+    
+   
+   
     useEffect(() => {
-        if (search.current) {
-            search.current.value = ''
-            search.current.focus()
-            focusArea.current = 'input'
+        if(typeof window !== 'undefined' && isSearch) {
+            const originalStyle = window.getComputedStyle(document.body).overflow;
+            // Prevent scrolling on mount
+            originalBodyStyle.current = originalStyle
+            document.body.style.overflow = "hidden";
+            // Re-enable scrolling when component unmounts
+            return(()=>{
+                document.body.style.overflow = 'visible'
+            })
         }
-    }, [search])
+      
+      }, [isSearch]); 
+      
 
-    useEffect(() => {
-        if (search.current) {
-            search.current.value = ''
+   
+   
+      useEffect(()=>{
+        if(search?.current && isSearch && document?.activeElement !== search?.current) {
+            search.current.focus()
         }
-    }, [isSearch])
+      },[isSearch, search])
+
+
     useEffect(() => {
         if (typeof window !== undefined) {
             window.addEventListener('keydown', handleKeyDown)
@@ -202,6 +237,9 @@ const SearchPanel = ({ setIsOpen, isSearch }: ISearch) => {
 
     }
 
+
+   
+
     const thottleSearch = useThrottleCallback(InputSearch, 1)
 
 
@@ -212,14 +250,14 @@ const SearchPanel = ({ setIsOpen, isSearch }: ISearch) => {
                 <>
                     {createPortal(
                         <>
-                            <Box width='full' height='full'
+                            <Box width='viewWidth' height='viewHeight'
+
                                 position="fixed" left={"0"} top={"0"}
-                                style={{ backdropFilter: 'blur(5px)', transition: 'backdrop-filter 1s ease-in-out' }}
+                                style={{ backdropFilter: 'blur(5px)', WebkitBackdropFilter:'blur(5px)', transition: 'backdrop-filter 1s ease-in-out' }}
                             >
                                 &nbsp;
                             </Box>
-                            {/* <Box width='full' height='full'
-                            > */}
+
                             <Box 
                             width='full'
                             overflow={'hidden'}

@@ -4,7 +4,7 @@ import Head from 'next/head'
 import PageLoadProgress from '@/components/Layout/PageLoadProgress'
 import Search from '@/components/Search'
 //state
-import React, { ReactNode, useEffect, useState } from 'react'
+import React, { ReactNode, useEffect, useState, useCallback } from 'react'
 import { useStore } from 'contexts'
 import useScrollPosition from '@react-hook/window-scroll'
 import UserProfile from '@/components/Layout/UserProfile'
@@ -46,6 +46,10 @@ const Layout = ({
     const [prevScroll, setPrevScroll] = useState(0)
     const {notifications } = useStore()
 
+
+   const setIsSearchOpen = useCallback((newState:boolean)=>{
+        setIsSearch(newState)
+   },[])
 
     const handleKey = (e: KeyboardEvent) => {
         if (e.keyCode === 18 || e.key === 'Alt') {
@@ -162,21 +166,34 @@ const Layout = ({
                     </Box>
                 </Box>
                 <Box
+                  display={{ sm: 'block', xs: 'none', md: 'block', lg: 'block', xl: 'block' }}
                 >
                     <Search
                         setIsVisible={setIsPinnedList}
                         isVisible={isPinnedList}
                         isSearch={isSearch}
-                        setIsOpen={setIsSearch}
+                        setIsOpen={setIsSearchOpen}
                     />
                 </Box>
 
                 <Box flexBasis={'0'} flexGrow={1}>
+                   
                     <Box
                         position='relative'
                     >
+                        
                         <Stack direction='horizontal'
                             justify={'flex-end'}>
+                                 <Box
+                    display={{ sm: 'none', xs: 'block', md: 'none', lg: 'none', xl: 'none' }}
+                    >
+                        <Search
+                            setIsVisible={setIsPinnedList}
+                            isVisible={isPinnedList}
+                            isSearch={isSearch}
+                            setIsOpen={setIsSearch}
+                        />
+                    </Box>
                             <UserProfile />
                         </Stack>
                     </Box>

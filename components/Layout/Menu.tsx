@@ -74,11 +74,12 @@ const Menu = ({ publisher }: { publisher?: PublisherType }) => {
                 </Dropdown>
 
 
-                <Box
-                    // display={{ sm: 'none', xs: 'none', md: 'none', lg: 'block', xl: 'block' }}
-                    style={{ userSelect: 'none' }}
-                >
+               
                     {!publisher && (
+                         <Box
+                         display={{ sm: 'none', xs: 'none', md: 'none', lg: 'block', xl: 'block' }}
+                         style={{ userSelect: 'none' }}
+                     >
                         <Box
                         width='fit'
                         display={{ sm: 'none', xs: 'none', md: 'none', lg: 'block', xl: 'block' }}
@@ -92,13 +93,31 @@ const Menu = ({ publisher }: { publisher?: PublisherType }) => {
                         >Mirrorfeed
                         </Text>
                         </Box>
+                           </Box>
                     )}
                     {publisher && (
-                        <Publisher publisher={publisher} />
+                        <>
+                         <Box
+                         display={{ sm: 'none', xs: 'none', md: 'block', lg: 'block', xl: 'block' }}
+                         style={{ userSelect: 'none' }}
+                     >
+                        <Publisher
+                     
+                        publisher={publisher} />
+                        </Box>
+                        <Box
+                         display={{ sm: 'block', xs: 'block', md: 'none', lg: 'none', xl: 'none' }}
+                         style={{ userSelect: 'none' }}
+                     >
+                        <Publisher
+                        hideLabel
+                        publisher={publisher} />
+                        </Box>
+                        </>
                     )}
 
 
-                </Box>
+             
             </Stack>
         </Box>
     )

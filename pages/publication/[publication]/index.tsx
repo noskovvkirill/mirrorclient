@@ -132,7 +132,7 @@ const Publication = ({ entries, publisher }: Props) => {
         )
     }), [publisher])
 
-
+ 
     return (
         <Layout title={publisher?.displayName}
             description={publisher?.description}
