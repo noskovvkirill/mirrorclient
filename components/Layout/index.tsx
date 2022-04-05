@@ -152,7 +152,7 @@ const Layout = ({
                 position='sticky'
                 justifyContent={'space-between'}
                 top={'0'}
-                zIndex={"10"}
+                zIndex={"50"}
             >
                 <PageLoadProgress />
 
@@ -166,17 +166,28 @@ const Layout = ({
                     </Box>
                 </Box>
                 <Box
-                  display={{ sm: 'block', xs: 'none', md: 'block', lg: 'block', xl: 'block' }}
+                //   display={{ sm: 'block', xs: 'none', md: 'block', lg: 'block', xl: 'block' }}
                 >
+                    <Stack direction='horizontal'
+                        justify={'flex-end'}>
                     <Search
                         setIsVisible={setIsPinnedList}
                         isVisible={isPinnedList}
                         isSearch={isSearch}
                         setIsOpen={setIsSearchOpen}
                     />
+                     <Box
+                    display={{ 
+                        sm: 'none', xs: 'block', md: 'none', lg: 'none', xl: 'none' }}
+                    >
+                      <UserProfile />
+                      </Box>
+                    </Stack>
                 </Box>
 
-                <Box flexBasis={'0'} flexGrow={1}>
+                <Box flexBasis={'0'} 
+                  display={{ sm: 'block', xs: 'none', md: 'block', lg: 'block', xl: 'block' }}
+                flexGrow={1}>
                    
                     <Box
                         position='relative'
@@ -184,8 +195,13 @@ const Layout = ({
                         
                         <Stack direction='horizontal'
                             justify={'flex-end'}>
-                                 <Box
-                    display={{ sm: 'none', xs: 'block', md: 'none', lg: 'none', xl: 'none' }}
+                    {/* <Box
+                    display={{ 
+                        sm: 'none', xs: 'block', md: 'none', lg: 'none', xl: 'none' }}
+                        style={{
+                            visibility: 'hidden',
+                            pointerEvents: 'none',
+                        }}
                     >
                         <Search
                             setIsVisible={setIsPinnedList}
@@ -193,7 +209,7 @@ const Layout = ({
                             isSearch={isSearch}
                             setIsOpen={setIsSearch}
                         />
-                    </Box>
+                    </Box> */}
                             <UserProfile />
                         </Stack>
                     </Box>
