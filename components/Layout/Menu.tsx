@@ -1,11 +1,16 @@
 import { Button, IconMenu, Dropdown, DropdownItem, Stack, Box, Tag, Text, IconBookOpen, IconCollection } from 'design-system'
 // import Link from 'next/link'
 import { useRouter } from 'next/router'
+import { useStore } from 'contexts'
+import {useAccount} from 'wagmi'
 import type { PublisherType } from 'types'
 import Publisher from '@/components/Publisher'
 
+
 const Menu = ({ publisher }: { publisher?: PublisherType }) => {
-    
+    const { withEth } = useStore()
+    const [{ data: accountData }] = useAccount()
+
     const router = useRouter()
     const trigger =  <Button
             variant='tertiary'
@@ -36,7 +41,7 @@ const Menu = ({ publisher }: { publisher?: PublisherType }) => {
                 <Dropdown 
                 width={{xs:'72', sm:'72', md:'64', lg:'64', xl:'64'}}
                 trigger={
-                    (router.pathname.split('/').includes('publication') || router.pathname.split('/').includes('member')) 
+                    ((router.pathname.split('/').includes('publication') || router.pathname.split('/').includes('member') || !withEth.address || !accountData?.address))
                     ? trigger 
                     : triggerMobile
                 }>
