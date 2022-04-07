@@ -37,11 +37,11 @@ const fetcher = (address: string) => {
 interface IPublisher {
     publisher?: PublisherType,
     ensLabel?: string,
-    size?: 'small' | 'default',
+    size?: 'small' | 'default' | 'large',
     hideLabel?: boolean,
 }
 
-const PublisherBody = ({ publisher, size, hideLabel=false}: { publisher: PublisherType, size: 'small' | 'default',  hideLabel?: boolean }) => {
+const PublisherBody = ({ publisher, size, hideLabel=false}: { publisher: PublisherType, size: 'small' | 'default' | 'large',  hideLabel?: boolean }) => {
 
     const members = useMemo(() => publisher.project?.members?.filter(member => member).map((member) => {
         return (
@@ -61,7 +61,7 @@ const PublisherBody = ({ publisher, size, hideLabel=false}: { publisher: Publish
                 : publisher?.member?.ens || '/'
         } passHref>
             <Box>
-            <Stack direction={"horizontal"} space={size === 'default' ? "4" : "2"} align={"center"}>
+            <Stack direction={"horizontal"} space={size === 'default' ? "4" : size === 'small' ? "2" : "4"} align={"center"}>
                 {size === 'default'
                     ? <Button
                         tabIndex={0}
@@ -75,12 +75,18 @@ const PublisherBody = ({ publisher, size, hideLabel=false}: { publisher: Publish
                             src={publisher?.project?.avatarURL}
                         />
                     </Button>
-                    : <Avatar
+                    : size === 'small' ? <Avatar
                         size={"6"}
                         placeholder={!publisher?.project?.avatarURL}
                         label={publisher?.project?.displayName || 'avatar'}
                         src={publisher?.project?.avatarURL}
                     />
+                    : <Avatar
+                    size='full'
+                    placeholder={!publisher?.project?.avatarURL}
+                    label={publisher?.project?.displayName || 'avatar'}
+                    src={publisher?.project?.avatarURL}
+                />
                 }
                 {/* <Link href={
                 publisher?.project?.domain

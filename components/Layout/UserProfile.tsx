@@ -91,16 +91,20 @@ const UserProfile = () => {
         return () => window.removeEventListener('focus', handler)
     }, [])
 
+    const isSettings = router.pathname.split('/').includes('settings')
+
+
     if (accountData) {
         return (
             <Stack direction='horizontal'>
                 {state.address
                     ? <></>
-                    : <Button
+                    :<Button
                         size='small'
                         loading={state.loading}
                         onClick={signIn}>Sign in with Ethereum</Button>}
-                <Dropdown trigger={
+                
+                {!isSettings && <Dropdown trigger={
                     <Box>
                         <Stack direction='horizontal' align='center'>
                             {!state.loading && (
@@ -161,7 +165,7 @@ const UserProfile = () => {
                         onClick={disconnect}>
                         Disconnect
                     </DropdownItem>
-                </Dropdown>
+                </Dropdown>}
             </Stack>
         )
     }

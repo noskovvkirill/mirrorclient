@@ -3,9 +3,11 @@ import useOnScreen from 'hooks/useOnScreen'
 //components
 import { Box, Spinner as Loader, Stack } from 'design-system'
 import Entry from '@/components/Cards/Entry'
+import FeaturedPublications from'@/components/Cards/FeaturedPublications'
 //types
 import type { EntryType } from 'types'
 
+const featuredPubl = [{name:'songcamp', type:'domain'}, {name:'p',type:'domain'}, {name:'jad', type:'domain'}, {name:'club', type:'domain'},{name:'0x562a149dA0F18E698E281CA222Eb5635C0aD0Bd6', type:'member'}, {name:'forefront', type:'domain'}]
 
 type DataType = Array<EntryType['digest'] | null | undefined> | Array<EntryType> | null | undefined;
 
@@ -20,6 +22,9 @@ interface IGrid {
 
 const Grid = ({ data, error, isValidating, setSize, pathName, fetchEntries }: IGrid) => {
     // const appSettings = useRecoilValue(settings)
+
+    const isHome = pathName === '/' || pathName === '/all'
+
     const ref = useRef<HTMLDivElement | null>(null)
     const entry = useOnScreen(ref, {
         threshold: 0,
@@ -36,6 +41,7 @@ const Grid = ({ data, error, isValidating, setSize, pathName, fetchEntries }: IG
 
     if (error) return <Box>Something went wrong...Refresh the page  {JSON.stringify(error)}</Box>
 
+    
 
     return (
         <Box
@@ -50,7 +56,11 @@ const Grid = ({ data, error, isValidating, setSize, pathName, fetchEntries }: IG
                 gridRowGap: '18px',
                 width: '100%',
             }}
-        >
+        >   
+        
+            {isHome && (
+                <FeaturedPublications publications={featuredPubl}/>
+            )}
 
             {data?.map((item: EntryType | EntryType['digest'] | null | undefined) => {
                 if (!item) {
@@ -85,8 +95,18 @@ const Grid = ({ data, error, isValidating, setSize, pathName, fetchEntries }: IG
                     gridColumn: 'span 3'
                 }}
                 height={'24'}>
+                
+                {isValidating && 
+                <Box>
+                <Box
+                display={{xs: 'none', sm: 'none', md: 'none', lg: 'flex', xl: 'flex'}}
+                ><Stack justify='center' align='center'><Loader size='large' /></Stack></Box>
 
-                {isValidating && <Stack justify='center' align='center'><Loader size='large' /></Stack>
+                <Box
+                display={{xs: 'flex', sm: 'flex', md: 'flex', lg: 'none', xl: 'none'}}
+                ><Stack justify='center' align='center'><Loader size='small' /></Stack></Box>
+
+                </Box>
                 }
             </Box>
 

@@ -1,4 +1,4 @@
-import { Button, IconMenu, Dropdown, DropdownItem, Stack, Box, Tag, Text, IconBookOpen, IconCollection } from 'design-system'
+import { Button, IconMenu, IconChevronLeft, Dropdown, DropdownItem, Stack, Box, Tag, Text, IconBookOpen, IconCollection } from 'design-system'
 // import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useStore } from 'contexts'
@@ -30,7 +30,51 @@ const Menu = ({ publisher }: { publisher?: PublisherType }) => {
         </Stack>
     </Button>
 
-        
+    const isUser =  withEth?.address && accountData?.address
+    const isPublication = router.pathname.split('/').includes('publication')
+    const isMember =  router.pathname.split('/').includes('member') 
+    const isSettings = router.pathname.split('/').includes('settings')
+
+    const Menu =  <Dropdown 
+        width={{xs:'72', sm:'72', md:'64', lg:'64', xl:'64'}}
+        trigger={
+            ((isPublication && !isUser) || (isMember && !isUser) || !isUser)
+            ? trigger 
+            : triggerMobile
+        }>
+        <DropdownItem width='full'
+            size='small'
+            onClick={() => router.push('/')}
+            prefix={<IconCollection />}
+            variant={router.pathname === '' || router.pathname === '/' ? 'primary' : 'tertiary'}>
+            Feed
+        </DropdownItem>
+
+        <DropdownItem
+            disabled
+            onClick={() => router.push('/trending')}
+            width='full'
+            size='small'
+            variant={'secondary'}
+            prefix={<Tag size='small' tone={'blue'}>Soon</Tag>}
+        >
+            Trending
+        </DropdownItem>
+
+
+        <DropdownItem
+            onClick={() => router.push('/about')}
+            width='full'
+            size='small'
+            variant={router.pathname === '/about' ? 'primary' : 'tertiary'}
+            prefix={<IconBookOpen />}
+        >
+            About
+        </DropdownItem>
+
+    </Dropdown>
+
+
     return (
         <Box
             width='fit'
@@ -38,46 +82,12 @@ const Menu = ({ publisher }: { publisher?: PublisherType }) => {
             borderRadius={'2xLarge'}
         >
             <Stack direction={'horizontal'} align='center'>
-                <Dropdown 
-                width={{xs:'72', sm:'72', md:'64', lg:'64', xl:'64'}}
-                trigger={
-                    ((router.pathname.split('/').includes('publication') || router.pathname.split('/').includes('member') || !withEth.address || !accountData?.address))
-                    ? trigger 
-                    : triggerMobile
-                }>
-
-                    <DropdownItem width='full'
-                        size='small'
-                        onClick={() => router.push('/')}
-                        prefix={<IconCollection />}
-                        variant={router.pathname === '' || router.pathname === '/' ? 'primary' : 'tertiary'}>
-                        Feed
-                    </DropdownItem>
-
-                    <DropdownItem
-                        disabled
-                        onClick={() => router.push('/trending')}
-                        width='full'
-                        size='small'
-                        variant={'secondary'}
-                        prefix={<Tag size='small' tone={'blue'}>Soon</Tag>}
-                    >
-                        Trending
-                    </DropdownItem>
-
-
-                    <DropdownItem
-                        onClick={() => router.push('/about')}
-                        width='full'
-                        size='small'
-                        variant={router.pathname === '/about' ? 'primary' : 'tertiary'}
-                        prefix={<IconBookOpen />}
-                    >
-                        About
-                    </DropdownItem>
-
-                </Dropdown>
-
+                    {!isSettings 
+                    ? Menu
+                    : <Button 
+                    onClick={()=>router.back()}
+                    size='small' shape='circle' variant='tertiary'><IconChevronLeft/></Button>
+                    }
 
                
                     {!publisher && (
@@ -95,7 +105,9 @@ const Menu = ({ publisher }: { publisher?: PublisherType }) => {
                                 'bold'
                             }
                             size='extraLarge'
-                        >Mirrorfeed
+                        >
+                            
+                            {!isSettings ? 'Mirrorfeed' : 'Home' }
                         </Text>
                         </Box>
                            </Box>
