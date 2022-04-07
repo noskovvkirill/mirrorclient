@@ -15,7 +15,7 @@ import { createClient } from '@supabase/supabase-js'
 //type
 import type { EntryType } from 'types'
 import type { GetServerSideProps } from 'next'
-
+import type {FeaturedType} from '@/components/Cards/FeaturedPublications'
 
 const supabaseUrl = 'https://tcmqmkigakxeiuratohw.supabase.co'
 const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_SECRET || ''
@@ -25,13 +25,13 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res, query }
 
   const isEmail = query?.email === 'confirmed' ? true : false
 
-  const domains = req?.headers?.host?.split(".");
-  const subdomain =
-    domains &&
-    domains.length === (process.env.NODE_ENV === "development" ? 2 : 3) &&
-    domains[0];
+  // const domains = req?.headers?.host?.split(".");
+  // const subdomain =
+  //   domains &&
+  //   domains.length === (process.env.NODE_ENV === "development" ? 2 : 3) &&
+  //   domains[0];
   //home page
-  if (!subdomain || subdomain === "www") {
+  // if (!subdomain || subdomain === "www") {
 
     // const { data, error } = await supabase
     //   .from('mirroritems_test')
@@ -39,6 +39,18 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res, query }
     //   .order('timestamp', { ascending: false })
     //   .eq('isPublished', true)
     //   .limit(20)
+  //cache page for repeated visits
+    res.setHeader(
+      'Cache-Control',
+      'public, s-maxage=1, stale-while-revalidate=59'
+    );
+
+    const { data:featured } = await supabase
+    .from('featured')
+    .select('*')
+    .order('featuredAt', { ascending: false })
+    .limit(9)
+
     const { data, error } = await supabase
       .from('mirroritems')
       .select('*')
@@ -52,15 +64,15 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res, query }
       console.log('error fetch', error)
       return { props: { entries: [], isEmail:isEmail } }
     }
+
     const newdata = data?.map(({ digest }) => digest) as EntryType['digest'][] | null
-    return { props: { entries: newdata, isEmail:isEmail } }
+    return { props: { entries: newdata, isEmail:isEmail, featured:featured || null } }
+ 
+ 
   }
 
-  //cache subdomain page if redirected
-  res.setHeader(
-    'Cache-Control',
-    'public, s-maxage=1, stale-while-revalidate=59'
-  );
+
+
 
   // if (subdomain === "mirror-feed") {
   //   return {
@@ -70,19 +82,20 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res, query }
   //     },
   //   }
   // }
-  return ({ props: { entries: [], isEmail:isEmail } })
+  // return ({ props: { entries: [], isEmail:isEmail, featured:featured || null } })
   // return {
   //   redirect: {
   //     destination: process.env.NODE_ENV === "development" ? `http://${"mirrorfeed"}.xyz/${subdomain}` : `https://${"mirrorfeed"}.xyz/${subdomain}`,
   //     permanent: true,
   //   },
   // }
-};
+
 
 
 type Props = {
   entries: EntryType['digest'][],
   isEmail?: boolean
+  featured: FeaturedType[] | null;
 }
 
 
@@ -126,7 +139,7 @@ const fetcher = async (index: string | null) => {
 
 
 
-const RenderCard = ({ defaultState, pathName }: { defaultState: EntryType['digest'][], pathName: string }) => {
+const RenderCard = ({ defaultState, featured, pathName }: { defaultState: EntryType['digest'][], featured:FeaturedType[] | null, pathName: string }) => {
   const { data, error, isValidating, setSize } = useSWRInfinite(getKey, fetcher, { fallbackData: [defaultState] }) // tslint:disable-line
   const ref = useRef<HTMLDivElement | null>(null)
   const entry = useOnScreen(ref, {
@@ -143,12 +156,14 @@ const RenderCard = ({ defaultState, pathName }: { defaultState: EntryType['diges
   if (error) return <Box>Something went wrong...Refresh the page  {JSON.stringify(error)}</Box>
 
   return (
-    <GridPage pathName={pathName} data={data.flat()} error={error} isValidating={isValidating} setSize={setSize} />
+    <GridPage 
+    featured={featured}
+    pathName={pathName} data={data.flat()} error={error} isValidating={isValidating} setSize={setSize} />
   )
 }
 
 
-const Page = ({ entries, isEmail=false }: Props) => {
+const Page = ({ entries, isEmail=false, featured }: Props) => {
   const router = useRouter()
  
   return (
@@ -161,6 +176,7 @@ const Page = ({ entries, isEmail=false }: Props) => {
       <Box width={'full'}>
         <Header pathName={router.pathname} />
         <RenderCard
+          featured = {featured}
           pathName={router.pathname}
           defaultState={entries} />
       </Box>

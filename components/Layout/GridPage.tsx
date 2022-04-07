@@ -3,11 +3,10 @@ import useOnScreen from 'hooks/useOnScreen'
 //components
 import { Box, Spinner as Loader, Stack } from 'design-system'
 import Entry from '@/components/Cards/Entry'
-import FeaturedPublications from'@/components/Cards/FeaturedPublications'
+import FeaturedPublications, { FeaturedType } from'@/components/Cards/FeaturedPublications'
 //types
 import type { EntryType } from 'types'
 
-const featuredPubl = [{name:'songcamp', type:'domain'}, {name:'p',type:'domain'}, {name:'jad', type:'domain'}, {name:'club', type:'domain'},{name:'0x562a149dA0F18E698E281CA222Eb5635C0aD0Bd6', type:'member'}, {name:'forefront', type:'domain'}]
 
 type DataType = Array<EntryType['digest'] | null | undefined> | Array<EntryType> | null | undefined;
 
@@ -18,9 +17,10 @@ interface IGrid {
     isValidating?: boolean;
     pathName: string;
     fetchEntries?: boolean
+    featured: FeaturedType[] | null;
 }
 
-const Grid = ({ data, error, isValidating, setSize, pathName, fetchEntries }: IGrid) => {
+const Grid = ({ data, error, featured, isValidating, setSize, pathName, fetchEntries }: IGrid) => {
     // const appSettings = useRecoilValue(settings)
 
     const isHome = pathName === '/' || pathName === '/all'
@@ -58,8 +58,17 @@ const Grid = ({ data, error, isValidating, setSize, pathName, fetchEntries }: IG
             }}
         >   
         
-            {isHome && (
-                <FeaturedPublications publications={featuredPubl}/>
+            {isHome && featured && (
+                <>
+                    <Box display={{ xs: 'none', sm: 'none', md: 'none', lg: 'flex', xl: 'flex'}}>
+                        <FeaturedPublications publications={featured.slice(0,6)}/>
+                    </Box>
+                    <Box 
+                    marginTop={'2'}
+                    display={{ xs: 'flex', sm: 'flex', md: 'flex', lg: 'none', xl: 'none'}}>
+                        <FeaturedPublications publications={featured.slice(0,8)}/>
+                    </Box>
+                </>
             )}
 
             {data?.map((item: EntryType | EntryType['digest'] | null | undefined) => {

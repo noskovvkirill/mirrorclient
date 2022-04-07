@@ -81,12 +81,18 @@ const PublisherBody = ({ publisher, size, hideLabel=false}: { publisher: Publish
                         label={publisher?.project?.displayName || 'avatar'}
                         src={publisher?.project?.avatarURL}
                     />
-                    : <Avatar
-                    size='full'
+                    : <Button
+                    tabIndex={0}
+                    variant='tertiary'
+                    //@ts-ignore-next-line
+                    size='large'
+                    shape='circle'><Avatar
+                    size={{xs:'20', sm:'24', md:'24', lg:'24', xl:'24'}}
+                    shape='circle'
                     placeholder={!publisher?.project?.avatarURL}
                     label={publisher?.project?.displayName || 'avatar'}
                     src={publisher?.project?.avatarURL}
-                />
+                /></Button>
                 }
                 {/* <Link href={
                 publisher?.project?.domain
@@ -176,7 +182,7 @@ const Publisher = ({ publisher, ensLabel, size = 'default', hideLabel=false }: I
         }
         if (isValidating || error) {
             return (
-                <Skeleton height={size === 'default' ? '10' : '6'} loading>
+                <Skeleton height={size === 'default' ? '10' : size === 'small' ? '6' : '24'} loading>
                     <Text>Loading publisher.. It may take a couple seconds</Text>
                 </Skeleton>
             )
