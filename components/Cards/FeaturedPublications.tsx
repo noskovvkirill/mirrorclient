@@ -43,7 +43,7 @@ const FeaturedPublications = ({publications}:IFeaturedPublications) => {
                         {publications.map((publ)=>{
                             return(
                             <Box 
-                            key={'featured' + name}
+                            key={'featured' + publ?.name}
                             width='full' height='full' textAlign={'center'} padding={{xs:'0', sm:'0', md:'2', lg:'0', xl:'2'}}>
                                 <Stack direction='vertical' align={'center'} justify='center'>
                                 <Publisher
