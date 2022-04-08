@@ -1,4 +1,5 @@
 import type { AppProps } from 'next/app'
+import Script from 'next/script'
 import { ThemeProvider } from 'design-system'
 import { StoreProvider } from 'contexts'
 import { Provider, chain, defaultChains } from 'wagmi'
@@ -38,6 +39,14 @@ const connectors = ({ chainId }: { chainId?: Chain['id'] | undefined }) => {
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <Provider autoConnect connectors={connectors}>
+      {/* <script async data-api="/_hive" src="/bee.js"></script> */}
+
+      <Script
+      async 
+      data-api="/_hive"
+      src='/bee.js'
+      id='bee-js'
+      />
       <StoreProvider>
         <ThemeProvider>
           <Component {...pageProps} />
