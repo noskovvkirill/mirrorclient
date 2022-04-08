@@ -17,6 +17,7 @@ import type { ParsedUrlQuery } from 'querystring'
 import { useStore } from 'contexts'
 import getPublication from 'src/fetch/publication'
 import { useEffect, useState, useMemo } from 'react'
+import splitbee from '@splitbee/web';
 
 
 interface IParams extends ParsedUrlQuery {
@@ -85,6 +86,18 @@ const Publication = ({ entries, publisher }: Props) => {
     const { withEth } = useStore()
     const [isSubscribed, setIsSubscribed] = useState<boolean | null>(null)
     const [{ data }] = useAccount()
+
+    useEffect(()=>{
+        if(publisher){
+            splitbee.track("Publisher", {
+                address: publisher.address,
+                name: publisher.displayName,
+                domain: publisher.domain,
+                type:'mirror_publication'
+            })
+        }   
+    },[publisher])
+
 
     async function getSubscribed() {
         const { ok } = await fetch('/api/getSubscribedOne?publication=' + publisher?.domain?.split('.')[0])

@@ -1,5 +1,4 @@
 import type { AppProps } from 'next/app'
-import Script from 'next/script'
 import { ThemeProvider } from 'design-system'
 import { StoreProvider } from 'contexts'
 import { Provider, chain, defaultChains } from 'wagmi'
@@ -7,6 +6,8 @@ import type { Chain } from 'wagmi'
 import { InjectedConnector } from 'wagmi/connectors/injected'
 import { WalletConnectConnector } from 'wagmi/connectors/walletConnect'
 import { WalletLinkConnector } from 'wagmi/connectors/walletLink'
+import splitbee from '@splitbee/web';
+import { useEffect } from 'react'
 
 const infuraId = process.env.INFURA_ID
 const chains = defaultChains
@@ -37,16 +38,14 @@ const connectors = ({ chainId }: { chainId?: Chain['id'] | undefined }) => {
 
 
 function MyApp({ Component, pageProps }: AppProps) {
+  useEffect(()=>{
+    splitbee.init()
+  },[])
   return (
     <Provider autoConnect connectors={connectors}>
       {/* <script async data-api="/_hive" src="/bee.js"></script> */}
 
-      <Script
-      async 
-      data-api="/_hive"
-      src='/bee.js'
-      id='bee-js'
-      />
+    
       <StoreProvider>
         <ThemeProvider>
           <Component {...pageProps} />

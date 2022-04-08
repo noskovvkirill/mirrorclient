@@ -1,7 +1,8 @@
 import Layout from '@/components/Layout'
 import Entry from '@/components/Entry'
 import { Box } from 'design-system'
-
+import splitbee from '@splitbee/web';
+import { useEffect } from 'react';
 //utils
 // import { supabase } from 'src/client'
 // import getPublication from 'src/fetch/publication'
@@ -61,6 +62,16 @@ type Props = {
 }
 
 const Article = ({ entry }: Props) => {
+
+    useEffect(()=>{
+        if(entry?.digest){
+            splitbee.track("Entry", {
+                digest:entry.digest,
+                type:'mirror_member'
+            })
+        }   
+    },[entry])
+
     if (!entry) return <></>
     return (
         <Layout publisher={entry?.publisher}
