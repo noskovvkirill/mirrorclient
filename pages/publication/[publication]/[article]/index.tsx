@@ -73,6 +73,7 @@ type Props = {
 const Article = ({ entry }: Props) => {
     useEffect(()=>{
         if(entry?.digest){
+            console.log('Entry 🐝')
             splitbee.track("Entry", {
                 digest:entry.digest,
                 type:'mirror_publication'

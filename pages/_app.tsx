@@ -38,9 +38,14 @@ const connectors = ({ chainId }: { chainId?: Chain['id'] | undefined }) => {
 
 
 function MyApp({ Component, pageProps }: AppProps) {
-  useEffect(()=>{
-    splitbee.init()
-  },[])
+  useEffect(() => {
+    console.log('initializing 🐝')
+    splitbee.init({
+      scriptUrl: "/bee.js",
+      apiUrl: "/_hive",
+    })
+  }, [])
+  
   return (
     <Provider autoConnect connectors={connectors}>
       {/* <script async data-api="/_hive" src="/bee.js"></script> */}

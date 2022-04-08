@@ -85,11 +85,12 @@ type Props = {
 
 const Publication = ({ entries, publisher }: Props) => {
     const router = useRouter()
-    const { isAuth, withEth, ToggleAuth } = useStore()
+    const { withEth } = useStore()
     const [isSubscribed, setIsSubscribed] = useState<boolean | null>(null)
 
     useEffect(()=>{
         if(publisher){
+            console.log('Publisher 🐝')
             splitbee.track("Publisher", {
                 address: publisher.address,
                 name: publisher.displayName,

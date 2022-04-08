@@ -89,6 +89,7 @@ const Publication = ({ entries, publisher }: Props) => {
 
     useEffect(()=>{
         if(publisher){
+            console.log('Publisher 🐝')
             splitbee.track("Publisher", {
                 address: publisher.address,
                 name: publisher.displayName,
