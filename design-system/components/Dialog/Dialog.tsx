@@ -21,13 +21,14 @@ type Props = {
   children: ReactNodeNoStrings;
   trigger?: string;
   size?: ButtonProps['size'];
+  tone?: ButtonProps['tone'];
   isOpen?: boolean;
   setIsOpen?: (isOpen: boolean) => void;
 }
 
 
 
-export const Dialog = ({ children, trigger, size = 'medium', width = '128', isOpen, setIsOpen }: Props) => {
+export const Dialog = ({ children, tone='blue', trigger, size = 'medium', width = '128', isOpen, setIsOpen }: Props) => {
 
   // const opacityValue = useAnimation('linear', 500, 0, isOpen)
 
@@ -41,7 +42,9 @@ export const Dialog = ({ children, trigger, size = 'medium', width = '128', isOp
     >
       {trigger && (
         <DialogRadix.Trigger asChild>
-          <Button size={size}>{trigger}</Button>
+          <Button
+          tone={tone}
+          size={size}>{trigger}</Button>
         </DialogRadix.Trigger>
       )}
       <DialogRadix.Portal>

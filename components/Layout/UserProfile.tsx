@@ -26,6 +26,10 @@ const UserProfile = () => {
     const { ToggleAuth, isAuth, withEth: state, setWithEth: setState } = useStore()
     const [, signMessage] = useSignMessage()
 
+    const isHome = router.pathname === '/'
+    const isTrending = router.pathname.includes('trending')
+    const isProfile = router.pathname.includes('profile')
+    const isAbout = router.pathname.includes('about')
 
     const signIn = useCallback(async () => {
         try {
@@ -100,9 +104,13 @@ const UserProfile = () => {
                 {state.address
                     ? <></>
                     :<Button
+                        tone={isAbout ? 'red' : isTrending ? 'green' : 'blue'}
                         size='small'
                         loading={state.loading}
-                        onClick={signIn}>Sign in with Ethereum</Button>}
+                        onClick={signIn}>
+                            Sign in with Ethereum
+                    </Button>
+                }
                 
                 {!isSettings && <Dropdown trigger={
                     <Box>
@@ -174,6 +182,7 @@ const UserProfile = () => {
 
     return (
         <Dialog
+            tone={isAbout ? 'red' : isTrending ? 'green' : 'blue'}
             isOpen={isAuth}
             setIsOpen={ToggleAuth}
             width={{ xs: '3/4', sm: '3/4', md: '96', lg: '96', xl: '96' }}

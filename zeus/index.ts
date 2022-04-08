@@ -49,6 +49,7 @@ export type ValueTypes = {
 	exchangeRate?:boolean,
 	token?:ValueTypes["mirrorERC20Token"],
 	publisher?:ValueTypes["PublisherType"],
+	events?:ValueTypes["CrowdfundEvent"],
 		__typename?: boolean
 }>;
 	["UserProfileType"]: AliasType<{
@@ -161,6 +162,7 @@ export type ValueTypes = {
 	events?:ValueTypes["EditionEventsType"],
 	tokenIds?:boolean,
 	publisher?:ValueTypes["PublisherType"],
+	draftDigest?:boolean,
 	blockState?:ValueTypes["BlockStateType"],
 		__typename?: boolean
 }>;
@@ -176,6 +178,7 @@ export type ValueTypes = {
 	id?:boolean,
 	mimetype?:boolean,
 	sizes?:ValueTypes["MediaAssetSizesType"],
+	cid?:boolean,
 	url?:boolean,
 		__typename?: boolean
 }>;
@@ -237,6 +240,8 @@ export type ValueTypes = {
 	twitterUsername?:boolean,
 	collectorAddress?:boolean,
 	serialNumber?:boolean,
+	digest?:boolean,
+	draftDigest?:boolean,
 		__typename?: boolean
 }>;
 	/** The publisher of the block */
@@ -360,6 +365,29 @@ export type ValueTypes = {
 	publisher?:ValueTypes["PublisherType"],
 		__typename?: boolean
 }>;
+	/** CrowdfundEvent Type */
+["CrowdfundEvent"]: AliasType<{
+	id?:boolean,
+	event?:boolean,
+	amount?:boolean,
+	amountRaised?:boolean,
+	amountFormatted?:boolean,
+	amountRaisedFormatted?:boolean,
+	creatorAllocation?:boolean,
+	value?:boolean,
+	address?:boolean,
+	from?:boolean,
+	to?:boolean,
+	blockNumber?:boolean,
+	logIndex?:boolean,
+	network?:boolean,
+	transactionHash?:boolean,
+	editionId?:boolean,
+	tokenId?:boolean,
+	crowdfundId?:boolean,
+	timestamp?:boolean,
+		__typename?: boolean
+}>;
 	/** Publication Settings type */
 ["publicationSettings"]: AliasType<{
 	publicationLabel?:boolean,
@@ -403,6 +431,7 @@ export type ValueTypes = {
 	userProfileId?:boolean,
 	featuredImageId?:boolean,
 	arweaveTransactionRequest?:ValueTypes["ArweaveTransactionRequestType"],
+	latestBlockData?:ValueTypes["LatestBlockDataType"],
 	/** Transaction hash that includes NFT event */
 	nftTransactionHash?:boolean,
 	/** address of the token that has the NFT */
@@ -420,6 +449,8 @@ export type ValueTypes = {
 	featuredImage?:ValueTypes["MediaAssetType"],
 	publisher?:ValueTypes["PublisherType"],
 	collaborators?:ValueTypes["ProjectType"],
+	settings?:ValueTypes["EntrySettingsType"],
+	writingNFT?:ValueTypes["WritingNFTType"],
 		__typename?: boolean
 }>;
 	/** Describes an Arweave Transaction Request */
@@ -429,10 +460,98 @@ export type ValueTypes = {
 	entryId?:boolean,
 		__typename?: boolean
 }>;
+	/** LatestBlockDataType type */
+["LatestBlockDataType"]: AliasType<{
+	number?:boolean,
+	timestamp?:boolean,
+		__typename?: boolean
+}>;
 	/** Contains verification of authorship */
 ["Authorship"]: AliasType<{
 	publicKey?:boolean,
 	signature?:boolean,
+		__typename?: boolean
+}>;
+	/** Entry SEO settings */
+["EntrySettingsType"]: AliasType<{
+	/** Meta image */
+	metaImage?:ValueTypes["MediaAssetType"],
+	/** Meta title */
+	title?:boolean,
+	/** Meta description */
+	description?:boolean,
+		__typename?: boolean
+}>;
+	/** WritingNFT Type */
+["WritingNFTType"]: AliasType<{
+	_id?:boolean,
+	title?:boolean,
+	description?:boolean,
+	/** Total supply */
+	quantity?:boolean,
+	/** Price in Ether */
+	price?:boolean,
+	/** Version of contracts used */
+	version?:boolean,
+	/** Signing key timestamp (in unix seconds) */
+	timestamp?:boolean,
+	/** Signing key digest */
+	digest?:boolean,
+	/** Signing key signature */
+	signature?:boolean,
+	/** Deployment signature */
+	deploymentSignature?:boolean,
+	/** Deployment signature type */
+	deploymentSignatureType?:boolean,
+	/** Address of the proxy */
+	proxyAddress?:boolean,
+	/** Nonce for deployment */
+	nonce?:boolean,
+	/** Deployment status, 1 = Created, 5 = Confirmed */
+	status?:boolean,
+	/** Transaction Hash */
+	transactionHash?:boolean,
+	/** Block number of deploy */
+	deployedAt?:boolean,
+	/** NFT Media */
+	media?:ValueTypes["MediaAssetType"],
+	publisher?:ValueTypes["PublisherType"],
+	/** Which network to connect to */
+	network?:ValueTypes["NetworkType"],
+	/** Total NFTs sold */
+	numSold?:boolean,
+	collectors?:ValueTypes["WritingNFTCollectorType"],
+		__typename?: boolean
+}>;
+	/** Network Type */
+["NetworkType"]: AliasType<{
+	_id?:boolean,
+	chainId?:boolean,
+	explorerURL?:boolean,
+	name?:boolean,
+	currency?:ValueTypes["CurrencyType"],
+		__typename?: boolean
+}>;
+	/** Currency Type */
+["CurrencyType"]: AliasType<{
+	_id?:boolean,
+	name?:boolean,
+	symbol?:boolean,
+	decimals?:boolean,
+		__typename?: boolean
+}>;
+	/** Collectors of Writing NFT */
+["WritingNFTCollectorType"]: AliasType<{
+	_id?:boolean,
+	/** Address of collector */
+	address?:boolean,
+	/** Project (if it exists) */
+	project?:ValueTypes["UserProfileType"],
+	transactionHash?:boolean,
+	tokenId?:boolean,
+	message?:boolean,
+	price?:boolean,
+	blockNumber?:boolean,
 		__typename?: boolean
 }>;
 	/** API Queries [Read] */
@@ -446,6 +565,8 @@ contributorsByAddress?: [{	addresses?:(string | undefined | null)[]},ValueTypes[
 	nextContributorId?:boolean,
 entry?: [{	digest?:string | null},ValueTypes["entry"]],
 entries?: [{	publicOnly?:boolean | null,	projectAddress?:string | null},ValueTypes["entry"]],
+	/** Top 20 entries */
+	topEntries?:ValueTypes["entry"],
 resolveENS?: [{	/** The full name of the ENS domain, e.g. test.mirror.xyz */
 	name?:string | null},ValueTypes["ENS"]],
 lookupENS?: [{	/** The address to look up */
@@ -485,7 +606,8 @@ splits?: [{	/** Project address */
 split?: [{	address?:string | null},ValueTypes["SplitType"]],
 	unverifiedTwitterProfiles?:ValueTypes["UnverifiedTwitterProfileType"],
 editions?: [{	/** Address of project */
-	projectAddress?:string | null},ValueTypes["edition"]],
+	projectAddress?:string | null,	/** Where clause */
+	where?:ValueTypes["EditionWhereInputType"] | null},ValueTypes["edition"]],
 edition?: [{	editionId?:number | null,	editionContractAddress?:string | null},ValueTypes["edition"]],
 userActivityFeed?: [{	address?:string | null},ValueTypes["ActivityPropertiesType"]],
 email?: [{	address?:string | null},ValueTypes["email"]],
@@ -507,13 +629,14 @@ hasUserSubmittedSurvey?: [{	address?:string | null,	surveyId?:number | null},boo
 getSurvey?: [{	/** ID of the survey */
 	surveyId?:number | null,	/** Address of the crowdfund */
 	crowdfundAddress?:string | null},ValueTypes["SurveyType"]],
-crowdfundDraftById?: [{	/** Crowdfund draft ID */
-	id?:number | null,	/** Signature */
-	signature?:string | null,	/** Digest */
-	digest?:string | null,	/** Unix Timestamp */
-	timestamp?:string | null,	/** Address of user who created crowdfund draft */
-	address?:string | null,	/** Public key used to sign the crowdfund data */
-	key?:string | null},ValueTypes["CrowdfundDraft"]],
+crowdfundDraftById?: [{	/** The Ethereum address associated with the user */
+	userAddress?:string | null,	/** The Ethereum address associated with the project */
+	projectAddress?:string | null,	/** Digest */
+	digest?:string | null,	/** Public key used to sign the crowdfund data */
+	key?:string | null,	/** Signature with content related to the crowdfund */
+	signature?:string | null,	/** Unix Timestamp in seconds */
+	timestamp?:string | null,	/** Crowdfund draft ID */
+	id?:number | null},ValueTypes["CrowdfundDraft"]],
 	/** Endpoint for querying all contracts */
 	contracts?:ValueTypes["Contract"],
 proposals?: [{	address?:string | null},ValueTypes["Proposal"]],
@@ -545,6 +668,8 @@ projectFeed?: [{	projectAddress?:string | null},ValueTypes["ProjectType"]],
 plugins?: [{	projectAddress?:string | null},ValueTypes["PluginType"]],
 	/** List of all available plugins */
 	pluginsList?:ValueTypes["PluginType"],
+editionDraft?: [{	/** Digest of the draft */
+	digest?:string | null},ValueTypes["EditionDraftType"]],
 		__typename?: boolean
 }>;
 	/** ENS type */
@@ -624,6 +749,7 @@ plugins?: [{	projectAddress?:string | null},ValueTypes["PluginType"]],
 	title?:boolean,
 	crowdfundDraftId?:boolean,
 	publisher?:ValueTypes["PublisherType"],
+	digest?:boolean,
 		__typename?: boolean
 }>;
 	/** CrowdfundBlock type */
@@ -660,29 +786,6 @@ plugins?: [{	projectAddress?:string | null},ValueTypes["PluginType"]],
 	avatarURL?:boolean,
 	twitterUsername?:boolean,
 	percentage?:boolean,
-		__typename?: boolean
-}>;
-	/** CrowdfundEvent Type */
-["CrowdfundEvent"]: AliasType<{
-	id?:boolean,
-	event?:boolean,
-	amount?:boolean,
-	amountRaised?:boolean,
-	amountFormatted?:boolean,
-	amountRaisedFormatted?:boolean,
-	creatorAllocation?:boolean,
-	value?:boolean,
-	address?:boolean,
-	from?:boolean,
-	to?:boolean,
-	blockNumber?:boolean,
-	logIndex?:boolean,
-	network?:boolean,
-	transactionHash?:boolean,
-	editionId?:boolean,
-	tokenId?:boolean,
-	crowdfundId?:boolean,
-	timestamp?:boolean,
 		__typename?: boolean
 }>;
 	/** ReserveAuction type */
@@ -807,6 +910,7 @@ plugins?: [{	projectAddress?:string | null},ValueTypes["PluginType"]],
 	operator?:ValueTypes["UserProfileType"],
 	publication?:ValueTypes["publication"],
 	publisher?:ValueTypes["PublisherType"],
+	version?:boolean,
 		__typename?: boolean
 }>;
 	/** Returns information about a split allocation */
@@ -845,6 +949,10 @@ plugins?: [{	projectAddress?:string | null},ValueTypes["PluginType"]],
 	twitterProfile?:ValueTypes["TwitterProfileType"],
 		__typename?: boolean
 }>;
+	/** where */
+["EditionWhereInputType"]: {
+	digest?:string | null
+};
 	["ActivityPropertiesType"]: AliasType<{
 	key?:boolean,
 	detailValue?:boolean,
@@ -1205,6 +1313,23 @@ plugins?: [{	projectAddress?:string | null},ValueTypes["PluginType"]],
 	installed?:boolean,
 		__typename?: boolean
 }>;
+	/** Edition draft type */
+["EditionDraftType"]: AliasType<{
+	_id?:boolean,
+	publisher?:ValueTypes["PublisherType"],
+	digest?:boolean,
+	title?:boolean,
+	quantity?:boolean,
+	description?:boolean,
+	price?:boolean,
+	fundingRecipient?:boolean,
+	thumbnailMedia?:ValueTypes["MediaAssetType"],
+	primaryMedia?:ValueTypes["MediaAssetType"],
+	singleArtifact?:boolean,
+	baseUriHash?:boolean,
+	contentHash?:boolean,
+		__typename?: boolean
+}>;
 	/** API Mutations [Create, Update, Delete] */
 ["mutations"]: AliasType<{
 registerContributor?: [{	/** The Ethereum address associated with the contributor */
@@ -1246,7 +1371,8 @@ createEntry?: [{	/** The Ethereum address associated with the user */
 	nftId?:number | null,	/** Address for entry contributors */
 	entryContributorAddresses?:(string | undefined | null)[],	/** ID of featured image if there is one */
 	featuredImageId?:number | null,	/** ID of featured image if there is one */
-	hideTitleInEntry?:boolean | null},ValueTypes["entry"]],
+	hideTitleInEntry?:boolean | null,	/** Entry SEO Settings */
+	settings?:ValueTypes["EntrySettingsInputType"] | null},ValueTypes["entry"]],
 addSigningKey?: [{	/** The Ethereum address associated with the contributor */
 	ethAddress?:string | null,	/** The public key for the EC keypair used for signing from a device */
 	publicKey?:string | null,	/** The signature proving ownership of the signing key by the contributor */
@@ -1271,7 +1397,8 @@ updateEntry?: [{	/** The Ethereum address associated with the user */
 	nftId?:number | null,	/** Address for entry contributors */
 	entryContributorAddresses?:(string | undefined | null)[],	/** ID of featured image if there is one */
 	featuredImageId?:number | null,	/** ID of featured image if there is one */
-	hideTitleInEntry?:boolean | null},ValueTypes["entry"]],
+	hideTitleInEntry?:boolean | null,	/** Entry SEO Settings */
+	settings?:ValueTypes["EntrySettingsInputType"] | null},ValueTypes["entry"]],
 updateSettings?: [{	/** The label of the publication being updated */
 	publicationLabel?:string | null,	/** New name for publication */
 	publicationDisplayName?:string | null,	/** New publication avatar */
@@ -1338,6 +1465,14 @@ updateCrowdfundPublishStatus?: [{	/** The Ethereum address associated with the u
 	timestamp?:string | null,	/** Crowdfund address */
 	crowdfundAddress?:string | null,	/** Publish status */
 	publishStatus?:string | null},ValueTypes["crowdfund"]],
+reinstateCrowdfundDraft?: [{	/** The Ethereum address associated with the user */
+	userAddress?:string | null,	/** The Ethereum address associated with the project */
+	projectAddress?:string | null,	/** Digest */
+	digest?:string | null,	/** Public key used to sign the crowdfund data */
+	key?:string | null,	/** Signature with content related to the crowdfund */
+	signature?:string | null,	/** Unix Timestamp in seconds */
+	timestamp?:string | null,	/** Crowdfund address */
+	crowdfundAddress?:string | null},ValueTypes["CrowdfundDraft"]],
 createNFT?: [{	/** Name of the token */
 	name?:string | null,	/** Token URI */
 	tokenURI?:string | null,	/** The Ethereum address associated with the contributor */
@@ -1372,11 +1507,12 @@ createPromptResponse?: [{	/** The content in the prompt response */
 	contentHash?:string | null},ValueTypes["promptResponse"]],
 createSplit?: [{	/** The Ethereum address associated with the user */
 	userAddress?:string | null,	/** The Ethereum address associated with the project */
-	projectAddress?:string | null,	name?:string | null,	address?:string | null,	transactionHash?:string | null,	network?:string | null},ValueTypes["SplitType"]],
+	projectAddress?:string | null,	name?:string | null,	address?:string | null,	transactionHash?:string | null,	network?:string | null,	version?:string | null},ValueTypes["SplitType"]],
 createSplitAllocations?: [{	splitAllocations?:(ValueTypes["SplitAllocationInputType"] | undefined | null)[]},boolean],
 createEdition?: [{	/** The Ethereum address associated with the user */
 	userAddress?:string | null,	/** The Ethereum address associated with the project */
-	projectAddress?:string | null,	title?:string | null,	quantity?:number | null,	price?:number | null,	artifactThumbnailId?:number | null,	artifactPrimaryId?:number | null,	key?:string | null,	digest?:string | null,	signature?:string | null,	fundingRecipient?:string | null,	network?:string | null,	transactionHash?:string | null,	description?:string | null,	editionContractAddress?:string | null,	version?:string | null,	singleArtifact?:boolean | null,	crowdfundAddress?:string | null,	contentHash?:string | null,	baseUriHash?:string | null},ValueTypes["edition"]],
+	projectAddress?:string | null,	title?:string | null,	quantity?:number | null,	price?:number | null,	artifactThumbnailId?:number | null,	artifactPrimaryId?:number | null,	key?:string | null,	digest?:string | null,	signature?:string | null,	fundingRecipient?:string | null,	network?:string | null,	transactionHash?:string | null,	description?:string | null,	editionContractAddress?:string | null,	version?:string | null,	singleArtifact?:boolean | null,	crowdfundAddress?:string | null,	contentHash?:string | null,	baseUriHash?:string | null,	editionId?:number | null,	/** Timestamp */
+	timestamp?:string | null},ValueTypes["edition"]],
 createCrowdfundEditions?: [{	/** The Ethereum address associated with the user */
 	userAddress?:string | null,	/** The Ethereum address associated with the project */
 	projectAddress?:string | null,	editions?:(ValueTypes["EditionInputType"] | undefined | null)[],	key?:string | null,	digest?:string | null,	signature?:string | null,	fundingRecipient?:string | null,	network?:string | null,	transactionHash?:string | null,	editionContractAddress?:string | null,	version?:string | null,	crowdfundAddress?:string | null},ValueTypes["edition"]],
@@ -1392,7 +1528,8 @@ setEditionTransactionHash?: [{	/** The Ethereum address associated with the user
 	timestamp?:string | null,	ids?:(number | undefined | null)[],	transactionHash?:string | null,	fundingRecipient?:string | null,	network?:string | null},boolean],
 setEditionTransactionHashWithUserProfile?: [{	ids?:(number | undefined | null)[],	userAddress?:string | null,	transactionHash?:string | null,	fundingRecipient?:string | null,	network?:string | null,	signature?:string | null,	digest?:string | null,	key?:string | null,	/** Unix timestamp in seconds */
 	timestamp?:string | null},boolean],
-createMediaAsset?: [{	mimetype?:string | null,	sizes?:ValueTypes["MediaAssetSizesInputType"] | null},ValueTypes["MediaAssetType"]],
+createMediaAsset?: [{	mimetype?:string | null,	sizes?:ValueTypes["MediaAssetSizesInputType"] | null,	/** IPFS content identifier for the media file */
+	cid?:string | null},ValueTypes["MediaAssetType"]],
 addEmail?: [{	email?:string | null,	address?:string | null,	signature?:string | null,	digest?:string | null,	key?:string | null,	timestamp?:string | null},ValueTypes["email"]],
 verifyEmail?: [{	token?:string | null},ValueTypes["email"]],
 setWriteRaceNotification?: [{	address?:string | null,	value?:boolean | null,	signature?:string | null,	digest?:string | null,	timestamp?:string | null,	key?:string | null},boolean],
@@ -1569,6 +1706,54 @@ updatePluginStatus?: [{	/** The Ethereum address associated with the user */
 	timestamp?:string | null,	/** Database ID for a plugin record */
 	pluginId?:number | null,	/** Whether to install or uinstall the plugin */
 	install?:boolean | null},ValueTypes["PluginType"]],
+createEditionDraft?: [{	/** The Ethereum address associated with the user */
+	userAddress?:string | null,	/** The Ethereum address associated with the project */
+	projectAddress?:string | null,	/** Digest */
+	digest?:string | null,	/** Public key used to sign the crowdfund data */
+	key?:string | null,	/** Signature with content related to the crowdfund */
+	signature?:string | null,	/** Unix Timestamp in seconds */
+	timestamp?:string | null,	title?:string | null,	quantity?:number | null,	description?:string | null,	price?:number | null,	fundingRecipient?:string | null,	artifactThumbnailId?:number | null,	artifactPrimaryId?:number | null,	singleArtifact?:boolean | null,	baseUriHash?:string | null,	contentHash?:string | null},ValueTypes["EditionDraftType"]],
+updateEditionDraft?: [{	/** The Ethereum address associated with the user */
+	userAddress?:string | null,	/** The Ethereum address associated with the project */
+	projectAddress?:string | null,	/** Digest */
+	digest?:string | null,	/** Public key used to sign the crowdfund data */
+	key?:string | null,	/** Signature with content related to the crowdfund */
+	signature?:string | null,	/** Unix Timestamp in seconds */
+	timestamp?:string | null,	title?:string | null,	quantity?:number | null,	description?:string | null,	price?:number | null,	fundingRecipient?:string | null,	artifactThumbnailId?:number | null,	artifactPrimaryId?:number | null,	singleArtifact?:boolean | null,	baseUriHash?:string | null,	contentHash?:string | null,	/** Original digest of the draft */
+	draftDigest?:string | null},ValueTypes["EditionDraftType"]],
+reinstateEditionDraft?: [{	/** The Ethereum address associated with the user */
+	userAddress?:string | null,	/** The Ethereum address associated with the project */
+	projectAddress?:string | null,	/** Digest */
+	digest?:string | null,	/** Public key used to sign the crowdfund data */
+	key?:string | null,	/** Signature with content related to the crowdfund */
+	signature?:string | null,	/** Unix Timestamp in seconds */
+	timestamp?:string | null,	/** Original digest of the draft */
+	draftDigest?:string | null},ValueTypes["EditionDraftType"]],
+createEditionFromDraft?: [{	/** The Ethereum address associated with the user */
+	userAddress?:string | null,	/** The Ethereum address associated with the project */
+	projectAddress?:string | null,	/** Digest */
+	digest?:string | null,	/** Public key used to sign the crowdfund data */
+	key?:string | null,	/** Signature with content related to the crowdfund */
+	signature?:string | null,	/** Unix Timestamp in seconds */
+	timestamp?:string | null,	/** Original digest of the draft */
+	draftDigest?:string | null,	network?:string | null,	editionContractAddress?:string | null,	version?:string | null},ValueTypes["edition"]],
+createWritingNFT?: [{	/** The Ethereum address associated with the user */
+	userAddress?:string | null,	/** The Ethereum address associated with the project */
+	projectAddress?:string | null,	/** Digest */
+	digest?:string | null,	/** Public key used to sign the crowdfund data */
+	key?:string | null,	/** Signature with content related to the crowdfund */
+	signature?:string | null,	/** Unix Timestamp in seconds */
+	timestamp?:string | null,	title?:string | null,	description?:string | null,	/** Total supply */
+	quantity?:number | null,	/** Price in Ether */
+	price?:number | null,	/** Deployment signature */
+	deploymentSignature?:string | null,	/** Deployment signature type */
+	deploymentSignatureType?:string | null,	/** Address of the proxy */
+	proxyAddress?:string | null,	/** Digest of the entry */
+	entryDigest?:string | null,	/** ID of uploaded media */
+	mediaAssetId?:number | null,	/** Chain ID for NFT */
+	chainId?:number | null,	/** Version of contracts used */
+	version?:string | null,	/** Deployment nonce */
+	nonce?:number | null},ValueTypes["WritingNFTType"]],
 		__typename?: boolean
 }>;
 	/** Success type */
@@ -1576,6 +1761,15 @@ updatePluginStatus?: [{	/** The Ethereum address associated with the user */
 	success?:boolean,
 		__typename?: boolean
 }>;
+	/** Used to control meta settings */
+["EntrySettingsInputType"]: {
+	/** Meta image ID */
+	metaImageId?:number | null,
+	/** Meta title */
+	title?:string | null,
+	/** Meta description */
+	description?:string | null
+};
 	/** Edition For Signature type */
 ["EditionForSignatureType"]: {
 	title?:string | null,
@@ -1679,7 +1873,8 @@ export type ModelTypes = {
 	blockState?:ModelTypes["BlockStateType"],
 	exchangeRate?:string,
 	token?:ModelTypes["mirrorERC20Token"],
-	publisher?:ModelTypes["PublisherType"]
+	publisher?:ModelTypes["PublisherType"],
+	events?:(ModelTypes["CrowdfundEvent"] | undefined)[]
 };
 	["UserProfileType"]: {
 		address?:string,
@@ -1783,6 +1978,7 @@ export type ModelTypes = {
 	events?:(ModelTypes["EditionEventsType"] | undefined)[],
 	tokenIds?:(string | undefined)[],
 	publisher?:ModelTypes["PublisherType"],
+	draftDigest?:string,
 	blockState?:ModelTypes["BlockStateType"]
 };
 	/** Edition Attribute type */
@@ -1796,6 +1992,7 @@ export type ModelTypes = {
 		id?:number,
 	mimetype?:string,
 	sizes?:ModelTypes["MediaAssetSizesType"],
+	cid?:string,
 	url?:string
 };
 	/** description */
@@ -1852,7 +2049,9 @@ export type ModelTypes = {
 	avatarURL?:string,
 	twitterUsername?:string,
 	collectorAddress?:string,
-	serialNumber?:string
+	serialNumber?:string,
+	digest?:string,
+	draftDigest?:string
 };
 	/** The publisher of the block */
 ["PublisherType"]: {
@@ -1959,6 +2158,28 @@ export type ModelTypes = {
 	createdAt?:string,
 	publisher?:ModelTypes["PublisherType"]
 };
+	/** CrowdfundEvent Type */
+["CrowdfundEvent"]: {
+		id?:number,
+	event?:string,
+	amount?:string,
+	amountRaised?:string,
+	amountFormatted?:number,
+	amountRaisedFormatted?:string,
+	creatorAllocation?:string,
+	value?:string,
+	address?:string,
+	from?:string,
+	to?:string,
+	blockNumber?:number,
+	logIndex?:number,
+	network?:string,
+	transactionHash?:string,
+	editionId?:number,
+	tokenId?:number,
+	crowdfundId?:number,
+	timestamp?:string
+};
 	/** Publication Settings type */
 ["publicationSettings"]: {
 		publicationLabel?:string,
@@ -2000,6 +2221,7 @@ export type ModelTypes = {
 	userProfileId?:number,
 	featuredImageId?:number,
 	arweaveTransactionRequest?:ModelTypes["ArweaveTransactionRequestType"],
+	latestBlockData?:ModelTypes["LatestBlockDataType"],
 	/** Transaction hash that includes NFT event */
 	nftTransactionHash?:string,
 	/** address of the token that has the NFT */
@@ -2016,7 +2238,9 @@ export type ModelTypes = {
 	editions?:(ModelTypes["edition"] | undefined)[],
 	featuredImage?:ModelTypes["MediaAssetType"],
 	publisher?:ModelTypes["PublisherType"],
-	collaborators?:(ModelTypes["ProjectType"] | undefined)[]
+	collaborators?:(ModelTypes["ProjectType"] | undefined)[],
+	settings?:ModelTypes["EntrySettingsType"],
+	writingNFT?:ModelTypes["WritingNFTType"]
 };
 	/** Describes an Arweave Transaction Request */
 ["ArweaveTransactionRequestType"]: {
@@ -2024,10 +2248,92 @@ export type ModelTypes = {
 	transactionId?:string,
 	entryId?:number
 };
+	/** LatestBlockDataType type */
+["LatestBlockDataType"]: {
+		number?:number,
+	timestamp?:number
+};
 	/** Contains verification of authorship */
 ["Authorship"]: {
 		publicKey?:string,
 	signature?:string
+};
+	/** Entry SEO settings */
+["EntrySettingsType"]: {
+		/** Meta image */
+	metaImage?:ModelTypes["MediaAssetType"],
+	/** Meta title */
+	title?:string,
+	/** Meta description */
+	description?:string
+};
+	/** WritingNFT Type */
+["WritingNFTType"]: {
+		_id?:string,
+	title?:string,
+	description?:string,
+	/** Total supply */
+	quantity?:number,
+	/** Price in Ether */
+	price?:number,
+	/** Version of contracts used */
+	version?:string,
+	/** Signing key timestamp (in unix seconds) */
+	timestamp?:number,
+	/** Signing key digest */
+	digest?:string,
+	/** Signing key signature */
+	signature?:string,
+	/** Deployment signature */
+	deploymentSignature?:string,
+	/** Deployment signature type */
+	deploymentSignatureType?:string,
+	/** Address of the proxy */
+	proxyAddress?:string,
+	/** Nonce for deployment */
+	nonce?:number,
+	/** Deployment status, 1 = Created, 5 = Confirmed */
+	status?:number,
+	/** Transaction Hash */
+	transactionHash?:string,
+	/** Block number of deploy */
+	deployedAt?:number,
+	/** NFT Media */
+	media?:ModelTypes["MediaAssetType"],
+	publisher?:ModelTypes["PublisherType"],
+	/** Which network to connect to */
+	network?:ModelTypes["NetworkType"],
+	/** Total NFTs sold */
+	numSold?:number,
+	collectors?:(ModelTypes["WritingNFTCollectorType"] | undefined)[]
+};
+	/** Network Type */
+["NetworkType"]: {
+		_id?:string,
+	chainId?:number,
+	explorerURL?:string,
+	name?:string,
+	currency?:ModelTypes["CurrencyType"]
+};
+	/** Currency Type */
+["CurrencyType"]: {
+		_id?:string,
+	name?:string,
+	symbol?:string,
+	decimals?:number
+};
+	/** Collectors of Writing NFT */
+["WritingNFTCollectorType"]: {
+		_id?:string,
+	/** Address of collector */
+	address?:string,
+	/** Project (if it exists) */
+	project?:ModelTypes["UserProfileType"],
+	transactionHash?:string,
+	tokenId?:string,
+	message?:string,
+	price?:string,
+	blockNumber?:number
 };
 	/** API Queries [Read] */
 ["query"]: {
@@ -2044,6 +2350,8 @@ export type ModelTypes = {
 	entry?:ModelTypes["entry"],
 	/** All the entries for a user address */
 	entries?:(ModelTypes["entry"] | undefined)[],
+	/** Top 20 entries */
+	topEntries?:(ModelTypes["entry"] | undefined)[],
 	/** Endpoint for returning ENS information for a given domain */
 	resolveENS?:ModelTypes["ENS"],
 	/** Endpoint for returning ENS information for a given address */
@@ -2143,7 +2451,9 @@ export type ModelTypes = {
 	/** Endpoint for querying all plugins for a project */
 	plugins?:(ModelTypes["PluginType"] | undefined)[],
 	/** List of all available plugins */
-	pluginsList?:(ModelTypes["PluginType"] | undefined)[]
+	pluginsList?:(ModelTypes["PluginType"] | undefined)[],
+	/** Endpoint for querying a edition draft */
+	editionDraft?:ModelTypes["EditionDraftType"]
 };
 	/** ENS type */
 ["ENS"]: {
@@ -2210,7 +2520,8 @@ export type ModelTypes = {
 	symbol?:string,
 	title?:string,
 	crowdfundDraftId?:number,
-	publisher?:ModelTypes["PublisherType"]
+	publisher?:ModelTypes["PublisherType"],
+	digest?:string
 };
 	/** CrowdfundBlock type */
 ["CrowdfundBlock"]: {
@@ -2245,28 +2556,6 @@ export type ModelTypes = {
 	avatarURL?:string,
 	twitterUsername?:string,
 	percentage?:string
-};
-	/** CrowdfundEvent Type */
-["CrowdfundEvent"]: {
-		id?:number,
-	event?:string,
-	amount?:string,
-	amountRaised?:string,
-	amountFormatted?:number,
-	amountRaisedFormatted?:string,
-	creatorAllocation?:string,
-	value?:string,
-	address?:string,
-	from?:string,
-	to?:string,
-	blockNumber?:number,
-	logIndex?:number,
-	network?:string,
-	transactionHash?:string,
-	editionId?:number,
-	tokenId?:number,
-	crowdfundId?:number,
-	timestamp?:string
 };
 	/** ReserveAuction type */
 ["reserveAuction"]: {
@@ -2380,7 +2669,8 @@ export type ModelTypes = {
 	events?:(ModelTypes["SplitEventType"] | undefined)[],
 	operator?:ModelTypes["UserProfileType"],
 	publication?:ModelTypes["publication"],
-	publisher?:ModelTypes["PublisherType"]
+	publisher?:ModelTypes["PublisherType"],
+	version?:string
 };
 	/** Returns information about a split allocation */
 ["SplitAllocationType"]: {
@@ -2415,6 +2705,8 @@ export type ModelTypes = {
 	address?:string,
 	twitterProfile?:ModelTypes["TwitterProfileType"]
 };
+	/** where */
+["EditionWhereInputType"]: GraphQLTypes["EditionWhereInputType"];
 	["ActivityPropertiesType"]: {
 		key?:string,
 	detailValue?:string
@@ -2741,6 +3033,22 @@ export type ModelTypes = {
 	imageURL?:string,
 	installed?:boolean
 };
+	/** Edition draft type */
+["EditionDraftType"]: {
+		_id?:string,
+	publisher?:ModelTypes["PublisherType"],
+	digest?:string,
+	title?:string,
+	quantity?:number,
+	description?:string,
+	price?:number,
+	fundingRecipient?:string,
+	thumbnailMedia?:ModelTypes["MediaAssetType"],
+	primaryMedia?:ModelTypes["MediaAssetType"],
+	singleArtifact?:boolean,
+	baseUriHash?:string,
+	contentHash?:string
+};
 	/** API Mutations [Create, Update, Delete] */
 ["mutations"]: {
 		/** Endpoint for onboarding a contributor */
@@ -2781,6 +3089,8 @@ export type ModelTypes = {
 	updateCrowdfund?:ModelTypes["crowdfund"],
 	/** Endpoint to update crowdfund publish status */
 	updateCrowdfundPublishStatus?:ModelTypes["crowdfund"],
+	/** Endpoint to reinstate a draft */
+	reinstateCrowdfundDraft?:ModelTypes["CrowdfundDraft"],
 	/** Endpoint for creating a new NFT */
 	createNFT?:ModelTypes["nft"],
 	/** Endpoint for creating a new reserve auction */
@@ -2866,12 +3176,24 @@ export type ModelTypes = {
 	/** Endpoint for updating a user profile theme */
 	updateProjectTheme?:ModelTypes["ProjectThemeType"],
 	/** Endpoint for updating a plugin's installation status for a project */
-	updatePluginStatus?:ModelTypes["PluginType"]
+	updatePluginStatus?:ModelTypes["PluginType"],
+	/** Endpoint for creating an edition draft */
+	createEditionDraft?:ModelTypes["EditionDraftType"],
+	/** Endpoint for a updating an edition draft */
+	updateEditionDraft?:ModelTypes["EditionDraftType"],
+	/** Endpoint for an reinstating edition draft */
+	reinstateEditionDraft?:ModelTypes["EditionDraftType"],
+	/** Endpoint for creating edition from draft */
+	createEditionFromDraft?:ModelTypes["edition"],
+	/** Endpoint for creating a writing NFT */
+	createWritingNFT?:ModelTypes["WritingNFTType"]
 };
 	/** Success type */
 ["success"]: {
 		success?:boolean
 };
+	/** Used to control meta settings */
+["EntrySettingsInputType"]: GraphQLTypes["EntrySettingsInputType"];
 	/** Edition For Signature type */
 ["EditionForSignatureType"]: GraphQLTypes["EditionForSignatureType"];
 	/** description */
@@ -2938,7 +3260,8 @@ export type GraphQLTypes = {
 	blockState?: GraphQLTypes["BlockStateType"],
 	exchangeRate?: string,
 	token?: GraphQLTypes["mirrorERC20Token"],
-	publisher?: GraphQLTypes["PublisherType"]
+	publisher?: GraphQLTypes["PublisherType"],
+	events?: Array<GraphQLTypes["CrowdfundEvent"] | undefined>
 };
 	["UserProfileType"]: {
 	__typename: "UserProfileType",
@@ -3051,6 +3374,7 @@ export type GraphQLTypes = {
 	events?: Array<GraphQLTypes["EditionEventsType"] | undefined>,
 	tokenIds?: Array<string | undefined>,
 	publisher?: GraphQLTypes["PublisherType"],
+	draftDigest?: string,
 	blockState?: GraphQLTypes["BlockStateType"]
 };
 	/** Edition Attribute type */
@@ -3066,6 +3390,7 @@ export type GraphQLTypes = {
 	id?: number,
 	mimetype?: string,
 	sizes?: GraphQLTypes["MediaAssetSizesType"],
+	cid?: string,
 	url?: string
 };
 	/** description */
@@ -3126,7 +3451,9 @@ export type GraphQLTypes = {
 	avatarURL?: string,
 	twitterUsername?: string,
 	collectorAddress?: string,
-	serialNumber?: string
+	serialNumber?: string,
+	digest?: string,
+	draftDigest?: string
 };
 	/** The publisher of the block */
 ["PublisherType"]: {
@@ -3250,6 +3577,29 @@ export type GraphQLTypes = {
 	createdAt?: string,
 	publisher?: GraphQLTypes["PublisherType"]
 };
+	/** CrowdfundEvent Type */
+["CrowdfundEvent"]: {
+	__typename: "CrowdfundEvent",
+	id?: number,
+	event?: string,
+	amount?: string,
+	amountRaised?: string,
+	amountFormatted?: number,
+	amountRaisedFormatted?: string,
+	creatorAllocation?: string,
+	value?: string,
+	address?: string,
+	from?: string,
+	to?: string,
+	blockNumber?: number,
+	logIndex?: number,
+	network?: string,
+	transactionHash?: string,
+	editionId?: number,
+	tokenId?: number,
+	crowdfundId?: number,
+	timestamp?: string
+};
 	/** Publication Settings type */
 ["publicationSettings"]: {
 	__typename: "publicationSettings",
@@ -3294,6 +3644,7 @@ export type GraphQLTypes = {
 	userProfileId?: number,
 	featuredImageId?: number,
 	arweaveTransactionRequest?: GraphQLTypes["ArweaveTransactionRequestType"],
+	latestBlockData?: GraphQLTypes["LatestBlockDataType"],
 	/** Transaction hash that includes NFT event */
 	nftTransactionHash?: string,
 	/** address of the token that has the NFT */
@@ -3310,7 +3661,9 @@ export type GraphQLTypes = {
 	editions?: Array<GraphQLTypes["edition"] | undefined>,
 	featuredImage?: GraphQLTypes["MediaAssetType"],
 	publisher?: GraphQLTypes["PublisherType"],
-	collaborators?: Array<GraphQLTypes["ProjectType"] | undefined>
+	collaborators?: Array<GraphQLTypes["ProjectType"] | undefined>,
+	settings?: GraphQLTypes["EntrySettingsType"],
+	writingNFT?: GraphQLTypes["WritingNFTType"]
 };
 	/** Describes an Arweave Transaction Request */
 ["ArweaveTransactionRequestType"]: {
@@ -3319,11 +3672,99 @@ export type GraphQLTypes = {
 	transactionId?: string,
 	entryId?: number
 };
+	/** LatestBlockDataType type */
+["LatestBlockDataType"]: {
+	__typename: "LatestBlockDataType",
+	number?: number,
+	timestamp?: number
+};
 	/** Contains verification of authorship */
 ["Authorship"]: {
 	__typename: "Authorship",
 	publicKey?: string,
 	signature?: string
+};
+	/** Entry SEO settings */
+["EntrySettingsType"]: {
+	__typename: "EntrySettingsType",
+	/** Meta image */
+	metaImage?: GraphQLTypes["MediaAssetType"],
+	/** Meta title */
+	title?: string,
+	/** Meta description */
+	description?: string
+};
+	/** WritingNFT Type */
+["WritingNFTType"]: {
+	__typename: "WritingNFTType",
+	_id?: string,
+	title?: string,
+	description?: string,
+	/** Total supply */
+	quantity?: number,
+	/** Price in Ether */
+	price?: number,
+	/** Version of contracts used */
+	version?: string,
+	/** Signing key timestamp (in unix seconds) */
+	timestamp?: number,
+	/** Signing key digest */
+	digest?: string,
+	/** Signing key signature */
+	signature?: string,
+	/** Deployment signature */
+	deploymentSignature?: string,
+	/** Deployment signature type */
+	deploymentSignatureType?: string,
+	/** Address of the proxy */
+	proxyAddress?: string,
+	/** Nonce for deployment */
+	nonce?: number,
+	/** Deployment status, 1 = Created, 5 = Confirmed */
+	status?: number,
+	/** Transaction Hash */
+	transactionHash?: string,
+	/** Block number of deploy */
+	deployedAt?: number,
+	/** NFT Media */
+	media?: GraphQLTypes["MediaAssetType"],
+	publisher?: GraphQLTypes["PublisherType"],
+	/** Which network to connect to */
+	network?: GraphQLTypes["NetworkType"],
+	/** Total NFTs sold */
+	numSold?: number,
+	collectors?: Array<GraphQLTypes["WritingNFTCollectorType"] | undefined>
+};
+	/** Network Type */
+["NetworkType"]: {
+	__typename: "NetworkType",
+	_id?: string,
+	chainId?: number,
+	explorerURL?: string,
+	name?: string,
+	currency?: GraphQLTypes["CurrencyType"]
+};
+	/** Currency Type */
+["CurrencyType"]: {
+	__typename: "CurrencyType",
+	_id?: string,
+	name?: string,
+	symbol?: string,
+	decimals?: number
+};
+	/** Collectors of Writing NFT */
+["WritingNFTCollectorType"]: {
+	__typename: "WritingNFTCollectorType",
+	_id?: string,
+	/** Address of collector */
+	address?: string,
+	/** Project (if it exists) */
+	project?: GraphQLTypes["UserProfileType"],
+	transactionHash?: string,
+	tokenId?: string,
+	message?: string,
+	price?: string,
+	blockNumber?: number
 };
 	/** API Queries [Read] */
 ["query"]: {
@@ -3341,6 +3782,8 @@ export type GraphQLTypes = {
 	entry?: GraphQLTypes["entry"],
 	/** All the entries for a user address */
 	entries?: Array<GraphQLTypes["entry"] | undefined>,
+	/** Top 20 entries */
+	topEntries?: Array<GraphQLTypes["entry"] | undefined>,
 	/** Endpoint for returning ENS information for a given domain */
 	resolveENS?: GraphQLTypes["ENS"],
 	/** Endpoint for returning ENS information for a given address */
@@ -3440,7 +3883,9 @@ export type GraphQLTypes = {
 	/** Endpoint for querying all plugins for a project */
 	plugins?: Array<GraphQLTypes["PluginType"] | undefined>,
 	/** List of all available plugins */
-	pluginsList?: Array<GraphQLTypes["PluginType"] | undefined>
+	pluginsList?: Array<GraphQLTypes["PluginType"] | undefined>,
+	/** Endpoint for querying a edition draft */
+	editionDraft?: GraphQLTypes["EditionDraftType"]
 };
 	/** ENS type */
 ["ENS"]: {
@@ -3520,7 +3965,8 @@ export type GraphQLTypes = {
 	symbol?: string,
 	title?: string,
 	crowdfundDraftId?: number,
-	publisher?: GraphQLTypes["PublisherType"]
+	publisher?: GraphQLTypes["PublisherType"],
+	digest?: string
 };
 	/** CrowdfundBlock type */
 ["CrowdfundBlock"]: {
@@ -3557,29 +4003,6 @@ export type GraphQLTypes = {
 	avatarURL?: string,
 	twitterUsername?: string,
 	percentage?: string
-};
-	/** CrowdfundEvent Type */
-["CrowdfundEvent"]: {
-	__typename: "CrowdfundEvent",
-	id?: number,
-	event?: string,
-	amount?: string,
-	amountRaised?: string,
-	amountFormatted?: number,
-	amountRaisedFormatted?: string,
-	creatorAllocation?: string,
-	value?: string,
-	address?: string,
-	from?: string,
-	to?: string,
-	blockNumber?: number,
-	logIndex?: number,
-	network?: string,
-	transactionHash?: string,
-	editionId?: number,
-	tokenId?: number,
-	crowdfundId?: number,
-	timestamp?: string
 };
 	/** ReserveAuction type */
 ["reserveAuction"]: {
@@ -3703,7 +4126,8 @@ export type GraphQLTypes = {
 	events?: Array<GraphQLTypes["SplitEventType"] | undefined>,
 	operator?: GraphQLTypes["UserProfileType"],
 	publication?: GraphQLTypes["publication"],
-	publisher?: GraphQLTypes["PublisherType"]
+	publisher?: GraphQLTypes["PublisherType"],
+	version?: string
 };
 	/** Returns information about a split allocation */
 ["SplitAllocationType"]: {
@@ -3740,6 +4164,10 @@ export type GraphQLTypes = {
 	id?: number,
 	address?: string,
 	twitterProfile?: GraphQLTypes["TwitterProfileType"]
+};
+	/** where */
+["EditionWhereInputType"]: {
+		digest?: string
 };
 	["ActivityPropertiesType"]: {
 	__typename: "ActivityPropertiesType",
@@ -4101,6 +4529,23 @@ export type GraphQLTypes = {
 	imageURL?: string,
 	installed?: boolean
 };
+	/** Edition draft type */
+["EditionDraftType"]: {
+	__typename: "EditionDraftType",
+	_id?: string,
+	publisher?: GraphQLTypes["PublisherType"],
+	digest?: string,
+	title?: string,
+	quantity?: number,
+	description?: string,
+	price?: number,
+	fundingRecipient?: string,
+	thumbnailMedia?: GraphQLTypes["MediaAssetType"],
+	primaryMedia?: GraphQLTypes["MediaAssetType"],
+	singleArtifact?: boolean,
+	baseUriHash?: string,
+	contentHash?: string
+};
 	/** API Mutations [Create, Update, Delete] */
 ["mutations"]: {
 	__typename: "mutations",
@@ -4142,6 +4587,8 @@ export type GraphQLTypes = {
 	updateCrowdfund?: GraphQLTypes["crowdfund"],
 	/** Endpoint to update crowdfund publish status */
 	updateCrowdfundPublishStatus?: GraphQLTypes["crowdfund"],
+	/** Endpoint to reinstate a draft */
+	reinstateCrowdfundDraft?: GraphQLTypes["CrowdfundDraft"],
 	/** Endpoint for creating a new NFT */
 	createNFT?: GraphQLTypes["nft"],
 	/** Endpoint for creating a new reserve auction */
@@ -4227,12 +4674,31 @@ export type GraphQLTypes = {
 	/** Endpoint for updating a user profile theme */
 	updateProjectTheme?: GraphQLTypes["ProjectThemeType"],
 	/** Endpoint for updating a plugin's installation status for a project */
-	updatePluginStatus?: GraphQLTypes["PluginType"]
+	updatePluginStatus?: GraphQLTypes["PluginType"],
+	/** Endpoint for creating an edition draft */
+	createEditionDraft?: GraphQLTypes["EditionDraftType"],
+	/** Endpoint for a updating an edition draft */
+	updateEditionDraft?: GraphQLTypes["EditionDraftType"],
+	/** Endpoint for an reinstating edition draft */
+	reinstateEditionDraft?: GraphQLTypes["EditionDraftType"],
+	/** Endpoint for creating edition from draft */
+	createEditionFromDraft?: GraphQLTypes["edition"],
+	/** Endpoint for creating a writing NFT */
+	createWritingNFT?: GraphQLTypes["WritingNFTType"]
 };
 	/** Success type */
 ["success"]: {
 	__typename: "success",
 	success?: boolean
+};
+	/** Used to control meta settings */
+["EntrySettingsInputType"]: {
+		/** Meta image ID */
+	metaImageId?: number,
+	/** Meta title */
+	title?: string,
+	/** Meta description */
+	description?: string
 };
 	/** Edition For Signature type */
 ["EditionForSignatureType"]: {

@@ -269,7 +269,8 @@ const SearchPanel =  ({ setIsOpen, isSearch, search }: ISearch)  => {
                             maxHeight={'full'}
                                 zIndex='100'
                                 position="fixed" left={"0"} top={"0"}
-                                paddingY={'16'}
+                                paddingY={{sm:'16', xs:'16', md:'16', lg:'16', xl:'16'}}
+                                paddingBottom={{sm:'6', xs:'6', md:'6', lg:'16', xl:'16'}}
                                 style={{
                                     left: '50%', top: '0', bottom:'0',
                                     transform: 'translate(-50%, 0%)'
@@ -281,7 +282,7 @@ const SearchPanel =  ({ setIsOpen, isSearch, search }: ISearch)  => {
                                     ref={ref}
                                     borderColor={'accent'}
                                     borderRadius={'2xLarge'}
-                                    paddingY={'8'}
+                                    paddingY={{sm:'6', xs:'6', md:'6', lg:'8', xl:'8'}}
                                     paddingBottom='0'
                                     width={{ 'xs': 'full', 'sm': '3/4', 'md': '3/4', 'lg': '1/2', 'xl': '1/2' }}
                                     height={'fit'}
@@ -297,7 +298,7 @@ const SearchPanel =  ({ setIsOpen, isSearch, search }: ISearch)  => {
                                 >
                                         <Box position='sticky' 
                                         width='full'
-                                        paddingX={'8'}
+                                        paddingX={{sm:'4', xs:'4', md:'4', lg:'8', xl:'8'}}
                                         zIndex={'100'}
                                         top='0'>
                                         <Input
@@ -319,7 +320,7 @@ const SearchPanel =  ({ setIsOpen, isSearch, search }: ISearch)  => {
                                             display={'flex'}
                                             justifyContent={'flex-start'}
                                         maxHeight={'full'}
-                                        paddingX={'8'}
+                                        paddingX={{sm:'4', xs:'4', md:'4', lg:'8', xl:'8'}}
                                         alignItems={'center'}
                                         flexDirection={'column'}
                                         overflow={'scroll'}

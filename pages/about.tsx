@@ -30,6 +30,11 @@ const Page = () => {
                                 size='large' lineHeight={'1.375'} >
                                 The goal is to build the set of web3 native tools for curation and discovery that works for the Mirror community.
                             </Text>
+                            <Text
+                                color='textSecondary'
+                                size='large' lineHeight={'1.375'} >
+                                This project is possible thanks to <a target='_blank' rel="noreferrer noreferrer" href='https://degen-xyz.vercel.app'>Mirror Degen</a> and public Mirror API
+                            </Text>
                             <Box 
                             position='relative'
                             height='96'

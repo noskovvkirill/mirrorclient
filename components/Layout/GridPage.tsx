@@ -4,6 +4,7 @@ import useOnScreen from 'hooks/useOnScreen'
 import { Box, Spinner as Loader, Stack } from 'design-system'
 import Entry from '@/components/Cards/Entry'
 import FeaturedPublications, { FeaturedType } from'@/components/Cards/FeaturedPublications'
+import FeaturedEntries from '@/components/Cards/FeaturedEntries'
 //types
 import type { EntryType } from 'types'
 
@@ -17,7 +18,7 @@ interface IGrid {
     isValidating?: boolean;
     pathName: string;
     fetchEntries?: boolean
-    featured: FeaturedType[] | null;
+    featured?: FeaturedType[] | null;
 }
 
 const Grid = ({ data, error, featured, isValidating, setSize, pathName, fetchEntries }: IGrid) => {
@@ -56,7 +57,17 @@ const Grid = ({ data, error, featured, isValidating, setSize, pathName, fetchEnt
                 gridRowGap: '18px',
                 width: '100%',
             }}
-        >   
+        >       
+
+            {/* WIP */}
+
+            {/* {isHome && (
+                <Box
+                style={{
+                    gridColumnStart:1, gridColumnEnd:4}}>
+                <FeaturedEntries/>
+                </Box>
+            )} */}
         
             {isHome && featured && (
                 <>
@@ -66,7 +77,7 @@ const Grid = ({ data, error, featured, isValidating, setSize, pathName, fetchEnt
                     <Box 
                     marginTop={'2'}
                     display={{ xs: 'flex', sm: 'flex', md: 'flex', lg: 'none', xl: 'none'}}>
-                        <FeaturedPublications publications={featured.slice(0,8)}/>
+                        <FeaturedPublications publications={featured.slice(0,9)}/>
                     </Box>
                 </>
             )}

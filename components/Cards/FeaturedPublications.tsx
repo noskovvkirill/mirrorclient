@@ -15,7 +15,7 @@ const FeaturedPublications = ({publications}:IFeaturedPublications) => {
         <Box
         zIndex='0'
         tabIndex={-1}
-        borderRadius={'3xLarge'}
+        borderRadius={{xs:'2xLarge', sm:'2xLarge', md:'3xLarge', lg:'3xLarge', xl:'3xLarge'}}
         width={'full'}
         style={{
             background: 'linear-gradient(to bottom, rgba(0,0,0,0.06) 0%, rgba(0,0,0,0.13) 100%)',
@@ -41,7 +41,7 @@ const FeaturedPublications = ({publications}:IFeaturedPublications) => {
                 <Box>
                         <Box
                     display={{ xs: 'grid', sm: 'grid', md: 'grid', lg: 'grid', xl: 'grid' }}
-                    gridTemplateColumns={{ xs:4, sm: 4, md: 4, lg: 3, xl: 3, }}
+                    gridTemplateColumns={{ xs:3, sm: 3, md: 3, lg: 3, xl: 3, }}
                     gridTemplateRows={'auto'}
                     overflow={'hidden'}
                     flexDirection={'column'}

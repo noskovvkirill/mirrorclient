@@ -473,6 +473,7 @@ type entry {
   publisher: PublisherType
   collaborators: [ProjectType]
   settings: EntrySettingsType
+  writingNFT: WritingNFTType
 }
 
 """Describes an Arweave Transaction Request"""
@@ -504,6 +505,96 @@ type EntrySettingsType {
 
   """Meta description"""
   description: String
+}
+
+"""WritingNFT Type"""
+type WritingNFTType {
+  _id: String
+  title: String
+  description: String
+
+  """Total supply"""
+  quantity: Int
+
+  """Price in Ether"""
+  price: Float
+
+  """Version of contracts used"""
+  version: String
+
+  """Signing key timestamp (in unix seconds)"""
+  timestamp: Int
+
+  """Signing key digest"""
+  digest: String
+
+  """Signing key signature"""
+  signature: String
+
+  """Deployment signature"""
+  deploymentSignature: String
+
+  """Deployment signature type"""
+  deploymentSignatureType: String
+
+  """Address of the proxy"""
+  proxyAddress: String
+
+  """Nonce for deployment"""
+  nonce: Int
+
+  """Deployment status, 1 = Created, 5 = Confirmed"""
+  status: Int
+
+  """Transaction Hash"""
+  transactionHash: String
+
+  """Block number of deploy"""
+  deployedAt: Int
+
+  """NFT Media"""
+  media: MediaAssetType
+  publisher: PublisherType
+
+  """Which network to connect to"""
+  network: NetworkType
+
+  """Total NFTs sold"""
+  numSold: Int
+  collectors: [WritingNFTCollectorType]
+}
+
+"""Network Type"""
+type NetworkType {
+  _id: String
+  chainId: Int
+  explorerURL: String
+  name: String
+  currency: CurrencyType
+}
+
+"""Currency Type"""
+type CurrencyType {
+  _id: String
+  name: String
+  symbol: String
+  decimals: Int
+}
+
+"""Collectors of Writing NFT"""
+type WritingNFTCollectorType {
+  _id: String
+
+  """Address of collector"""
+  address: String
+
+  """Project (if it exists)"""
+  project: UserProfileType
+  transactionHash: String
+  tokenId: String
+  message: String
+  price: String
+  blockNumber: Int
 }
 
 """API Queries [Read]"""
@@ -2801,6 +2892,59 @@ type mutations {
     editionContractAddress: String
     version: String
   ): edition
+
+  """Endpoint for creating a writing NFT"""
+  createWritingNFT(
+    """The Ethereum address associated with the user"""
+    userAddress: String
+
+    """The Ethereum address associated with the project"""
+    projectAddress: String
+
+    """Digest"""
+    digest: String
+
+    """Public key used to sign the crowdfund data"""
+    key: String
+
+    """Signature with content related to the crowdfund"""
+    signature: String
+
+    """Unix Timestamp in seconds"""
+    timestamp: String
+    title: String
+    description: String
+
+    """Total supply"""
+    quantity: Int
+
+    """Price in Ether"""
+    price: Float
+
+    """Deployment signature"""
+    deploymentSignature: String
+
+    """Deployment signature type"""
+    deploymentSignatureType: String
+
+    """Address of the proxy"""
+    proxyAddress: String
+
+    """Digest of the entry"""
+    entryDigest: String
+
+    """ID of uploaded media"""
+    mediaAssetId: Int
+
+    """Chain ID for NFT"""
+    chainId: Int
+
+    """Version of contracts used"""
+    version: String
+
+    """Deployment nonce"""
+    nonce: Int
+  ): WritingNFTType
 }
 
 """Success type"""

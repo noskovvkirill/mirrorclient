@@ -1,8 +1,10 @@
+//WIP
+
+
 import thunder from 'src/fetcher'
 import useSWR from 'swr'
-import Root from './Root'
 import { render } from 'src/helpers/MarkdownSimpleParser'
-import { Box, Heading, Skeleton, SkeletonGroup, Stat, Tag, Text, Stack } from 'design-system'
+import { Box, Heading, Skeleton, SkeletonGroup, Stat, Tag, Text, Stack, Button, IconChevronRight, IconChevronLeft } from 'design-system'
 import Publisher from '@/components/Publisher'
 import AddressPrettyPrint from 'src/helpers/AddressPrettyPrint'
 // import Image from 'next/image'
@@ -10,60 +12,39 @@ import { getFirstImage } from 'src/helpers/MarkdownUtils'
 import type { BoxMaxWidth } from './Root'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import { useState } from 'react'
+import { useState, useRef, useEffect } from 'react'
+import {fetcher as fetcherEntry} from './Entry'
 //types
 import { EntryType } from 'types'
 
-export const fetcher = (digest: string) => {
+const fetcher = () => {
     return thunder('query')({
-        entry: [{
-            digest: digest
-        }, {
-            body: true,
-            title: true,
-            entryId: true,
-            publishedAtTimestamp: true,
-            canonicalUrl: true,
-            featuredImage: {
-                mimetype: true,
-                url: true
-            },
-            publisher: {
-                project: {
-                    address: true,
-                    displayName: true,
-                    avatarURL: true,
-                    domain: true,
-                    ens: true,
-                    theme: {
-                        accent: true
-                    }
-                },
-                member: {
-                    address: true,
-                    ens: true,
-                    displayName: true,
-                    avatarURL: true,
-                    domain: true
-
-                }
-            },
-        },
-        ],
-    }
+        topEntries:{
+            entryId:true,
+            digest:true
+         }
+        }
     )
 }
 
+ 
 
 
-const EntryItem = ({ entry, isValidating, maxWidth, digest, error }: { error: any, isValidating: boolean, entry?: EntryType, digest: string, maxWidth?: BoxMaxWidth }) => {
+
+const EntryItem = ({ maxWidth, digest, }: { digest: string, maxWidth?: BoxMaxWidth }) => {
+   
+    const { data, error, isValidating } = useSWR(digest, fetcherEntry, {
+        revalidateOnFocus: false
+    });
     const [isImageError, setIsImageError] = useState(false)
     const [isCoverError, setIsCoverError] = useState(false)
 
     const router = useRouter()
-    // console.log('entry', entry)
+    const entry = data?.entry
     return (
-        <Root maxWidth={maxWidth}>
+        <Box width="full"
+        maxWidth='1/3'
+        style={{ display: 'flex', flexShrink:0, maxHeight: '100%' }}>
             <Box display="flex"
                 tabIndex={0}
                 position={"relative"}
@@ -187,20 +168,139 @@ const EntryItem = ({ entry, isValidating, maxWidth, digest, error }: { error: an
 
                 </Box>
             </Box>
-        </Root>
+        </Box>
     )
 }
 
-const Entry = ({ digest, maxWidth, entry }: { entry?: EntryType, digest: string, maxWidth?: BoxMaxWidth }): JSX.Element => {
-    // console.log('entry___', digest)
-    const { data, error, isValidating } = useSWR(!entry ? digest : null, fetcher, {
+const Entry = ({ maxWidth }: {maxWidth?: BoxMaxWidth }): JSX.Element => {
+    
+    const [scrollPos, setScrollPos] = useState(0)
+    const container = useRef<HTMLDivElement>(null)
+
+    const scrollRightButton = () => {
+        if (container.current) {
+            container.current.scrollTo({
+                top: 0,
+                left: container.current.scrollLeft + container.current.clientWidth /3,
+                behavior: "smooth"
+            })
+        }
+    }
+    const scrollLeftButton = () => {
+        if (container.current) {
+             container.current.scrollTo({
+                top: 0,
+                left: container.current.scrollLeft - container.current.clientWidth /3,
+                behavior: "smooth"
+            })
+        }
+    }
+
+
+    useEffect(()=>{
+        const updateScrollPos = () => {
+            setScrollPos(container.current?.scrollLeft || 0)
+        }
+        if(container.current){
+            container.current.addEventListener('scroll', updateScrollPos)
+        }
+        return(()=>{
+            if(container.current){
+                container.current.removeEventListener('scroll', updateScrollPos)
+            }
+        })
+    },[])
+
+    const { data, error, isValidating } = useSWR('featuredEntries', fetcher, {
         revalidateOnFocus: false
     });
-    if (!entry && !data?.entry && !error && !isValidating) {
+    
+    if (!data && !error && !isValidating) {
         return <></>
     }
-    return (
-        <EntryItem entry={entry ? entry : data?.entry} isValidating={isValidating} maxWidth={maxWidth} digest={digest} error={error} />
+    return(
+         <Box
+         style={{
+               background: 'linear-gradient(to bottom, rgba(0,0,0,0.06) 0%, rgba(0,0,0,0.13) 100%)',
+        }}
+        backgroundColor={'foregroundSecondary'}
+        paddingTop={'8'}
+         borderRadius={'3xLarge'}
+         width='full'
+         position={'relative'}
+          >
+        <Box 
+        borderRadius={'full'}
+        zIndex='20'
+        display={scrollPos === 0 ? 'none' : 'block'}
+        boxShadow={'0.5'}
+        backgroundColor={'white'}
+        position='absolute' left='2' style={{top:'50%'}}>
+            <Button 
+            onClick={scrollLeftButton}
+            variant='transparent'
+            size='small' shape='circle'>
+                <IconChevronLeft color={'textTertiary'}/>
+            </Button>
+        </Box>
+        <Box 
+          borderRadius={'full'}
+         zIndex='20'
+         display={container?.current && container?.current?.clientWidth > container?.current?.scrollLeft ? 'block' : 'none'}
+         boxShadow={'0.5'}
+           backgroundColor={'white'}
+        position='absolute' right='2' style={{top:'50%'}}>
+        <Button 
+           onClick={scrollRightButton}
+           variant='transparent'
+           size='small' shape='circle'>
+            <IconChevronRight color={'textTertiary'}/>
+        </Button>
+        </Box>
+        <Stack direction='vertical' space='5'>
+             <Box width={'full'}  paddingX={{xs:'4', sm: '4', md: '6', lg: '4', xl: '4'}}>
+                    <Stack 
+                    align='center'
+                    justify={'space-between'}
+                    direction='horizontal' space='2'>
+                    <Text 
+                    size='large'
+                    weight={'semiBold'}
+                    color='textTertiary'>
+                        Popular entries
+                    </Text>
+                    </Stack>
+                </Box>
+             
+            <Box
+            paddingX={{xs:'4', sm: '4', md: '6', lg: '4', xl: '4'}}
+            paddingBottom={'8'}
+            ref={container}
+            style={{
+                scrollSnapType:'x mandatory',
+                scrollSnapStop: 'always',
+                gridAutoRows:'max-content',
+                gridAutoFlow:'column',
+                // overScrollBehaviourX: 'contain',
+            }}
+            display='grid'
+            
+            overflow={'scroll'} width='full'>
+          
+            {data && data?.topEntries?.map((entry:EntryType)=>{
+            if(entry.digest){
+            return(
+                <EntryItem 
+                maxWidth={'full'}
+                digest={entry.digest}
+                key={entry.digest+'featured_entry'}  />
+                )
+                } else return <></>
+        })}
+    
+        </Box>
+        </Stack>
+        </Box> 
     )
 };
 

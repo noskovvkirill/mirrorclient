@@ -1,4 +1,4 @@
-import { Button, IconMenu, IconChevronLeft, Dropdown, DropdownItem, Stack, Box, Tag, Text, IconBookOpen, IconCollection } from 'design-system'
+import { Button, IconMenu, IconChevronLeft, Dropdown, DropdownItem, Stack, Box, Text, IconBookOpen, IconCollection, IconTrendingUp } from 'design-system'
 // import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useStore } from 'contexts'
@@ -18,23 +18,25 @@ const Menu = ({ publisher }: { publisher?: PublisherType }) => {
             shape={'circle'}>
             <IconMenu />
         </Button>
-
-    const triggerMobile =  <Button
-    variant={'secondary'}
-    tone={router.pathname !== '/about' ? 'blue' : 'pink' }
-    size='small'
-    >
-        <Stack direction='horizontal' align='center' space={'1.5'}>
-           <IconMenu size={'6'}/>
-        {router.pathname !== '/about' ? 'Home' : 'About'}
-        </Stack>
-    </Button>
-
     const isUser =  withEth?.address && accountData?.address
+    const isTrending = router.pathname.split('/').includes('trending')
     const isPublication = router.pathname.split('/').includes('publication')
     const isMember =  router.pathname.split('/').includes('member') 
     const isSettings = router.pathname.split('/').includes('settings')
 
+    const triggerMobile =  <Button
+    variant={'secondary'}
+    tone={router.pathname !== '/about' ? isTrending ? 'green' : 'blue' : 'pink' }
+    size='small'
+    >
+        <Stack direction='horizontal' align='center' space={'1.5'}>
+           <IconMenu size={'6'}/>
+        {router.pathname === '/' ? 'Home' : router.pathname === '/trending' ? 'Trending' :  router.pathname === '/about' ? 'About' : 'Home'}
+        </Stack>
+    </Button>
+
+   
+      
     const Menu =  <Dropdown 
         width={{xs:'72', sm:'72', md:'64', lg:'64', xl:'64'}}
         trigger={
@@ -51,21 +53,24 @@ const Menu = ({ publisher }: { publisher?: PublisherType }) => {
         </DropdownItem>
 
         <DropdownItem
-            disabled
             onClick={() => router.push('/trending')}
             width='full'
+          
+            tone='green'
             size='small'
-            variant={'secondary'}
-            prefix={<Tag size='small' tone={'blue'}>Soon</Tag>}
+            variant={router.pathname === '/trending' ? 'primary' : 'tertiary'}           
+            prefix={<IconTrendingUp />}
+           
         >
             Trending
         </DropdownItem>
 
-
+        
         <DropdownItem
             onClick={() => router.push('/about')}
             width='full'
             size='small'
+            tone='red'
             variant={router.pathname === '/about' ? 'primary' : 'tertiary'}
             prefix={<IconBookOpen />}
         >

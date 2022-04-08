@@ -313,6 +313,12 @@ export const AllTypesProps: Record<string,any> = {
 				array:false,
 				arrayRequired:false,
 				required:false
+			},
+			where:{
+				type:"EditionWhereInputType",
+				array:false,
+				arrayRequired:false,
+				required:false
 			}
 		},
 		edition:{
@@ -452,13 +458,13 @@ export const AllTypesProps: Record<string,any> = {
 			}
 		},
 		crowdfundDraftById:{
-			id:{
-				type:"Int",
+			userAddress:{
+				type:"String",
 				array:false,
 				arrayRequired:false,
 				required:false
 			},
-			signature:{
+			projectAddress:{
 				type:"String",
 				array:false,
 				arrayRequired:false,
@@ -470,20 +476,26 @@ export const AllTypesProps: Record<string,any> = {
 				arrayRequired:false,
 				required:false
 			},
+			key:{
+				type:"String",
+				array:false,
+				arrayRequired:false,
+				required:false
+			},
+			signature:{
+				type:"String",
+				array:false,
+				arrayRequired:false,
+				required:false
+			},
 			timestamp:{
 				type:"String",
 				array:false,
 				arrayRequired:false,
 				required:false
 			},
-			address:{
-				type:"String",
-				array:false,
-				arrayRequired:false,
-				required:false
-			},
-			key:{
-				type:"String",
+			id:{
+				type:"Int",
 				array:false,
 				arrayRequired:false,
 				required:false
@@ -694,6 +706,22 @@ export const AllTypesProps: Record<string,any> = {
 				arrayRequired:false,
 				required:false
 			}
+		},
+		editionDraft:{
+			digest:{
+				type:"String",
+				array:false,
+				arrayRequired:false,
+				required:false
+			}
+		}
+	},
+	EditionWhereInputType:{
+		digest:{
+			type:"String",
+			array:false,
+			arrayRequired:false,
+			required:false
 		}
 	},
 	VerificationStatusEnum: "enum",
@@ -980,6 +1008,12 @@ export const AllTypesProps: Record<string,any> = {
 				array:false,
 				arrayRequired:false,
 				required:false
+			},
+			settings:{
+				type:"EntrySettingsInputType",
+				array:false,
+				arrayRequired:false,
+				required:false
 			}
 		},
 		addSigningKey:{
@@ -1129,6 +1163,12 @@ export const AllTypesProps: Record<string,any> = {
 			},
 			hideTitleInEntry:{
 				type:"Boolean",
+				array:false,
+				arrayRequired:false,
+				required:false
+			},
+			settings:{
+				type:"EntrySettingsInputType",
 				array:false,
 				arrayRequired:false,
 				required:false
@@ -1672,6 +1712,50 @@ export const AllTypesProps: Record<string,any> = {
 				required:false
 			}
 		},
+		reinstateCrowdfundDraft:{
+			userAddress:{
+				type:"String",
+				array:false,
+				arrayRequired:false,
+				required:false
+			},
+			projectAddress:{
+				type:"String",
+				array:false,
+				arrayRequired:false,
+				required:false
+			},
+			digest:{
+				type:"String",
+				array:false,
+				arrayRequired:false,
+				required:false
+			},
+			key:{
+				type:"String",
+				array:false,
+				arrayRequired:false,
+				required:false
+			},
+			signature:{
+				type:"String",
+				array:false,
+				arrayRequired:false,
+				required:false
+			},
+			timestamp:{
+				type:"String",
+				array:false,
+				arrayRequired:false,
+				required:false
+			},
+			crowdfundAddress:{
+				type:"String",
+				array:false,
+				arrayRequired:false,
+				required:false
+			}
+		},
 		createNFT:{
 			name:{
 				type:"String",
@@ -1888,6 +1972,12 @@ export const AllTypesProps: Record<string,any> = {
 				array:false,
 				arrayRequired:false,
 				required:false
+			},
+			version:{
+				type:"String",
+				array:false,
+				arrayRequired:false,
+				required:false
 			}
 		},
 		createSplitAllocations:{
@@ -2014,6 +2104,18 @@ export const AllTypesProps: Record<string,any> = {
 				required:false
 			},
 			baseUriHash:{
+				type:"String",
+				array:false,
+				arrayRequired:false,
+				required:false
+			},
+			editionId:{
+				type:"Int",
+				array:false,
+				arrayRequired:false,
+				required:false
+			},
+			timestamp:{
 				type:"String",
 				array:false,
 				arrayRequired:false,
@@ -2295,6 +2397,12 @@ export const AllTypesProps: Record<string,any> = {
 			},
 			sizes:{
 				type:"MediaAssetSizesInputType",
+				array:false,
+				arrayRequired:false,
+				required:false
+			},
+			cid:{
+				type:"String",
 				array:false,
 				arrayRequired:false,
 				required:false
@@ -3919,6 +4027,444 @@ export const AllTypesProps: Record<string,any> = {
 				arrayRequired:false,
 				required:false
 			}
+		},
+		createEditionDraft:{
+			userAddress:{
+				type:"String",
+				array:false,
+				arrayRequired:false,
+				required:false
+			},
+			projectAddress:{
+				type:"String",
+				array:false,
+				arrayRequired:false,
+				required:false
+			},
+			digest:{
+				type:"String",
+				array:false,
+				arrayRequired:false,
+				required:false
+			},
+			key:{
+				type:"String",
+				array:false,
+				arrayRequired:false,
+				required:false
+			},
+			signature:{
+				type:"String",
+				array:false,
+				arrayRequired:false,
+				required:false
+			},
+			timestamp:{
+				type:"String",
+				array:false,
+				arrayRequired:false,
+				required:false
+			},
+			title:{
+				type:"String",
+				array:false,
+				arrayRequired:false,
+				required:false
+			},
+			quantity:{
+				type:"Int",
+				array:false,
+				arrayRequired:false,
+				required:false
+			},
+			description:{
+				type:"String",
+				array:false,
+				arrayRequired:false,
+				required:false
+			},
+			price:{
+				type:"Float",
+				array:false,
+				arrayRequired:false,
+				required:false
+			},
+			fundingRecipient:{
+				type:"String",
+				array:false,
+				arrayRequired:false,
+				required:false
+			},
+			artifactThumbnailId:{
+				type:"Int",
+				array:false,
+				arrayRequired:false,
+				required:false
+			},
+			artifactPrimaryId:{
+				type:"Int",
+				array:false,
+				arrayRequired:false,
+				required:false
+			},
+			singleArtifact:{
+				type:"Boolean",
+				array:false,
+				arrayRequired:false,
+				required:false
+			},
+			baseUriHash:{
+				type:"String",
+				array:false,
+				arrayRequired:false,
+				required:false
+			},
+			contentHash:{
+				type:"String",
+				array:false,
+				arrayRequired:false,
+				required:false
+			}
+		},
+		updateEditionDraft:{
+			userAddress:{
+				type:"String",
+				array:false,
+				arrayRequired:false,
+				required:false
+			},
+			projectAddress:{
+				type:"String",
+				array:false,
+				arrayRequired:false,
+				required:false
+			},
+			digest:{
+				type:"String",
+				array:false,
+				arrayRequired:false,
+				required:false
+			},
+			key:{
+				type:"String",
+				array:false,
+				arrayRequired:false,
+				required:false
+			},
+			signature:{
+				type:"String",
+				array:false,
+				arrayRequired:false,
+				required:false
+			},
+			timestamp:{
+				type:"String",
+				array:false,
+				arrayRequired:false,
+				required:false
+			},
+			title:{
+				type:"String",
+				array:false,
+				arrayRequired:false,
+				required:false
+			},
+			quantity:{
+				type:"Int",
+				array:false,
+				arrayRequired:false,
+				required:false
+			},
+			description:{
+				type:"String",
+				array:false,
+				arrayRequired:false,
+				required:false
+			},
+			price:{
+				type:"Float",
+				array:false,
+				arrayRequired:false,
+				required:false
+			},
+			fundingRecipient:{
+				type:"String",
+				array:false,
+				arrayRequired:false,
+				required:false
+			},
+			artifactThumbnailId:{
+				type:"Int",
+				array:false,
+				arrayRequired:false,
+				required:false
+			},
+			artifactPrimaryId:{
+				type:"Int",
+				array:false,
+				arrayRequired:false,
+				required:false
+			},
+			singleArtifact:{
+				type:"Boolean",
+				array:false,
+				arrayRequired:false,
+				required:false
+			},
+			baseUriHash:{
+				type:"String",
+				array:false,
+				arrayRequired:false,
+				required:false
+			},
+			contentHash:{
+				type:"String",
+				array:false,
+				arrayRequired:false,
+				required:false
+			},
+			draftDigest:{
+				type:"String",
+				array:false,
+				arrayRequired:false,
+				required:false
+			}
+		},
+		reinstateEditionDraft:{
+			userAddress:{
+				type:"String",
+				array:false,
+				arrayRequired:false,
+				required:false
+			},
+			projectAddress:{
+				type:"String",
+				array:false,
+				arrayRequired:false,
+				required:false
+			},
+			digest:{
+				type:"String",
+				array:false,
+				arrayRequired:false,
+				required:false
+			},
+			key:{
+				type:"String",
+				array:false,
+				arrayRequired:false,
+				required:false
+			},
+			signature:{
+				type:"String",
+				array:false,
+				arrayRequired:false,
+				required:false
+			},
+			timestamp:{
+				type:"String",
+				array:false,
+				arrayRequired:false,
+				required:false
+			},
+			draftDigest:{
+				type:"String",
+				array:false,
+				arrayRequired:false,
+				required:false
+			}
+		},
+		createEditionFromDraft:{
+			userAddress:{
+				type:"String",
+				array:false,
+				arrayRequired:false,
+				required:false
+			},
+			projectAddress:{
+				type:"String",
+				array:false,
+				arrayRequired:false,
+				required:false
+			},
+			digest:{
+				type:"String",
+				array:false,
+				arrayRequired:false,
+				required:false
+			},
+			key:{
+				type:"String",
+				array:false,
+				arrayRequired:false,
+				required:false
+			},
+			signature:{
+				type:"String",
+				array:false,
+				arrayRequired:false,
+				required:false
+			},
+			timestamp:{
+				type:"String",
+				array:false,
+				arrayRequired:false,
+				required:false
+			},
+			draftDigest:{
+				type:"String",
+				array:false,
+				arrayRequired:false,
+				required:false
+			},
+			network:{
+				type:"String",
+				array:false,
+				arrayRequired:false,
+				required:false
+			},
+			editionContractAddress:{
+				type:"String",
+				array:false,
+				arrayRequired:false,
+				required:false
+			},
+			version:{
+				type:"String",
+				array:false,
+				arrayRequired:false,
+				required:false
+			}
+		},
+		createWritingNFT:{
+			userAddress:{
+				type:"String",
+				array:false,
+				arrayRequired:false,
+				required:false
+			},
+			projectAddress:{
+				type:"String",
+				array:false,
+				arrayRequired:false,
+				required:false
+			},
+			digest:{
+				type:"String",
+				array:false,
+				arrayRequired:false,
+				required:false
+			},
+			key:{
+				type:"String",
+				array:false,
+				arrayRequired:false,
+				required:false
+			},
+			signature:{
+				type:"String",
+				array:false,
+				arrayRequired:false,
+				required:false
+			},
+			timestamp:{
+				type:"String",
+				array:false,
+				arrayRequired:false,
+				required:false
+			},
+			title:{
+				type:"String",
+				array:false,
+				arrayRequired:false,
+				required:false
+			},
+			description:{
+				type:"String",
+				array:false,
+				arrayRequired:false,
+				required:false
+			},
+			quantity:{
+				type:"Int",
+				array:false,
+				arrayRequired:false,
+				required:false
+			},
+			price:{
+				type:"Float",
+				array:false,
+				arrayRequired:false,
+				required:false
+			},
+			deploymentSignature:{
+				type:"String",
+				array:false,
+				arrayRequired:false,
+				required:false
+			},
+			deploymentSignatureType:{
+				type:"String",
+				array:false,
+				arrayRequired:false,
+				required:false
+			},
+			proxyAddress:{
+				type:"String",
+				array:false,
+				arrayRequired:false,
+				required:false
+			},
+			entryDigest:{
+				type:"String",
+				array:false,
+				arrayRequired:false,
+				required:false
+			},
+			mediaAssetId:{
+				type:"Int",
+				array:false,
+				arrayRequired:false,
+				required:false
+			},
+			chainId:{
+				type:"Int",
+				array:false,
+				arrayRequired:false,
+				required:false
+			},
+			version:{
+				type:"String",
+				array:false,
+				arrayRequired:false,
+				required:false
+			},
+			nonce:{
+				type:"Int",
+				array:false,
+				arrayRequired:false,
+				required:false
+			}
+		}
+	},
+	EntrySettingsInputType:{
+		metaImageId:{
+			type:"Int",
+			array:false,
+			arrayRequired:false,
+			required:false
+		},
+		title:{
+			type:"String",
+			array:false,
+			arrayRequired:false,
+			required:false
+		},
+		description:{
+			type:"String",
+			array:false,
+			arrayRequired:false,
+			required:false
 		}
 	},
 	EditionForSignatureType:{
@@ -4164,7 +4710,8 @@ export const ReturnTypes: Record<string,any> = {
 		blockState:"BlockStateType",
 		exchangeRate:"String",
 		token:"mirrorERC20Token",
-		publisher:"PublisherType"
+		publisher:"PublisherType",
+		events:"CrowdfundEvent"
 	},
 	UserProfileType:{
 		address:"String",
@@ -4264,6 +4811,7 @@ export const ReturnTypes: Record<string,any> = {
 		events:"EditionEventsType",
 		tokenIds:"String",
 		publisher:"PublisherType",
+		draftDigest:"String",
 		blockState:"BlockStateType"
 	},
 	EditionAttribute:{
@@ -4275,6 +4823,7 @@ export const ReturnTypes: Record<string,any> = {
 		id:"Int",
 		mimetype:"String",
 		sizes:"MediaAssetSizesType",
+		cid:"String",
 		url:"String"
 	},
 	MediaAssetSizesType:{
@@ -4327,7 +4876,9 @@ export const ReturnTypes: Record<string,any> = {
 		avatarURL:"String",
 		twitterUsername:"String",
 		collectorAddress:"String",
-		serialNumber:"String"
+		serialNumber:"String",
+		digest:"String",
+		draftDigest:"String"
 	},
 	PublisherType:{
 		project:"ProjectType",
@@ -4424,6 +4975,27 @@ export const ReturnTypes: Record<string,any> = {
 		createdAt:"String",
 		publisher:"PublisherType"
 	},
+	CrowdfundEvent:{
+		id:"Int",
+		event:"String",
+		amount:"String",
+		amountRaised:"String",
+		amountFormatted:"Float",
+		amountRaisedFormatted:"String",
+		creatorAllocation:"String",
+		value:"String",
+		address:"String",
+		from:"String",
+		to:"String",
+		blockNumber:"Int",
+		logIndex:"Int",
+		network:"String",
+		transactionHash:"String",
+		editionId:"Int",
+		tokenId:"Int",
+		crowdfundId:"Int",
+		timestamp:"String"
+	},
 	publicationSettings:{
 		publicationLabel:"String",
 		settings:"String",
@@ -4462,6 +5034,7 @@ export const ReturnTypes: Record<string,any> = {
 		userProfileId:"Int",
 		featuredImageId:"Int",
 		arweaveTransactionRequest:"ArweaveTransactionRequestType",
+		latestBlockData:"LatestBlockDataType",
 		nftTransactionHash:"String",
 		nftAddress:"Int",
 		nftTokenId:"Int",
@@ -4475,16 +5048,73 @@ export const ReturnTypes: Record<string,any> = {
 		editions:"edition",
 		featuredImage:"MediaAssetType",
 		publisher:"PublisherType",
-		collaborators:"ProjectType"
+		collaborators:"ProjectType",
+		settings:"EntrySettingsType",
+		writingNFT:"WritingNFTType"
 	},
 	ArweaveTransactionRequestType:{
 		id:"Int",
 		transactionId:"String",
 		entryId:"Int"
 	},
+	LatestBlockDataType:{
+		number:"Int",
+		timestamp:"Int"
+	},
 	Authorship:{
 		publicKey:"String",
 		signature:"String"
+	},
+	EntrySettingsType:{
+		metaImage:"MediaAssetType",
+		title:"String",
+		description:"String"
+	},
+	WritingNFTType:{
+		_id:"String",
+		title:"String",
+		description:"String",
+		quantity:"Int",
+		price:"Float",
+		version:"String",
+		timestamp:"Int",
+		digest:"String",
+		signature:"String",
+		deploymentSignature:"String",
+		deploymentSignatureType:"String",
+		proxyAddress:"String",
+		nonce:"Int",
+		status:"Int",
+		transactionHash:"String",
+		deployedAt:"Int",
+		media:"MediaAssetType",
+		publisher:"PublisherType",
+		network:"NetworkType",
+		numSold:"Int",
+		collectors:"WritingNFTCollectorType"
+	},
+	NetworkType:{
+		_id:"String",
+		chainId:"Int",
+		explorerURL:"String",
+		name:"String",
+		currency:"CurrencyType"
+	},
+	CurrencyType:{
+		_id:"String",
+		name:"String",
+		symbol:"String",
+		decimals:"Int"
+	},
+	WritingNFTCollectorType:{
+		_id:"String",
+		address:"String",
+		project:"UserProfileType",
+		transactionHash:"String",
+		tokenId:"String",
+		message:"String",
+		price:"String",
+		blockNumber:"Int"
 	},
 	query:{
 		publication:"publication",
@@ -4496,6 +5126,7 @@ export const ReturnTypes: Record<string,any> = {
 		nextContributorId:"Int",
 		entry:"entry",
 		entries:"entry",
+		topEntries:"entry",
 		resolveENS:"ENS",
 		lookupENS:"ENS",
 		addressInfo:"addressInfo",
@@ -4563,7 +5194,8 @@ export const ReturnTypes: Record<string,any> = {
 		crowdfundTokenApprovalMetadata:"crowdfundTokenApprovalMetadata",
 		projectFeed:"ProjectType",
 		plugins:"PluginType",
-		pluginsList:"PluginType"
+		pluginsList:"PluginType",
+		editionDraft:"EditionDraftType"
 	},
 	ENS:{
 		name:"String",
@@ -4628,7 +5260,8 @@ export const ReturnTypes: Record<string,any> = {
 		symbol:"String",
 		title:"String",
 		crowdfundDraftId:"Int",
-		publisher:"PublisherType"
+		publisher:"PublisherType",
+		digest:"String"
 	},
 	CrowdfundBlock:{
 		name:"String",
@@ -4661,27 +5294,6 @@ export const ReturnTypes: Record<string,any> = {
 		avatarURL:"String",
 		twitterUsername:"String",
 		percentage:"String"
-	},
-	CrowdfundEvent:{
-		id:"Int",
-		event:"String",
-		amount:"String",
-		amountRaised:"String",
-		amountFormatted:"Float",
-		amountRaisedFormatted:"String",
-		creatorAllocation:"String",
-		value:"String",
-		address:"String",
-		from:"String",
-		to:"String",
-		blockNumber:"Int",
-		logIndex:"Int",
-		network:"String",
-		transactionHash:"String",
-		editionId:"Int",
-		tokenId:"Int",
-		crowdfundId:"Int",
-		timestamp:"String"
 	},
 	reserveAuction:{
 		_id:"String",
@@ -4792,7 +5404,8 @@ export const ReturnTypes: Record<string,any> = {
 		events:"SplitEventType",
 		operator:"UserProfileType",
 		publication:"publication",
-		publisher:"PublisherType"
+		publisher:"PublisherType",
+		version:"String"
 	},
 	SplitAllocationType:{
 		id:"Int",
@@ -5119,6 +5732,21 @@ export const ReturnTypes: Record<string,any> = {
 		imageURL:"String",
 		installed:"Boolean"
 	},
+	EditionDraftType:{
+		_id:"String",
+		publisher:"PublisherType",
+		digest:"String",
+		title:"String",
+		quantity:"Int",
+		description:"String",
+		price:"Float",
+		fundingRecipient:"String",
+		thumbnailMedia:"MediaAssetType",
+		primaryMedia:"MediaAssetType",
+		singleArtifact:"Boolean",
+		baseUriHash:"String",
+		contentHash:"String"
+	},
 	mutations:{
 		registerContributor:"contributor",
 		registerContributorForPublication:"contributor",
@@ -5141,6 +5769,7 @@ export const ReturnTypes: Record<string,any> = {
 		setCrowdfundTransactionHash:"Boolean",
 		updateCrowdfund:"crowdfund",
 		updateCrowdfundPublishStatus:"crowdfund",
+		reinstateCrowdfundDraft:"CrowdfundDraft",
 		createNFT:"nft",
 		createReserveAuction:"reserveAuction",
 		createPromptResponse:"promptResponse",
@@ -5184,7 +5813,12 @@ export const ReturnTypes: Record<string,any> = {
 		updateProject:"ProjectType",
 		setProjectHeaderImage:"MediaAssetType",
 		updateProjectTheme:"ProjectThemeType",
-		updatePluginStatus:"PluginType"
+		updatePluginStatus:"PluginType",
+		createEditionDraft:"EditionDraftType",
+		updateEditionDraft:"EditionDraftType",
+		reinstateEditionDraft:"EditionDraftType",
+		createEditionFromDraft:"edition",
+		createWritingNFT:"WritingNFTType"
 	},
 	success:{
 		success:"Boolean"

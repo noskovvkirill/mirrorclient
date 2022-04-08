@@ -228,6 +228,7 @@ const selectorProperties = defineProperties({
     active: { selector: '&:active' },
     focus: { selector: '&:focus' },
     hover: { selector: '&:hover' },
+    scroll: { selector: '&::WebkitScrollbar' },
   },
   defaultCondition: 'base',
   properties: {
