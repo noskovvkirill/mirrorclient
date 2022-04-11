@@ -220,8 +220,9 @@ const Publication = ({ entries, publisher }: Props) => {
                             display='flex'
                             flex={1}
                             backgroundColor={'backgroundSecondary'}
-                            width={'128'}
-                            minWidth={'96'}
+                            width={{ sm: 'viewWidth', xs: 'viewWidth', md: '128', xl: '128', lg: '128' }}
+                            maxWidth={'viewWidth'}
+                            minWidth={{ sm: 'auto', xs: 'auto', md: '96', xl: '96', lg: '96' }}
                             padding={'4'}>
 
                             <Box width='full' >
@@ -247,7 +248,7 @@ const Publication = ({ entries, publisher }: Props) => {
 
                                                         <Stack direction='horizontal' space={'2'} align='center'>
                                                             {publisher?.domain
-                                                                ? <> <a href={'https' + publisher?.domain}
+                                                                ? <> <a href={'https://' + publisher?.domain}
                                                                     target={'_blank'}
                                                                     rel='noreferrer'>
                                                                     <Box borderRadius={'full'}
@@ -274,7 +275,7 @@ const Publication = ({ entries, publisher }: Props) => {
 
                                                                     <Tag
                                                                         size={'medium'}
-                                                                        tone={'accent'}>{'https://mirror.xyz/' + AddressPrettyPrint(publisher?.address || '', 8)}</Tag>
+                                                                        tone={'accent'}>{'https://mirror.xyz/' + AddressPrettyPrint(publisher?.address || '', 6)}</Tag>
                                                                 </>
                                                             }
 

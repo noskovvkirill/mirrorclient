@@ -58,7 +58,7 @@ const PublisherBody = ({ publisher, size, hideLabel=false}: { publisher: Publish
         style={{ pointerEvents: 'all' }}> <Link href={
             publisher?.project?.domain
                 ? '/publication/' + publisher?.project?.domain.split('.')[0] + '/'
-                : publisher?.member?.ens || '/'
+                : '/member/' + publisher.project?.address || publisher.member?.address || ''
         } passHref>
             <Box>
             <Stack direction={"horizontal"} space={size === 'default' ? "4" : size === 'small' ? "2" : "4"} align={"center"}>

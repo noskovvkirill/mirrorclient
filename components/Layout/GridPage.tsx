@@ -50,7 +50,8 @@ const Grid = ({ data, error, featured, isValidating, setSize, pathName, fetchEnt
             minHeight={'viewHeight'}
             gridTemplateColumns={{ xs: 1, sm: 2, md: 2, lg: 3, xl: 3, }}
             gridTemplateRows={'auto'}
-            overflow={'hidden'}
+            // overflow={'auto'}
+            overflow={{xs:'unset', sm:'unset', md:'unset', lg:'unset', xl:'unset'}}
             flexDirection={'column'}
             style={{
                 gridColumnGap: '18px',

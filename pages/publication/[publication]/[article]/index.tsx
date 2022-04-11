@@ -78,6 +78,8 @@ const Article = ({ entry }: Props) => {
                 digest:entry.digest,
                 type:'mirror_publication'
             })
+        } else {
+            console.log('Failed Entry 🐝', entry.digest)
         }   
     },[entry])
     if (!entry) return <></>

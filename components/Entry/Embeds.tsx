@@ -83,6 +83,15 @@ const Embeds = ({ href, children }: { href?: string, children?: any }) => {
     // }
  
     if (new URL(href).host === 'twitter.com') {
+       if(!href.includes('status')){
+           return(
+            <Box as='a'
+            wordBreak='break-word'
+            color={'accent'}
+            style={{ textDecoration: 'underline', textUnderlineOffset: '0.2 rem' }}
+            href={href}>{children}</Box>
+           )
+       }
         return (<Box 
         width='full'
         flex='auto'

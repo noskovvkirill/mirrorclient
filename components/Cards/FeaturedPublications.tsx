@@ -67,7 +67,7 @@ const FeaturedPublications = ({publications}:IFeaturedPublications) => {
                                 ensLabel={publ.domain ? publ.domain : publ.project}
                                 />
                                 <Tag> 
-                                    {AddressPrettyPrint(publ.project.toUpperCase(), 8)}
+                                    {AddressPrettyPrint(publ.project.toUpperCase(), 6)}
                                 </Tag>
                                 </Stack>
                             </Box>

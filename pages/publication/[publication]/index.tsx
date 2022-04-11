@@ -188,7 +188,8 @@ const Publication = ({ entries, publisher }: Props) => {
                             display='flex'
                             flex={1}
                             backgroundColor={'backgroundSecondary'}
-                            width={{ sm: 'full', xs: 'full', md: '128', xl: '128', lg: '128' }}
+                            width={{ sm: 'viewWidth', xs: 'viewWidth', md: '128', xl: '128', lg: '128' }}
+                            maxWidth={'viewWidth'}
                             minWidth={{ sm: 'auto', xs: 'auto', md: '96', xl: '96', lg: '96' }}
                             padding={'4'}>
 
@@ -214,7 +215,7 @@ const Publication = ({ entries, publisher }: Props) => {
                                                         >Info</Text>
 
                                                         <Stack direction='horizontal' space={'2'} align='center'>
-                                                            <a href={'https' + publisher?.domain}
+                                                            <a href={'https://' + publisher?.domain}
                                                                 target={'_blank'}
                                                                 rel='noreferrer'>
                                                                 <Box borderRadius={'full'}
