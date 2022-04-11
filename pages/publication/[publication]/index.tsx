@@ -171,17 +171,18 @@ const Publication = ({ entries, publisher }: Props) => {
                                 size='headingOne'
                             >{publisher?.displayName}
                             </Text>
-
-
-                            <Text
-                                align={'center'}
-                                color='textTertiary'
-                                weight={
-                                    'bold'
-                                }
-                                size='root'
-                            >{publisher?.description}
-                            </Text>
+                            
+                            <Box maxWidth={'192'}>
+                                <Text
+                                    align={'center'}
+                                    color='textTertiary'
+                                    weight={
+                                        'bold'
+                                    }
+                                    size='root'
+                                >{publisher?.description}
+                                </Text>
+                            </Box>
                         </Stack>
 
                         <Box
